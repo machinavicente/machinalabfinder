@@ -3,7 +3,7 @@ $host = 'aws-0-us-east-2.pooler.supabase.com'; // Reemplaza con tu host de Supab
 $port = '5432';
 $dbname = 'postgres'; // Nombre de la DB en Supabase (generalmente 'postgres')
 $user = 'postgres.nihjruyujqysshpsgnpp'; // Usuario de Supabase
-$password = 'vicentejosemachinarebolledo'; // Contraseña de la DB
+$password = 'machinalabsxpass'; // Contraseña de la DB
 
 try {
     $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
