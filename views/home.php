@@ -78,8 +78,8 @@
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $id = $row['id'];
                             $categoria = $row['categoria'];
-                            $name = $row['name'];
-                            $link = $row['link'];
+                            $nombre_del_simulador = $row['nombre_del_simulador'];
+                            $enlace = $row['enlace'];
             ?>
             <!-- Card Individual -->
             <div class="col-md-4 col-lg-3">
@@ -87,10 +87,10 @@
                     <div class="card-body text-center d-flex flex-column">
                         <i class="bi bi-terminal fs-1 my-4"></i>
                         <span class="badge category-badge mb-3"><?php echo htmlspecialchars(ucfirst($categoria)); ?></span>
-                        <h5 class="card-title"><?php echo htmlspecialchars($name); ?></h5>
+                        <h5 class="card-title"><?php echo htmlspecialchars($nombre_del_simulador); ?></h5>
                         <hr>
                         <p class="card-text text-muted mb-4">Simulador interactivo</p>
-                        <a href="<?php echo htmlspecialchars($link); ?>" target="_blank" class="btn btn-simulator mt-auto">Ejecutar</a>
+                        <a href="<?php echo htmlspecialchars($enlace); ?>" target="_blank" class="btn btn-simulator mt-auto">Ejecutar</a>
                     </div>
                 </div>
             </div>
