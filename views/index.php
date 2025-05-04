@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MachinaSynthLabs - UNEFA</title>
-  <link href="./assets/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/index.css">
+  <link href="./../assets/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="./../assets/css/index.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body class="unefa-primary-bg text-white">
@@ -18,7 +18,7 @@
         <div class="col-lg-6">
           <div class="d-flex align-items-center mb-4">
             <div>
-                <img class="me-3" src="./assets/images/logo.png" alt="logo" width="70" height="100">
+                <img class="me-3" src="./../assets/images/logo.png" alt="logo" width="70" height="100">
             </div>
             <h2 class="mb-0">UNEFA - Extensión Zaraza</h2>
           </div>
@@ -28,7 +28,7 @@
           <p class="mb-5">Optimiza tus practicas de laboratorio con esta colección de herramientas virtuales diseñadas para complementar tu formación profesional.</p>
           
           <div class="d-flex gap-3">
-            <a href="./views/home.php" class="btn btn-unefa btn-lg pb-2">Empezar</a>
+            <a href="./home.php" class="btn btn-unefa btn-lg pb-2">Empezar</a>
           </div>
         </div>
         
