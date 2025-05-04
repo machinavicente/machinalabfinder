@@ -66,7 +66,7 @@
     <div class="row g-4 mb-5">
         <?php
                 // Obtenemos los simuladores para esta asignatura
-                $consulta_simuladores = "SELECT * FROM simuladores WHERE asignatura = :asignatura ORDER BY name";
+                $consulta_simuladores = "SELECT * FROM simuladores WHERE asignatura = :asignatura ORDER BY nombre_del_simulador";
                 $stmt = $pdo->prepare($consulta_simuladores);
                 $stmt->bindParam(':asignatura', $asignatura_actual, PDO::PARAM_STR);
                 $stmt->execute();
