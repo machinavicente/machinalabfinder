@@ -7,7 +7,6 @@
   <link href="../assets/bootstrap/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/home.css" type="text/css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
- 
 </head>
 <body>
 
@@ -28,7 +27,7 @@
         <h2 class="text-center mb-4">Encuentra el simulador que necesitas</h2>
         <div class="input-group mb-3">
           <input type="text" class=" search-input" placeholder="Buscar simuladores..." id="search_bar">
-          <script src="./../assets/js/search-bar.js"></script>
+          <script src="../assets/js/search-bar.js"></script>
         </div>
         <div class="text-center">
           <small>Ejemplo: redes, programación, bases de datos</small>
@@ -38,41 +37,39 @@
   </div>
 
   <!-- Contenido principal -->
- <div class="container py-5">
+  <div class="container py-5">
     <?php 
-        $host = 'aws-0-us-east-1.pooler.supabase.com'; // Reemplaza con tu host de Supabase
+        // Configuración debería estar en un archivo aparte (config.php)
+        $host = 'aws-0-us-east-1.pooler.supabase.com';
         $port = '5432';
-        $dbname = 'postgres'; // Nombre de la DB en Supabase (generalmente 'postgres')
-        $user = 'postgres.nthgofwioyfrjvocyvrs'; // Usuario de Supabase
-        $password = 'machinasynthlabs'; // Contraseña de la DB
+        $dbname = 'postgres';
+        $user = 'postgres.nthgofwioyfrjvocyvrs';
+        $password = 'machinasynthlabs';
 
         try {
-            // Establecer conexión con PDO
             $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
             $conexion = new PDO($dsn, $user, $password);
             $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             
-            // Obtenemos las asignaturas únicas
             $consulta_asignaturas = "SELECT DISTINCT asignatura FROM simuladores ORDER BY asignatura";
             $resultado_asignaturas = $conexion->query($consulta_asignaturas);
             
-            if ($resultado_asignaturas) {
+            if ($resultado_asignaturas && $resultado_asignaturas->rowCount() > 0) {
                 while ($asignatura_row = $resultado_asignaturas->fetch(PDO::FETCH_ASSOC)) {
                     $asignatura_actual = $asignatura_row['asignatura'];
-        ?>
+    ?>
             
         <!-- Sección por asignatura -->
         <h3 class="section-title mb-4"><?php echo htmlspecialchars(ucfirst($asignatura_actual)); ?></h3>
 
         <div class="row g-4 mb-5">
             <?php
-                    // Obtenemos los simuladores para esta asignatura
                     $consulta_simuladores = "SELECT * FROM simuladores WHERE asignatura = :asignatura ORDER BY nombre_del_simulador";
                     $stmt = $conexion->prepare($consulta_simuladores);
                     $stmt->bindParam(':asignatura', $asignatura_actual);
                     $stmt->execute();
                     
-                    if ($stmt) {
+                    if ($stmt && $stmt->rowCount() > 0) {
                         while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                             $id = $row['id'];
                             $categoria = $row['categoria'];
@@ -93,19 +90,24 @@
                 </div>
             </div>
             <?php
-                        } // Cierra while simuladores
-                    } // Cierra if resultado_simuladores
+                        }
+                    } else {
+                        echo '<div class="col-12"><p class="text-muted">No hay simuladores disponibles para esta asignatura.</p></div>';
+                    }
             ?>
         </div> <!-- Cierre del row -->
         <?php
-                } // Cierra while asignaturas
-            } // Cierra if resultado_asignaturas
+                }
+            } else {
+                echo '<div class="alert alert-info">No se encontraron asignaturas con simuladores disponibles.</div>';
+            }
         } catch (PDOException $e) {
             error_log("Error de conexión: " . $e->getMessage());
-            die("Error al conectar con la base de datos");
+            echo '<div class="alert alert-danger">Error al cargar los simuladores. Por favor intente más tarde.</div>';
         }
-        ?>
-    </div> <!-- Cierre del container -->
+    ?>
+  </div> <!-- Cierre del container -->
+
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
