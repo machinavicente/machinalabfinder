@@ -40,13 +40,11 @@
   <!-- Contenido principal -->
  <div class="container py-5">
     <?php 
-        // Configuración de la conexión a Supabase
         $host = 'aws-0-us-east-1.pooler.supabase.com'; // Reemplaza con tu host de Supabase
         $port = '5432';
         $dbname = 'postgres'; // Nombre de la DB en Supabase (generalmente 'postgres')
         $user = 'postgres.nthgofwioyfrjvocyvrs'; // Usuario de Supabase
         $password = 'machinasynthlabs'; // Contraseña de la DB
-
 
         try {
             // Establecer conexión con PDO
