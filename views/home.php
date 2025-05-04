@@ -40,57 +40,74 @@
   <!-- Contenido principal -->
  <div class="container py-5">
     <?php 
-    $inc = include("../model/show.php");
-    if ($inc) {
-        // Obtenemos las asignaturas únicas
-        $consulta_asignaturas = "SELECT DISTINCT asignatura FROM simuladores ORDER BY asignatura";
-        $resultado_asignaturas = mysqli_query($conexion, $consulta_asignaturas);
-        
-        if ($resultado_asignaturas) {
-            while ($asignatura_row = mysqli_fetch_assoc($resultado_asignaturas)) {
-                $asignatura_actual = $asignatura_row['asignatura'];
-    ?>
-    
-    <!-- Sección por asignatura -->
-    <h3 class="section-title mb-4"><?php echo htmlspecialchars(ucfirst($asignatura_actual)); ?></h3>
-    
-    <div class="row g-4 mb-5">
-        <?php
-                // Obtenemos los simuladores para esta asignatura
-                $consulta_simuladores = "SELECT * FROM simuladores WHERE asignatura = '".mysqli_real_escape_string($conexion, $asignatura_actual)."' ORDER BY name";
-                $resultado_simuladores = mysqli_query($conexion, $consulta_simuladores);
-                
-                if ($resultado_simuladores) {
-                    while ($row = mysqli_fetch_assoc($resultado_simuladores)) {
-                        $id = $row['id'];
-                        $categoria = $row['categoria'];
-                        $name = $row['name'];
-                        $link = $row['link'];
+        // Configuración de la conexión a Supabase
+        $host = 'aws-0-us-east-1.pooler.supabase.com'; // Reemplaza con tu host de Supabase
+        $port = '5432';
+        $dbname = 'postgres'; // Nombre de la DB en Supabase (generalmente 'postgres')
+        $user = 'postgres.nthgofwioyfrjvocyvrs'; // Usuario de Supabase
+        $password = 'machinasynthlabs'; // Contraseña de la DB
+
+
+        try {
+            // Establecer conexión con PDO
+            $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
+            $conexion = new PDO($dsn, $user, $password);
+            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            
+            // Obtenemos las asignaturas únicas
+            $consulta_asignaturas = "SELECT DISTINCT asignatura FROM simuladores ORDER BY asignatura";
+            $resultado_asignaturas = $conexion->query($consulta_asignaturas);
+            
+            if ($resultado_asignaturas) {
+                while ($asignatura_row = $resultado_asignaturas->fetch(PDO::FETCH_ASSOC)) {
+                    $asignatura_actual = $asignatura_row['asignatura'];
         ?>
-        <!-- Card Individual -->
-        <div class="col-md-4 col-lg-3">
-            <div class="card shadow-sm h-100">
-                <div class="card-body text-center d-flex flex-column">
-                    <i class="bi bi-terminal fs-1 my-4"></i>
-                    <span class="badge category-badge mb-3"><?php echo htmlspecialchars(ucfirst($categoria)); ?></span>
-                    <h5 class="card-title"><?php echo htmlspecialchars($name); ?></h5>
-                    <hr>
-                    <p class="card-text text-muted mb-4">Simulador interactivo</p>
-                    <a href="<?php echo htmlspecialchars($link); ?>" target="_blank" class="btn btn-simulator mt-auto ">Ejecutar</a>
+            
+        <!-- Sección por asignatura -->
+        <h3 class="section-title mb-4"><?php echo htmlspecialchars(ucfirst($asignatura_actual)); ?></h3>
+
+        <div class="row g-4 mb-5">
+            <?php
+                    // Obtenemos los simuladores para esta asignatura
+                    $consulta_simuladores = "SELECT * FROM simuladores WHERE asignatura = :asignatura ORDER BY name";
+                    $stmt = $conexion->prepare($consulta_simuladores);
+                    $stmt->bindParam(':asignatura', $asignatura_actual);
+                    $stmt->execute();
+                    
+                    if ($stmt) {
+                        while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                            $id = $row['id'];
+                            $categoria = $row['categoria'];
+                            $name = $row['name'];
+                            $link = $row['link'];
+            ?>
+            <!-- Card Individual -->
+            <div class="col-md-4 col-lg-3">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body text-center d-flex flex-column">
+                        <i class="bi bi-terminal fs-1 my-4"></i>
+                        <span class="badge category-badge mb-3"><?php echo htmlspecialchars(ucfirst($categoria)); ?></span>
+                        <h5 class="card-title"><?php echo htmlspecialchars($name); ?></h5>
+                        <hr>
+                        <p class="card-text text-muted mb-4">Simulador interactivo</p>
+                        <a href="<?php echo htmlspecialchars($link); ?>" target="_blank" class="btn btn-simulator mt-auto">Ejecutar</a>
+                    </div>
                 </div>
             </div>
-        </div>
+            <?php
+                        } // Cierra while simuladores
+                    } // Cierra if resultado_simuladores
+            ?>
+        </div> <!-- Cierre del row -->
         <?php
-                    } // Cierra while simuladores
-                } // Cierra if resultado_simuladores
+                } // Cierra while asignaturas
+            } // Cierra if resultado_asignaturas
+        } catch (PDOException $e) {
+            error_log("Error de conexión: " . $e->getMessage());
+            die("Error al conectar con la base de datos");
+        }
         ?>
-    </div> <!-- Cierre del row -->
-    <?php
-            } // Cierra while asignaturas
-        } // Cierra if resultado_asignaturas
-    } // Cierra if($inc)
-    ?>
-</div> <!-- Cierre del container -->
+    </div> <!-- Cierre del container -->
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
