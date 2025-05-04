@@ -39,18 +39,51 @@
   <!-- Contenido principal -->
   <div class="container py-5">
     <?php 
-        // Configuración debería estar en un archivo aparte (config.php)
-        $host = 'aws-0-us-east-1.pooler.supabase.com';
-        $port = '5432';
-        $dbname = 'postgres';
-        $user = 'postgres.nthgofwioyfrjvocyvrs';
-        $password = 'machinasynthlabs';
+        // Configuración de conexión (en producción, usa variables de entorno)
+        $db_config = [
+            'host' => 'aws-0-us-east-1.pooler.supabase.com',
+            'port' => '5432',
+            'dbname' => 'postgres',
+            'user' => 'postgres.nthgofwioyfrjvocyvrs',
+            'password' => 'machinasynthlabs',
+            'sslmode' => 'require' // Prueba con 'prefer' si falla
+        ];
+
+        // Función para conectar a la base de datos con reintentos
+        function connectDB($config, $max_attempts = 3) {
+            $attempt = 1;
+            $dsn = "pgsql:host={$config['host']};port={$config['port']};dbname={$config['dbname']};sslmode={$config['sslmode']}";
+            
+            while ($attempt <= $max_attempts) {
+                try {
+                    $conexion = new PDO($dsn, $config['user'], $config['password']);
+                    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+                    $conexion->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
+                    return $conexion;
+                } catch (PDOException $e) {
+                    error_log("Intento $attempt fallido: " . $e->getMessage());
+                    if ($attempt == $max_attempts) {
+                        throw $e; // Relanza la excepción después del último intento
+                    }
+                    sleep(1); // Espera 1 segundo antes de reintentar
+                    $attempt++;
+                }
+            }
+        }
 
         try {
-            $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;sslmode=require";
-            $conexion = new PDO($dsn, $user, $password);
-            $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            // Establecer conexión con reintentos
+            $conexion = connectDB($db_config);
             
+            // Verificar si la tabla existe
+            $table_check = $conexion->query("SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_name = 'simuladores')");
+            $table_exists = $table_check->fetchColumn();
+            
+            if (!$table_exists) {
+                throw new Exception("La tabla 'simuladores' no existe en la base de datos");
+            }
+            
+            // Obtenemos las asignaturas únicas
             $consulta_asignaturas = "SELECT DISTINCT asignatura FROM simuladores ORDER BY asignatura";
             $resultado_asignaturas = $conexion->query($consulta_asignaturas);
             
@@ -64,9 +97,10 @@
 
         <div class="row g-4 mb-5">
             <?php
+                    // Obtenemos los simuladores para esta asignatura
                     $consulta_simuladores = "SELECT * FROM simuladores WHERE asignatura = :asignatura ORDER BY nombre_del_simulador";
                     $stmt = $conexion->prepare($consulta_simuladores);
-                    $stmt->bindParam(':asignatura', $asignatura_actual);
+                    $stmt->bindParam(':asignatura', $asignatura_actual, PDO::PARAM_STR);
                     $stmt->execute();
                     
                     if ($stmt && $stmt->rowCount() > 0) {
@@ -75,6 +109,9 @@
                             $categoria = $row['categoria'];
                             $nombre_del_simulador = $row['nombre_del_simulador'];
                             $enlace = $row['enlace'];
+                            
+                            // Validar el enlace antes de mostrarlo
+                            $enlace_valido = filter_var($enlace, FILTER_VALIDATE_URL) ? $enlace : '#';
             ?>
             <!-- Card Individual -->
             <div class="col-md-4 col-lg-3">
@@ -85,7 +122,7 @@
                         <h5 class="card-title"><?php echo htmlspecialchars($nombre_del_simulador); ?></h5>
                         <hr>
                         <p class="card-text text-muted mb-4">Simulador interactivo</p>
-                        <a href="<?php echo htmlspecialchars($enlace); ?>" target="_blank" class="btn btn-simulator mt-auto">Ejecutar</a>
+                        <a href="<?php echo htmlspecialchars($enlace_valido); ?>" target="_blank" class="btn btn-simulator mt-auto">Ejecutar</a>
                     </div>
                 </div>
             </div>
@@ -102,8 +139,28 @@
                 echo '<div class="alert alert-info">No se encontraron asignaturas con simuladores disponibles.</div>';
             }
         } catch (PDOException $e) {
-            error_log("Error de conexión: " . $e->getMessage());
-            echo '<div class="alert alert-danger">Error al cargar los simuladores. Por favor intente más tarde.</div>';
+            error_log("Error de base de datos: " . $e->getMessage());
+            echo '<div class="alert alert-danger">';
+            echo '<h4>Error de conexión con la base de datos</h4>';
+            echo '<p>Por favor verifica:</p>';
+            echo '<ul>';
+            echo '<li>Que las credenciales de conexión sean correctas</li>';
+            echo '<li>Que el servidor de base de datos esté disponible</li>';
+            echo '<li>Que tu conexión a internet esté activa</li>';
+            echo '</ul>';
+            // Solo muestra detalles del error en entorno de desarrollo
+            if (strpos($_SERVER['HTTP_HOST'], 'localhost') !== false) {
+                echo '<div class="alert alert-warning mt-3"><strong>Detalles técnicos:</strong> ' . htmlspecialchars($e->getMessage()) . '</div>';
+            }
+            echo '</div>';
+        } catch (Exception $e) {
+            error_log("Error general: " . $e->getMessage());
+            echo '<div class="alert alert-danger">Error: ' . htmlspecialchars($e->getMessage()) . '</div>';
+        } finally {
+            // Cerrar conexión si existe
+            if (isset($conexion)) {
+                $conexion = null;
+            }
         }
     ?>
   </div> <!-- Cierre del container -->
