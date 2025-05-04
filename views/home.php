@@ -7,7 +7,6 @@
   <link href="../assets/bootstrap/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../assets/css/home.css" type="text/css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
- 
 </head>
 <body>
 
@@ -38,16 +37,26 @@
   </div>
 
   <!-- Contenido principal -->
- <div class="container py-5">
+  <div class="container py-5">
     <?php 
-    $inc = include("../model/show.php");
-    if ($inc) {
+    // Configuración de conexión a Supabase
+    $host = 'aws-0-us-east-2.pooler.supabase.com';
+    $port = '5432';
+    $dbname = 'postgres';
+    $user = 'postgres.nihjruyujqysshpsgnpp';
+    $password = 'machinalabsxpass';
+
+    try {
+        $dsn = "pgsql:host=$host;port=$port;dbname=$dbname";
+        $pdo = new PDO($dsn, $user, $password);
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        
         // Obtenemos las asignaturas únicas
-        $consulta_asignaturas = "SELECT DISTINCT asignatura FROM simuladores ORDER BY asignatura";
-        $resultado_asignaturas = mysqli_query($conexion, $consulta_asignaturas);
+        $consulta_asignaturas = "SELECT DISTINCT asignatura FROM Simuladores ORDER BY asignatura";
+        $resultado_asignaturas = $pdo->query($consulta_asignaturas);
         
         if ($resultado_asignaturas) {
-            while ($asignatura_row = mysqli_fetch_assoc($resultado_asignaturas)) {
+            while ($asignatura_row = $resultado_asignaturas->fetch(PDO::FETCH_ASSOC)) {
                 $asignatura_actual = $asignatura_row['asignatura'];
     ?>
     
@@ -57,15 +66,16 @@
     <div class="row g-4 mb-5">
         <?php
                 // Obtenemos los simuladores para esta asignatura
-                $consulta_simuladores = "SELECT * FROM simuladores WHERE asignatura = '".mysqli_real_escape_string($conexion, $asignatura_actual)."' ORDER BY name";
-                $resultado_simuladores = mysqli_query($conexion, $consulta_simuladores);
+                $consulta_simuladores = "SELECT * FROM Simuladores WHERE asignatura = :asignatura ORDER BY name";
+                $stmt = $pdo->prepare($consulta_simuladores);
+                $stmt->bindParam(':asignatura', $asignatura_actual, PDO::PARAM_STR);
+                $stmt->execute();
                 
-                if ($resultado_simuladores) {
-                    while ($row = mysqli_fetch_assoc($resultado_simuladores)) {
-                        $id = $row['id'];
-                        $categoria = $row['categoria'];
-                        $name = $row['name'];
-                        $link = $row['link'];
+                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                    $id = $row['id'];
+                    $categoria = $row['categoria'];
+                    $nombre_del_simulador = $row['nombre_del_simulador'];
+                    $enlace = $row['enlace'];
         ?>
         <!-- Card Individual -->
         <div class="col-md-4 col-lg-3">
@@ -73,22 +83,23 @@
                 <div class="card-body text-center d-flex flex-column">
                     <i class="bi bi-terminal fs-1 my-4"></i>
                     <span class="badge category-badge mb-3"><?php echo htmlspecialchars(ucfirst($categoria)); ?></span>
-                    <h5 class="card-title"><?php echo htmlspecialchars($name); ?></h5>
+                    <h5 class="card-title"><?php echo htmlspecialchars($nombre_del_simulador); ?></h5>
                     <hr>
                     <p class="card-text text-muted mb-4">Simulador interactivo</p>
-                    <a href="<?php echo htmlspecialchars($link); ?>" target="_blank" class="btn btn-simulator mt-auto ">Ejecutar</a>
+                    <a href="<?php echo htmlspecialchars($enlace); ?>" target="_blank" class="btn btn-simulator mt-auto ">Ejecutar</a>
                 </div>
             </div>
         </div>
         <?php
-                    } // Cierra while simuladores
-                } // Cierra if resultado_simuladores
+                } // Cierra while simuladores
         ?>
     </div> <!-- Cierre del row -->
     <?php
             } // Cierra while asignaturas
         } // Cierra if resultado_asignaturas
-    } // Cierra if($inc)
+    } catch (PDOException $e) {
+        die("Error de conexión: " . $e->getMessage());
+    }
     ?>
 </div> <!-- Cierre del container -->
   <!-- Bootstrap JS -->
