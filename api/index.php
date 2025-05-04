@@ -1,2 +1,2 @@
 <?php
-require __DIR__ . '/../views/index.hmtl';
+require __DIR__ . '/../views/index.html';
