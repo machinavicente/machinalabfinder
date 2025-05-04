@@ -52,7 +52,7 @@
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
         // Obtenemos las asignaturas únicas
-        $consulta_asignaturas = "SELECT DISTINCT asignatura FROM Simuladores ORDER BY asignatura";
+        $consulta_asignaturas = "SELECT DISTINCT asignatura FROM simuladores ORDER BY asignatura";
         $resultado_asignaturas = $pdo->query($consulta_asignaturas);
         
         if ($resultado_asignaturas) {
@@ -66,7 +66,7 @@
     <div class="row g-4 mb-5">
         <?php
                 // Obtenemos los simuladores para esta asignatura
-                $consulta_simuladores = "SELECT * FROM Simuladores WHERE asignatura = :asignatura ORDER BY name";
+                $consulta_simuladores = "SELECT * FROM simuladores WHERE asignatura = :asignatura ORDER BY name";
                 $stmt = $pdo->prepare($consulta_simuladores);
                 $stmt->bindParam(':asignatura', $asignatura_actual, PDO::PARAM_STR);
                 $stmt->execute();
