@@ -13,7 +13,7 @@
   <!-- Barra de navegación -->
   <nav class="navbar navbar-expand-lg navbar-dark navbar-unefa">
     <div class="container d-flex justify-content-center">
-      <a class="navbar-brand d-flex align-items-center" href="../index.php">
+      <a class="navbar-brand d-flex align-items-center" href="../api/index.php">
         <div class="me-3"><img src="../assets/images/logo.png" alt="logo" width="40" height="60"></div>
         <span>Machina<span style=" color: #FFC72C;">Synth</span>Labs</span>
       </a>
