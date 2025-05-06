@@ -4,8 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MachinaSynthLabs - UNEFA</title>
-  <link href="../assets/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="../assets/css/home.css" type="text/css">
+  <link href="/assets/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/assets/css/home.css" type="text/css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 </head>
 <body>
@@ -14,7 +14,7 @@
   <nav class="navbar navbar-expand-lg navbar-dark navbar-unefa">
     <div class="container d-flex justify-content-center">
       <a class="navbar-brand d-flex align-items-center" href="../api/index.php">
-        <div class="me-3"><img src="../assets/images/logo.png" alt="logo" width="40" height="60"></div>
+        <div class="me-3"><img src="/assets/images/logo.png" alt="logo" width="40" height="60"></div>
         <span>Machina<span style=" color: #FFC72C;">Synth</span>Labs</span>
       </a>
     </div>
@@ -27,7 +27,7 @@
         <h2 class="text-center mb-4">Encuentra el simulador que necesitas</h2>
         <div class="input-group mb-3">
           <input type="text" class=" search-input" placeholder="Buscar simuladores..." id="search_bar">
-          <script src="./../assets/js/search-bar.js"></script>
+          <script src="/../assets/js/search-bar.js"></script>
         </div>
         <div class="text-center">
           <small>Ejemplo: redes, programación, bases de datos</small>
