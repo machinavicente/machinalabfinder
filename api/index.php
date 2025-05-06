@@ -1,3 +1,9 @@
+<?php
+  echo "<pre>";
+  print_r(scandir(__DIR__ . '/../public/assets/css'));
+  echo "</pre>";
+?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
