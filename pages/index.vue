@@ -1,19 +1,8 @@
-<?php
-  echo "<pre>";
-  print_r(scandir(__DIR__ . '/../public/assets/css'));
-  echo "</pre>";
-?>
 
+<template>
+<ClientOnly>
 <!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MachinaSynthLabs - UNEFA</title>
-   <link href="/public/assets/bootstrap/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/public/assets/css/index.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-</head>
 <body class="unefa-primary-bg text-white">
 
   <!-- Jumbotron/Hero Section -->
@@ -24,7 +13,7 @@
         <div class="col-lg-6">
           <div class="d-flex align-items-center mb-4">
             <div>
-                <img class="me-3" src="/public/assets/images/logo.png" alt="logo" width="70" height="100">
+                <img class="me-3" src="/assets/images/logo.png" alt="logo" width="70" height="100">
             </div>
             <h2 class="mb-0">UNEFA - Extensión Zaraza</h2>
           </div>
@@ -34,7 +23,9 @@
           <p class="mb-5">Optimiza tus practicas de laboratorio con esta colección de herramientas virtuales diseñadas para complementar tu formación profesional.</p>
           
           <div class="d-flex gap-3">
-            <a href="/public/views/home.php" class="btn btn-unefa btn-lg pb-2">Empezar</a>
+            <NuxtLink to="#">
+              <a href="/home" class="btn btn-unefa btn-lg pb-2">Empezar</a>
+            </NuxtLink>
           </div>
         </div>
         
@@ -89,8 +80,7 @@
       </div>
     </div>
   </section>
-
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+</ClientOnly>
+</template>
