@@ -1,4 +1,81 @@
+<script setup lang="ts">
+import type { SupabaseClient } from '@supabase/supabase-js'
 
+interface simuladores {
+  id: number
+  nombre_del_simulador: string
+  enlace: string
+  categoria: string
+  asignatura: string
+}
+
+// Obtén el cliente Supabase con el tipo correcto
+const { $supabase } = useNuxtApp()
+const supabase = $supabase as SupabaseClient
+
+// Estados reactivos
+const simuladores = ref<simuladores[]>([])
+const searchTerm = ref('')
+const isLoading = ref(true)
+const error = ref<string | null>(null)
+const asignaturaActual = ref('Todas las asignaturas')
+
+// Función para cargar datos
+async function cargarSimuladores() {
+  try {
+    isLoading.value = true;
+    error.value = null;
+    
+    // 1. Verificar conexión básica
+    const { data: sessionData } = await supabase.auth.getSession();
+    console.log('Sesión Supabase:', sessionData);
+    
+    // 2. Verificar existencia de la tabla
+    const { data: tableInfo } = await supabase
+      .rpc('get_table_info', { table_name: 'simuladores' })
+      .single();
+    console.log('Información de tabla:', tableInfo);
+    
+    // 3. Consulta con conteo exacto
+    const { data, error: supabaseError, count } = await supabase
+      .from('simuladores')
+      .select('*', { count: 'exact' })
+      .order('nombre_del_simulador', { ascending: true });
+    
+    console.log('Respuesta completa:', { data, error: supabaseError, count });
+    
+    if (supabaseError) throw supabaseError;
+    
+    if (count === 0) {
+      console.warn('La tabla existe pero está vacía');
+      error.value = 'No se encontraron simuladores en la base de datos';
+    }
+    
+    simuladores.value = data || [];
+    
+  } catch (err) {
+    error.value = err instanceof Error ? err.message : 'Error desconocido';
+    console.error('Error completo:', err);
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+onMounted(() => {
+  cargarSimuladores()
+})
+
+const filteredSimuladores = computed(() => {
+  if (!simuladores.value) return []
+  
+  const term = searchTerm.value.toLowerCase().trim()
+  return term
+    ? simuladores.value.filter(sim =>
+        sim.nombre_del_simulador.toLowerCase().includes(term) ||
+        sim.categoria.toLowerCase().includes(term))
+    : simuladores.value
+})
+</script>
 <template>
   <!-- Barra de navegación -->
   <nav class="navbar navbar-expand-lg navbar-dark navbar-unefa">
@@ -71,83 +148,7 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-// 1. Define los tipos para Supabase
-type SupabaseClient = {
-  from: (table: string) => {
-    select: (columns?: string) => {
-      order: (column: string, options?: { ascending?: boolean }) => Promise<{
-        data: any[] | null;
-        error: any;
-      }>;
-    };
-  };
-};
 
-// 2. Extiende la interfaz de NuxtApp
-declare module '#app' {
-  interface NuxtApp {
-    $supabase: SupabaseClient;
-  }
-}
-
-interface Simulador {
-  id: number;
-  nombre_del_simulador: string;
-  enlace: string;
-  categoria: string;
-  asignatura: string;
-}
-
-// 3. Usa type assertion al obtener $supabase
-const { $supabase } = useNuxtApp() as { $supabase: SupabaseClient };
-
-// 4. Verificación segura
-if (!$supabase?.from) {
-  console.error('Supabase no está inicializado correctamente');
-  throw new Error('Supabase no está inicializado correctamente');
-}
-
-// Estados reactivos
-const simuladores = ref<Simulador[]>([]);
-const searchTerm = ref('');
-const isLoading = ref(true);
-const error = ref<string | null>(null);
-const asignaturaActual = ref('Todas las asignaturas');
-
-// Obtener datos de Supabase
-onMounted(async () => {
-  try {
-    isLoading.value = true;
-    
-    // 5. Consulta con tipado seguro
-    const { data, error: supabaseError } = await $supabase
-      .from('simuladores')
-      .select('*')
-      .order('nombre_del_simulador', { ascending: true });
-
-    if (supabaseError) throw supabaseError;
-    
-    simuladores.value = (data as Simulador[]) || [];
-    
-  } catch (err: unknown) {
-    error.value = err instanceof Error ? err.message : 'Error desconocido';
-    console.error('Error al cargar simuladores:', err);
-  } finally {
-    isLoading.value = false;
-  }
-});
-
-// Filtrar simuladores
-const filteredSimuladores = computed(() => {
-  const term = searchTerm.value.toLowerCase().trim();
-  return term
-    ? simuladores.value.filter(sim =>
-        sim.nombre_del_simulador.toLowerCase().includes(term) ||
-        sim.categoria.toLowerCase().includes(term))
-    : simuladores.value;
-});
-</script>
 
 
 <style scoped>
