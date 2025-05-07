@@ -68,11 +68,20 @@ onMounted(() => {
 const filteredSimuladores = computed(() => {
   if (!simuladores.value) return []
   
-  const term = searchTerm.value.toLowerCase().trim()
+  // Función para normalizar el texto (quitar acentos y caracteres especiales)
+  const normalizeText = (text) => {
+    return text.toLowerCase()
+      .normalize('NFD') // Descompone los caracteres acentuados
+      .replace(/[\u0300-\u036f]/g, '') // Elimina los diacríticos
+      .trim()
+  }
+  
+  const term = normalizeText(searchTerm.value)
+  
   return term
     ? simuladores.value.filter(sim =>
-        sim.nombre_del_simulador.toLowerCase().includes(term) ||
-        sim.categoria.toLowerCase().includes(term))
+        normalizeText(sim.nombre_del_simulador).includes(term) ||
+        normalizeText(sim.categoria).includes(term))
     : simuladores.value
 })
 </script>
