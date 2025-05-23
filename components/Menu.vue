@@ -10,7 +10,7 @@
         aria-label="Toggle navigation"
         ref="burgerButton"
       >
-        <span class="navbar-toggler-icon text-danger"></span>
+        <span class="navbar-toggler-icon green-toggler"></span>
       </button>
 
       <!-- Logo visible solo en móviles -->
@@ -105,6 +105,11 @@ a {
 
 a:hover {
   color: #fff;
+}
+
+/* Estilos para el ícono de hamburguesa en verde */
+.green-toggler {
+  filter: invert(70%) sepia(40%) saturate(1000%) hue-rotate(80deg) brightness(90%) contrast(90%);
 }
 
 /* Estilos para pantallas grandes (horizontal) */
