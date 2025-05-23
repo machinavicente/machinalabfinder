@@ -1,13 +1,13 @@
 <template>
     <div class="contenedor">
-        <Header />
+        <Menu />
         <slot></slot>
         <Footer />
     </div>
 </template>
 
 <style>
-.contenedor {   
+.contenedor {
     width: 100%;
     min-height: 100vh;
 }
