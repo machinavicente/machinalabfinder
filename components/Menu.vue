@@ -3,14 +3,14 @@
     <div class="container-fluid">
       <!-- Botón hamburguesa a la izquierda -->
       <button
-        class="navbar-toggler text-danger"
+        class="navbar-toggler"
         type="button"
         @click="toggleMenu"
         :aria-expanded="menuOpen.toString()"
         aria-label="Toggle navigation"
         ref="burgerButton"
       >
-        <span class="navbar-toggler-icon"></span>
+        <span class="navbar-toggler-icon text-danger"></span>
       </button>
 
       <!-- Logo visible solo en móviles -->
