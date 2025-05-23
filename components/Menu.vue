@@ -1,56 +1,58 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Twelfth navbar example">
-    <div class="container-fluid">
-      <!-- Contenedor del botón hamburguesa con fondo -->
-      <div class="mobile-toggle-container">
-        <button
-          class="navbar-toggler"
-          type="button"
-          @click="toggleMenu"
-          :aria-expanded="menuOpen.toString()"
-          aria-label="Toggle navigation"
-          ref="burgerButton"
+  <div class="layout-wrapper">
+    <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Main navbar">
+      <div class="container-fluid">
+        <!-- Botón hamburguesa (pantallas pequeñas) -->
+        <div class="mobile-toggle-container">
+          <button
+            class="navbar-toggler"
+            type="button"
+            @click="toggleMenu"
+            :aria-expanded="menuOpen.toString()"
+            aria-label="Toggle navigation"
+            ref="burgerButton"
+          >
+            <span class="navbar-toggler-icon red-toggler"></span>
+          </button>
+        </div>
+
+        <!-- Menú lateral (pantallas pequeñas) -->
+        <div
+          class="navbar-collapse justify-content-md-center collapse"
+          :class="{ show: menuOpen }"
+          id="navbarsExample10"
+          ref="menuRef"
         >
-          <span class="navbar-toggler-icon red-toggler"></span>
-        </button>
-      </div>
+          <ul class="navbar-nav">
+            <li class="nav-item d-none d-lg-block desktop-logo-name">
+              <!-- Logo solo visible en pantallas grandes -->
+              <img src="/logo.png" alt="Logo" class="navbar-logo" />
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/">Inicio</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/dashboard">Dashboard</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/order_simulators">Simuladores Disponibles</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/registro_simuladores">Expande la colección</NuxtLink>
+            </li>
+          </ul>
+        </div>
 
-      <div
-        class="navbar-collapse justify-content-md-center collapse"
-        :class="{ show: menuOpen }"
-        id="navbarsExample10"
-        ref="menuRef"
-      >
-        <ul class="navbar-nav">
-          <li class="nav-item d-none d-lg-block desktop-logo-name">
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/">Inicio</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/dashboard">Dashboard</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/order_simulators" tabindex="-1" aria-disabled="true"
-              >Simuladores Disponibles</a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/registro_simuladores" tabindex="-1" aria-disabled="true"
-              >Expande la colección</a
-            >
-          </li>
-        </ul>
+        <!-- Overlay -->
+        <div v-if="menuOpen" class="overlay" @click="closeMenu" aria-hidden="true"></div>
       </div>
+    </nav>
 
-      <div
-        v-if="menuOpen"
-        class="overlay"
-        @click="closeMenu"
-        aria-hidden="true"
-      ></div>
+    <!-- Contenido principal con compensación -->
+    <div class="main-content">
+      <slot /> <!-- Aquí se inyecta el contenido de la página -->
     </div>
-  </nav>
+  </div>
 </template>
 
 <script setup>
@@ -97,15 +99,14 @@ onBeforeUnmount(() => {
   z-index: 1100;
 }
 
-a {
+a, .nav-link {
   color: #fff;
 }
 
-a:hover {
+a:hover, .nav-link:hover {
   color: #fff;
 }
 
-/* Contenedor del botón hamburguesa con fondo */
 .mobile-toggle-container {
   position: fixed;
   top: 0;
@@ -120,17 +121,21 @@ a:hover {
   border-bottom: 1px solid #ffc72c;
 }
 
-/* Estilos para el ícono de hamburguesa en rojo brillante */
 .red-toggler {
   filter: invert(26%) sepia(89%) saturate(7456%) hue-rotate(358deg) brightness(101%) contrast(118%);
 }
 
-/* Estilos para pantallas grandes (horizontal) */
+/* Compensar la altura fija del menú en el contenido */
+.main-content {
+  padding-top: 56px;
+}
+
+/* Pantallas grandes */
 @media (min-width: 992px) {
   .mobile-toggle-container {
     display: none;
   }
-  
+
   .navbar-nav {
     flex-direction: row;
   }
@@ -148,14 +153,19 @@ a:hover {
 
   .desktop-logo-name {
     display: flex !important;
+    align-items: center;
+  }
+
+  .navbar-logo {
+    height: 50px;
   }
 }
 
-/* Estilos para pantallas pequeñas (menú lateral izquierdo) */
+/* Pantallas pequeñas */
 @media (max-width: 991.98px) {
   .navbar-collapse {
     position: fixed;
-    top: 56px; /* Comienza debajo del contenedor del botón */
+    top: 56px;
     left: 0;
     bottom: 0;
     width: 250px;
@@ -169,14 +179,13 @@ a:hover {
 
   .navbar-collapse.show {
     transform: translateX(0);
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Sombra para mejor separación visual */
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
   }
 
   .navbar-nav {
     flex-direction: column;
     height: 100%;
-    padding-top: 0;
-    overflow-y: auto; /* Scroll si el contenido es muy largo */
+    overflow-y: auto;
   }
 
   .nav-item {
@@ -187,7 +196,6 @@ a:hover {
 
   .nav-link {
     padding: 0.8rem 1rem;
-    display: block;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
@@ -195,21 +203,15 @@ a:hover {
     display: none !important;
   }
 
-  /* Overlay para el fondo cuando el menú está abierto */
   .overlay {
     position: fixed;
-    top: 56px; /* Comienza debajo del contenedor del botón */
+    top: 56px;
     right: 0;
     bottom: 0;
     left: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1100;
     transition: opacity 0.3s ease;
-  }
-
-  /* Ajuste para el contenido principal */
-  body {
-    padding-top: 56px; /* Compensa la altura del contenedor fijo */
   }
 }
 </style>
