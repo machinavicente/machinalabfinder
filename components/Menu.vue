@@ -155,7 +155,7 @@ a:hover {
 @media (max-width: 991.98px) {
   .navbar-collapse {
     position: fixed;
-    top: 0;
+    top: 56px; /* Comienza debajo del contenedor del botón */
     left: 0;
     bottom: 0;
     width: 250px;
@@ -165,17 +165,18 @@ a:hover {
     z-index: 1101;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
-    margin-top: 56px; /* Para que no quede detrás del contenedor del botón */
   }
 
   .navbar-collapse.show {
     transform: translateX(0);
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2); /* Sombra para mejor separación visual */
   }
 
   .navbar-nav {
     flex-direction: column;
-    height: calc(100% - 56px);
-    padding-top: 20px;
+    height: 100%;
+    padding-top: 0;
+    overflow-y: auto; /* Scroll si el contenido es muy largo */
   }
 
   .nav-item {
@@ -197,12 +198,18 @@ a:hover {
   /* Overlay para el fondo cuando el menú está abierto */
   .overlay {
     position: fixed;
-    top: 56px; /* Debajo del contenedor del botón */
+    top: 56px; /* Comienza debajo del contenedor del botón */
     right: 0;
     bottom: 0;
-    left: 250px;
+    left: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1100;
+    transition: opacity 0.3s ease;
+  }
+
+  /* Ajuste para el contenido principal */
+  body {
+    padding-top: 56px; /* Compensa la altura del contenedor fijo */
   }
 }
 </style>
