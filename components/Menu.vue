@@ -1,19 +1,19 @@
 <template>
   <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Twelfth navbar example">
     <div class="container-fluid">
-      <!-- Botón hamburguesa a la izquierda -->
-      <button
-        class="navbar-toggler"
-        type="button"
-        @click="toggleMenu"
-        :aria-expanded="menuOpen.toString()"
-        aria-label="Toggle navigation"
-        ref="burgerButton"
-      >
-        <span class="navbar-toggler-icon green-toggler"></span>
-      </button>
-
-      <!-- Logo visible solo en móviles -->
+      <!-- Contenedor del botón hamburguesa con fondo -->
+      <div class="mobile-toggle-container">
+        <button
+          class="navbar-toggler"
+          type="button"
+          @click="toggleMenu"
+          :aria-expanded="menuOpen.toString()"
+          aria-label="Toggle navigation"
+          ref="burgerButton"
+        >
+          <span class="navbar-toggler-icon red-toggler"></span>
+        </button>
+      </div>
 
       <div
         class="navbar-collapse justify-content-md-center collapse"
@@ -22,7 +22,6 @@
         ref="menuRef"
       >
         <ul class="navbar-nav">
-          <!-- Logo visible solo en desktop (oculto en responsive) -->
           <li class="nav-item d-none d-lg-block desktop-logo-name">
           </li>
           <li class="nav-item">
@@ -44,7 +43,6 @@
         </ul>
       </div>
 
-      <!-- Overlay para cerrar menú al hacer click fuera -->
       <div
         v-if="menuOpen"
         class="overlay"
@@ -107,13 +105,32 @@ a:hover {
   color: #fff;
 }
 
-/* Estilos para el ícono de hamburguesa en verde */
-.green-toggler {
-  filter: invert(70%) sepia(40%) saturate(1000%) hue-rotate(80deg) brightness(90%) contrast(90%);
+/* Contenedor del botón hamburguesa con fondo */
+.mobile-toggle-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 56px;
+  background-color: #002147;
+  z-index: 1110;
+  display: flex;
+  align-items: center;
+  padding-left: 15px;
+  border-bottom: 1px solid #ffc72c;
+}
+
+/* Estilos para el ícono de hamburguesa en rojo brillante */
+.red-toggler {
+  filter: invert(26%) sepia(89%) saturate(7456%) hue-rotate(358deg) brightness(101%) contrast(118%);
 }
 
 /* Estilos para pantallas grandes (horizontal) */
 @media (min-width: 992px) {
+  .mobile-toggle-container {
+    display: none;
+  }
+  
   .navbar-nav {
     flex-direction: row;
   }
@@ -129,7 +146,6 @@ a:hover {
     white-space: nowrap;
   }
 
-  /* Mostrar logo + nombre desktop */
   .desktop-logo-name {
     display: flex !important;
   }
@@ -149,6 +165,7 @@ a:hover {
     z-index: 1101;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
+    margin-top: 56px; /* Para que no quede detrás del contenedor del botón */
   }
 
   .navbar-collapse.show {
@@ -157,8 +174,8 @@ a:hover {
 
   .navbar-nav {
     flex-direction: column;
-    height: 100%;
-    padding-top: 60px; /* Espacio para el logo móvil */
+    height: calc(100% - 56px);
+    padding-top: 20px;
   }
 
   .nav-item {
@@ -173,37 +190,17 @@ a:hover {
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
-  /* Ocultar logo + nombre desktop en responsive */
   .desktop-logo-name {
     display: none !important;
-  }
-
-  /* Logo en móviles */
-  .mobile-logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    white-space: nowrap;
-    display: flex;
-    align-items: center;
-    padding: 0.5rem 0;
-  }
-
-  /* Botón de toggle a la izquierda y fijo */
-  .navbar-toggler {
-    position: fixed; /* fijo para que no desaparezca al hacer scroll */
-    top: 15px;
-    left: 15px; /* cambiado de right a left */
-    z-index: 1110;
   }
 
   /* Overlay para el fondo cuando el menú está abierto */
   .overlay {
     position: fixed;
-    top: 0;
+    top: 56px; /* Debajo del contenedor del botón */
     right: 0;
     bottom: 0;
-    left: 250px; /* deja espacio para el menú a la izquierda */
+    left: 250px;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1100;
   }
