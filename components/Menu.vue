@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <!-- Botón hamburguesa a la izquierda -->
       <button
-        class="navbar-toggler"
+        class="navbar-toggler text-danger"
         type="button"
         @click="toggleMenu"
         :aria-expanded="menuOpen.toString()"
