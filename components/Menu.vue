@@ -22,19 +22,20 @@
           :class="{ show: menuOpen }"
           id="navbarsExample10"
           ref="menuRef"
+          @click.stop
         >
           <ul class="navbar-nav">
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/">Inicio</NuxtLink>
+              <NuxtLink class="nav-link" to="/" @click="closeMenu">Inicio</NuxtLink>
             </li>
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/dashboard">Dashboard</NuxtLink>
+              <NuxtLink class="nav-link" to="/dashboard" @click="closeMenu">Dashboard</NuxtLink>
             </li>
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/order_simulators">Simuladores Disponibles</NuxtLink>
+              <NuxtLink class="nav-link" to="/order_simulators" @click="closeMenu">Simuladores Disponibles</NuxtLink>
             </li>
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/registro_simuladores">Expande la colección</NuxtLink>
+              <NuxtLink class="nav-link" to="/registro_simuladores" @click="closeMenu">Expande la colección</NuxtLink>
             </li>
           </ul>
         </div>
@@ -89,10 +90,13 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .navbar {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1100;
   background-color: #002147;
   border-bottom: 1px solid #ffc72c;
-  position: relative;
-  z-index: 1100;
 }
 
 a, .nav-link {
@@ -103,25 +107,44 @@ a:hover, .nav-link:hover {
   color: #fff;
 }
 
+/* Barra horizontal que ocupa todo el ancho y contiene el botón burger */
 .mobile-toggle-container {
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
+  width: 100vw; /* ancho total horizontal */
   height: 56px;
-  background-color: #002147;
-  z-index: 1110;
+  background-color: #002147; /* fondo barra completo */
+  z-index: 1115; /* sobre overlay y menú */
   display: flex;
   align-items: center;
-  padding-left: 15px;
+  padding-left: 12px; /* espacio a la izquierda */
   border-bottom: 1px solid #ffc72c;
+  box-sizing: border-box;
 }
 
+/* Botón burger estilo */
+.mobile-toggle-container button.navbar-toggler {
+  background: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Icono burger personalizado */
 .red-toggler {
   filter: invert(26%) sepia(89%) saturate(7456%) hue-rotate(358deg) brightness(101%) contrast(118%);
+  width: 24px;
+  height: 24px;
 }
 
-/* Compensar la altura fija del menú en el contenido */
+/* Contenido principal con compensación */
 .main-content {
   padding-top: 56px;
 }
@@ -147,7 +170,6 @@ a:hover, .nav-link:hover {
     white-space: nowrap;
   }
 
-
   .navbar-logo {
     height: 50px;
   }
@@ -155,31 +177,35 @@ a:hover, .nav-link:hover {
 
 /* Pantallas pequeñas */
 @media (max-width: 991.98px) {
+  /* Menú lateral con fondo y no ocupa todo el ancho */
   .navbar-collapse {
-    bottom: 0;
-    width: 250px;
+    position: fixed;
+    top: 56px; /* justo debajo del burger */
+    left: 0;
+    width: 280px; /* ancho fijo para el menú lateral */
+    height: calc(100vh - 56px);
     padding: 20px;
-    background-color: #002147;
-    border-right: 1px solid #ffc72c;
-    z-index: 1;
+    background-color: rgba(0, 33, 71, 0.95); /* fondo oscuro con opacidad */
+    z-index: 1110; /* menos que burger para que botón esté encima */
+    overflow-y: auto;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
+    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
+    border-right: 1px solid #ffc72c;
+    border-radius: 0 8px 8px 0;
   }
 
   .navbar-collapse.show {
     transform: translateX(0);
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
   }
 
   .navbar-nav {
     flex-direction: column;
     height: 100%;
-    overflow-y: auto;
   }
 
   .nav-item {
     display: block;
-    margin-right: 0;
     margin-bottom: 15px;
   }
 
@@ -192,6 +218,7 @@ a:hover, .nav-link:hover {
     display: none !important;
   }
 
+  /* Overlay ocupa toda la pantalla menos la parte del burger */
   .overlay {
     position: fixed;
     top: 56px;
