@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ref, computed, onMounted } from 'vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
 
 interface simuladores {
@@ -22,13 +23,33 @@ const filtroAsignatura = ref('')
 const filtroCategoria = ref('')
 const terminoBusqueda = ref('')
 
+// --- Modales ---
+const modalModificarVisible = ref(false)
+const modalEliminarVisible = ref(false)
+const simuladorSeleccionado = ref<simuladores | null>(null)
+
+// Formulario edición
+const formNombre = ref('')
+const formEnlace = ref('')
+const formCategoria = ref('')
+const formAsignatura = ref('')
+const formDescripcion = ref('')
+
+const asignaturasOpciones = [
+  "Matemáticas", "Quimica", "Física I", "Cálculo Numérico", "Probabilidad y Estadística", "Lógica Matemática",
+  "Circuitos Lógicos", "Investigación de Operaciones", "Arquitectura del Computador", "Optimización No Lineal",
+  "Procesos Estocásticos", "Geometría Analítica", "Física II", "Programación", "Lenguajes de Programacion I",
+  "Lenguajes de Programacion II", "Lenguajes de Programacion III", "Procesamiento de Datos", "Bases de Datos",
+  "Redes", "Sistemas Operativos", "Simulacion y Modelos"
+]
+
 function normalizarTexto(texto: string): string {
   return texto
     .toLowerCase()
     .normalize('NFD') // Elimina acentos
     .replace(/[\u0300-\u036f]/g, '') // Elimina diacríticos
     .replace(/[^a-z0-9\s]/gi, '') // Elimina caracteres especiales
-    .trim() // Elimina espacios al inicio y final
+    .trim()
 }
 
 async function cargarSimuladores() {
@@ -41,7 +62,6 @@ async function cargarSimuladores() {
       .order('nombre_del_simulador', { ascending: true })
     if (supabaseError) throw supabaseError
 
-    // Normalizar categoria para evitar diferencias por mayúsculas o espacios
     simuladores.value = (data || []).map(sim => ({
       ...sim,
       categoria: normalizarTexto(sim.categoria)
@@ -60,7 +80,6 @@ const asignaturasDisponibles = computed(() =>
 
 const categoriasDisponibles = computed(() => {
   const catsNorm = [...new Set(simuladores.value.map(sim => sim.categoria))]
-  // Capitalizar primera letra para mostrar mejor la categoría
   return catsNorm.sort().map(cat => cat.charAt(0).toUpperCase() + cat.slice(1))
 })
 
@@ -129,10 +148,93 @@ function toggleAsignatura(asignatura: string) {
 }
 
 function toggleCategoria(categoria: string) {
-  // Normalizamos para que funcione igual que los datos
   const catNorm = normalizarTexto(categoria)
   filtroCategoria.value = filtroCategoria.value === catNorm ? '' : catNorm
 }
+
+// *** NUEVO: Control de tiempo para mostrar botones (72 horas = 3 días) ***
+function puedeEditarEliminar(fechaCreacion: string) {
+  const fecha = new Date(fechaCreacion)
+  const ahora = new Date()
+  const diffHoras = (ahora.getTime() - fecha.getTime()) / (1000 * 60 * 60)
+  return diffHoras <= 72
+}
+
+// --- Abrir modal modificar y llenar form ---
+function abrirModificar(sim: simuladores) {
+  simuladorSeleccionado.value = sim
+  formNombre.value = sim.nombre_del_simulador
+  formEnlace.value = sim.enlace
+  formCategoria.value = sim.categoria
+  formAsignatura.value = sim.asignatura
+  formDescripcion.value = sim.descripcion_del_simulador
+  modalModificarVisible.value = true
+  modalEliminarVisible.value = false
+}
+
+// --- Guardar cambios ---
+async function guardarCambios() {
+  if (!simuladorSeleccionado.value) return
+  // Actualizar en supabase
+  const { error: updateError } = await supabase
+    .from('simuladores')
+    .update({
+      nombre_del_simulador: formNombre.value,
+      enlace: formEnlace.value,
+      categoria: formCategoria.value,
+      asignatura: formAsignatura.value,
+      descripcion_del_simulador: formDescripcion.value
+    })
+    .eq('id', simuladorSeleccionado.value.id)
+
+  if (updateError) {
+    alert('Error al actualizar: ' + updateError.message)
+  } else {
+    // Actualizar localmente
+    const index = simuladores.value.findIndex(s => s.id === simuladorSeleccionado.value?.id)
+    if (index !== -1) {
+      simuladores.value[index] = {
+        ...simuladorSeleccionado.value,
+        nombre_del_simulador: formNombre.value,
+        enlace: formEnlace.value,
+        categoria: formCategoria.value,
+        asignatura: formAsignatura.value,
+        descripcion_del_simulador: formDescripcion.value
+      }
+    }
+    modalModificarVisible.value = false
+  }
+}
+
+// --- Abrir modal eliminar ---
+function abrirEliminar(sim: simuladores) {
+  simuladorSeleccionado.value = sim
+  modalEliminarVisible.value = true
+  modalModificarVisible.value = false
+}
+
+// --- Confirmar eliminación ---
+async function confirmarEliminar() {
+  if (!simuladorSeleccionado.value) return
+  const { error: deleteError } = await supabase
+    .from('simuladores')
+    .delete()
+    .eq('id', simuladorSeleccionado.value.id)
+  if (deleteError) {
+    alert('Error al eliminar: ' + deleteError.message)
+  } else {
+    simuladores.value = simuladores.value.filter(s => s.id !== simuladorSeleccionado.value?.id)
+    modalEliminarVisible.value = false
+  }
+}
+
+// --- Cerrar modales ---
+function cerrarModales() {
+  modalModificarVisible.value = false
+  modalEliminarVisible.value = false
+  simuladorSeleccionado.value = null
+}
+
 </script>
 
 <template>
@@ -148,39 +250,24 @@ function toggleCategoria(categoria: string) {
     <div v-else>
       <!-- Barra de búsqueda -->
       <div class="mb-4">
-        <input
-          v-model="terminoBusqueda"
-          type="text"
-          class="form-control"
-          placeholder="Buscar simuladores..."
-          autocomplete="off"
-        />
+        <input v-model="terminoBusqueda" type="text" class="form-control" placeholder="Buscar simuladores..."
+          autocomplete="off" />
       </div>
 
       <!-- Filtros tipo chip -->
       <div class="mb-4">
         <h6 class="text-unefa-dark fw-bold mb-2">Filtrar por asignatura:</h6>
         <div class="d-flex flex-wrap gap-2 mb-3">
-          <button
-            v-for="asig in asignaturasDisponibles"
-            :key="asig"
-            @click="toggleAsignatura(asig)"
-            class="btn btn-sm"
-            :class="filtroAsignatura === asig ? 'btn-unefa-primary text-white' : 'btn-outline-secondary'"
-          >
+          <button v-for="asig in asignaturasDisponibles" :key="asig" @click="toggleAsignatura(asig)" class="btn btn-sm"
+            :class="filtroAsignatura === asig ? 'btn-unefa-primary text-white' : 'btn-outline-secondary'">
             {{ asig }}
           </button>
         </div>
 
         <h6 class="text-unefa-dark fw-bold mb-2">Filtrar por categoría:</h6>
         <div class="d-flex flex-wrap gap-2">
-          <button
-            v-for="cat in categoriasDisponibles"
-            :key="cat"
-            @click="toggleCategoria(cat)"
-            class="btn btn-sm"
-            :class="normalizarTexto(filtroCategoria) === normalizarTexto(cat) ? 'btn-unefa-primary text-white' : 'btn-outline-secondary'"
-          >
+          <button v-for="cat in categoriasDisponibles" :key="cat" @click="toggleCategoria(cat)" class="btn btn-sm"
+            :class="normalizarTexto(filtroCategoria) === normalizarTexto(cat) ? 'btn-unefa-primary text-white' : 'btn-outline-secondary'">
             {{ cat }}
           </button>
         </div>
@@ -200,7 +287,8 @@ function toggleCategoria(categoria: string) {
           <div v-for="sim in simGroup" :key="sim.id" class="col-md-4 d-flex">
             <div class="ultimo-simulador-card card shadow-sm h-100 flex-fill">
               <div class="card-header d-flex justify-content-between align-items-center">
-                <span class="badge category-badge">{{ sim.categoria.charAt(0).toUpperCase() + sim.categoria.slice(1) }}</span>
+                <span class="badge category-badge">{{ sim.categoria.charAt(0).toUpperCase() + sim.categoria.slice(1)
+                  }}</span>
                 <div class="win-window-controls ms-auto d-flex">
                   <span class="win-btn win-minimize"><i class="bi bi-dash"></i></span>
                   <span class="win-btn win-maximize"><i class="bi bi-square"></i></span>
@@ -208,18 +296,16 @@ function toggleCategoria(categoria: string) {
                 </div>
               </div>
               <div class="card-body d-flex flex-column">
-                <div class="d-flex align-items-center mb-3">
-                  <i
-                    :class="[
-                      'bi',
-                      iconoPorAsignatura(sim.asignatura),
-                      'me-3',
-                      'fs-1',
-                      'text-unefa-primary'
-                    ]"
-                    aria-hidden="true"
-                  ></i>
-                  <h5 class="mb-0 profesional-title text-unefa-dark">
+                <div class="d-flex align-items-center mb-3 ">
+                  <i :class="[
+                    'bi',
+                    iconoPorAsignatura(sim.asignatura),
+                    'me-3',
+                    'fs-1',
+                    'text-unefa-primary', 
+                    'text-secondary'
+                  ]" aria-hidden="true"></i>
+                  <h5 class="profesional-title text-unefa-dark">
                     {{ sim.nombre_del_simulador }}
                   </h5>
                 </div>
@@ -228,120 +314,241 @@ function toggleCategoria(categoria: string) {
                 </p>
                 <div class="d-flex justify-content-between align-items-center mt-3">
                   <span class="badge asignatura-badge">{{ sim.asignatura }}</span>
-                  <a :href="sim.enlace" target="_blank" class="btn btn-sm btn-unefa-primary text-white">
-                    <i class="bi bi-play-fill"></i> Usar
+                  <a :href="sim.enlace" target="_blank" class="btn  btn-primary btn-sm btn-unefa-primary text-white">
+                    <i class="bi bi-play-fill s"></i> Usar
                   </a>
                 </div>
                 <span class="small text-danger mt-2">
                   Agregado: {{ formatDate(sim.created_at) }}
                 </span>
+
+                <!-- Botones modificar y eliminar - Solo si están dentro de 72h -->
+                <div v-if="puedeEditarEliminar(sim.created_at)" class="botones-accion">
+                  <button @click="abrirModificar(sim)" class="btn btn-outline-warning" type="button" title="Modificar">
+                    <i class="bi bi-pencil-square"></i> Modificar
+                  </button>
+                  <button @click="abrirEliminar(sim)" class="btn btn-outline-danger" type="button" title="Eliminar">
+                    <i class="bi bi-trash"></i> Eliminar
+                  </button>
+                </div>
+
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Modal Modificar -->
+    <transition name="modal-fade">
+      <div v-if="modalModificarVisible" class="modal-backdrop" @click.self="cerrarModales">
+        <div class="modal-window">
+          <h5 class="modal-title text-warning">Modificar Simulador</h5>
+          <form @submit.prevent="guardarCambios">
+            <div class="mb-3">
+              <label for="nombreSim" class="form-label">Nombre</label>
+              <input id="nombreSim" v-model="formNombre" type="text" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label for="enlaceSim" class="form-label">Enlace</label>
+              <input id="enlaceSim" v-model="formEnlace" type="url" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label for="categoriaSim" class="form-label">Categoría</label>
+              <input id="categoriaSim" v-model="formCategoria" type="text" class="form-control" required />
+            </div>
+            <div class="mb-3">
+              <label for="asignaturaSim" class="form-label">Asignatura</label>
+              <select id="asignaturaSim" v-model="formAsignatura" class="form-select" required>
+                <option value="" disabled>Seleccione asignatura</option>
+                <option v-for="asig in asignaturasOpciones" :key="asig" :value="asig">
+                  {{ asig }}
+                </option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="descSim" class="form-label">Descripción</label>
+              <textarea id="descSim" v-model="formDescripcion" class="form-control" rows="3" required></textarea>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-secondary" @click="cerrarModales">Cancelar</button>
+              <button type="submit" class="btn btn-warning text-dark">Guardar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </transition>
+
+    <!-- Modal Eliminar -->
+    <transition name="modal-fade">
+      <div v-if="modalEliminarVisible" class="modal-backdrop" @click.self="cerrarModales">
+        <div class="modal-window">
+          <h5 class="modal-title text-danger">Confirmar Eliminación</h5>
+          <p>¿Está seguro que desea eliminar el simulador <strong>{{ simuladorSeleccionado?.nombre_del_simulador
+              }}</strong>?</p>
+          <div class="d-flex justify-content-end gap-2">
+            <button type="button" class="btn btn-secondary" @click="cerrarModales">Cancelar</button>
+            <button type="button" class="btn btn-danger" @click="confirmarEliminar">Eliminar</button>
+          </div>
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
 <style scoped>
-/* Colores UNEFA */
-.text-unefa-primary {
-  color: #003366 !important;
+.container.containerr {
+  margin: 0 auto;
 }
 
-.text-unefa-dark {
-  color: #1a1a1a;
+/* Estilo ventana modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1500;
 }
 
-.btn-unefa-primary {
-  background-color: #007A3D;
-  border: none;
-  transition: background-color 0.3s ease;
-}
-
-.btn-unefa-primary:hover {
-  background-color: #005A28;
-  color: white;
-}
-
-.unefa-gradient {
-  background: linear-gradient(40deg, #003366, #007A3D) !important;
-}
-
-.unefa-hr {
-  border-top: 2px solid #007A3D;
-}
-
-/* Fondo y card */
-body {
-  background-color: #f5f7fa;
-}
-
-.ultimo-simulador-card {
-  border-radius: 0.25rem;
+.modal-window {
   background: white;
-  box-shadow: 0 4px 15px rgb(0 0 0 / 0.1);
-  transition: box-shadow 0.3s ease;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-.card-body {
-  display: flex;
-  flex-direction: column;
-  flex-grow: 1;
-}
-
-.profesional-title {
-  font-weight: 600;
+  border-radius: 6px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  padding: 1.5rem;
+  width: 400px;
+  max-width: 95vw;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Transición modal */
+.modal-fade-enter-active,
+.modal-fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.modal-fade-enter-from,
+.modal-fade-leave-to {
+  opacity: 0;
+}
+
+/* Botones estilo Windows (win-window-controls) ya están definidos en el css base */
+
+/* Botones modificar y eliminar */
+.ultimo-simulador-card .btn-warning {
+  font-weight: 600;
+  box-shadow: 0 0 4px #f0ad4ecc;
+  border-radius: 3px;
+}
+
+.ultimo-simulador-card .btn-outline-danger {
+  border-width: 2px;
+  font-weight: 600;
+  border-radius: 3px;
+}
+
+/* Badges */
 .category-badge {
-  background-color: #003366;
+  background-color: #036;
   color: white;
   font-weight: 600;
-  padding: 0.3em 0.6em;
-  border-radius: 0.25rem;
-  text-transform: uppercase;
-  font-size: 0.8rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: 4px;
+  text-transform: capitalize;
 }
 
 .asignatura-badge {
   background-color: gray;
   color: white;
   font-weight: 600;
-  padding: 0.2em 0.5em;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-transform: none;
 }
 
-.win-window-controls span {
+/* Botones modificar y eliminar con outline y más discretos */
+.ultimo-simulador-card .btn-outline-warning,
+.ultimo-simulador-card .btn-outline-danger {
+  font-weight: 500;
+  padding: 0.25rem 0.6rem;
+  font-size: 0.85rem;
+  border-width: 1.5px;
+  border-radius: 4px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.ultimo-simulador-card .btn-outline-warning:hover {
+  background-color: #ffc107;
+  color: #212529;
+  border-color: #ffc107;
+}
+
+.ultimo-simulador-card .btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+  border-color: #dc3545;
+}
+
+/* Contenedor botones para space-between */
+.ultimo-simulador-card .botones-accion {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}
+
+/* Mejorar barra superior con controles Windows */
+.ultimo-simulador-card .card-header {
+  padding: 0.3rem 0.7rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.win-window-controls {
+  margin-left: auto;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.win-btn {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 24px;
+  height: 22px;
+  font-size: 14px;
   cursor: pointer;
-  padding: 0 6px;
-  font-size: 1.2rem;
-  color: #888;
   user-select: none;
+  border-radius: 3px;
+  color: #444;
+  transition: background-color 0.2s, color 0.2s;
 }
 
-.win-window-controls span:hover {
-  color: #000;
+.win-btn:hover {
+  background-color: #0078d7;
+  color: white;
 }
 
-/* Input de búsqueda */
-input.form-control {
-  border-radius: 0.375rem;
-  border: 1px solid #ced4da;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  transition: border-color 0.3s ease;
+/* Diferentes colores al pasar el mouse para cada botón */
+.win-minimize:hover {
+  background-color: #999;
+  color: white;
 }
 
-input.form-control:focus {
-  border-color: #007A3D;
-  box-shadow: 0 0 0 0.2rem rgba(0, 122, 61, 0.25);
-  outline: none;
+.win-maximize:hover {
+  background-color: #0078d7;
+  color: white;
 }
+
+.win-close:hover {
+  background-color: #e81123;
+  color: white;
+}
+.btn-unefa-primary {
+    background-color: #007a3d;
+    border: none;
+    transition: background-color .3s ease;
+}
+
 </style>

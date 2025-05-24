@@ -23,5 +23,12 @@ export default defineNuxtConfig({
     }
   },
   modules: [],
-  plugins: ['~/plugins/supabase']
+  plugins: ['~/plugins/supabase'],
+    runtimeConfig: {
+    public: {
+      supabaseUrl: process.env.SUPABASE_URL,
+      supabaseKey: process.env.SUPABASE_KEY
+    }
+  }
+
 })

@@ -12,7 +12,7 @@
             aria-label="Toggle navigation"
             ref="burgerButton"
           >
-            <span class="navbar-toggler-icon red-toggler"></span>
+            <span class="navbar-toggler-icon"></span>
           </button>
         </div>
 
@@ -135,13 +135,6 @@ a:hover, .nav-link:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Icono burger personalizado */
-.red-toggler {
-  filter: invert(26%) sepia(89%) saturate(7456%) hue-rotate(358deg) brightness(101%) contrast(118%);
-  width: 24px;
-  height: 24px;
 }
 
 /* Contenido principal con compensación */
