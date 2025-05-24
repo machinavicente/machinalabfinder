@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
+import { forbiddenKeywords } from '@/utils/validate_form.js'
 
 interface simuladores {
   id: number
@@ -50,6 +51,11 @@ function normalizarTexto(texto: string): string {
     .replace(/[\u0300-\u036f]/g, '') // Elimina diacríticos
     .replace(/[^a-z0-9\s]/gi, '') // Elimina caracteres especiales
     .trim()
+}
+
+function contieneContenidoInapropiado(url: string): boolean {
+  const lowerUrl = url.toLowerCase()
+  return forbiddenKeywords.some(keyword => lowerUrl.includes(keyword.toLowerCase()))
 }
 
 async function cargarSimuladores() {
@@ -152,12 +158,11 @@ function toggleCategoria(categoria: string) {
   filtroCategoria.value = filtroCategoria.value === catNorm ? '' : catNorm
 }
 
-// *** NUEVO: Control de tiempo para mostrar botones (72 horas = 3 días) ***
 function puedeEditarEliminar(fechaCreacion: string) {
   const fecha = new Date(fechaCreacion)
   const ahora = new Date()
   const diffHoras = (ahora.getTime() - fecha.getTime()) / (1000 * 60 * 60)
-  return diffHoras <= 72
+  return diffHoras <= 8 
 }
 
 // --- Abrir modal modificar y llenar form ---
@@ -175,6 +180,13 @@ function abrirModificar(sim: simuladores) {
 // --- Guardar cambios ---
 async function guardarCambios() {
   if (!simuladorSeleccionado.value) return
+  
+  // Validación de contenido inapropiado
+  if (contieneContenidoInapropiado(formEnlace.value)) {
+    alert('Este enlace contiene contenido no apto para un entorno educativo. Por favor, ingrese un enlace válido.')
+    return
+  }
+
   // Actualizar en supabase
   const { error: updateError } = await supabase
     .from('simuladores')
@@ -234,9 +246,7 @@ function cerrarModales() {
   modalEliminarVisible.value = false
   simuladorSeleccionado.value = null
 }
-
 </script>
-
 <template>
   <div class="container containerr py-4">
     <div v-if="isLoading" class="text-center py-5">
@@ -450,19 +460,19 @@ function cerrarModales() {
 
 /* Badges */
 .category-badge {
-  background-color: #036;
-  color: white;
-  font-weight: 600;
+  
+  color: #000;
+  font-weight: 800;
   padding: 0.3rem 0.6rem;
   border-radius: 4px;
   text-transform: capitalize;
 }
 
 .asignatura-badge {
-  background-color: gray;
+  background-color: #036;
   color: white;
   font-weight: 600;
-  padding: 0.2rem 0.5rem;
+  padding: 0.3rem 0.5rem;
   border-radius: 4px;
   text-transform: none;
 }

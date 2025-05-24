@@ -30,9 +30,12 @@
             </li>
             <li class="nav-item">
               <NuxtLink class="nav-link" to="/dashboard" @click="closeMenu">Dashboard</NuxtLink>
-            </li>
+            </li> 
             <li class="nav-item">
               <NuxtLink class="nav-link" to="/order_simulators" @click="closeMenu">Simuladores Disponibles</NuxtLink>
+            </li>
+            <li class="nav-item">
+              <NuxtLink class="nav-link" to="/downloads" @click="closeMenu">Herramientas Descargables</NuxtLink>
             </li>
             <li class="nav-item">
               <NuxtLink class="nav-link" to="/registro_simuladores" @click="closeMenu">Expande la colección</NuxtLink>

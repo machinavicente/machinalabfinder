@@ -47,7 +47,7 @@
                 aria-live="polite"
               >
                 <p>
-                  Para comenzar, presiona el botón <strong>Comenzar</strong> y accede a la colección
+                  Para iniciar, presiona el botón <strong>Comenzar</strong> y accede a la colección
                   de simuladores virtuales disponibles. Explora, practica y potencia tu aprendizaje.
                 </p>
                 <p>

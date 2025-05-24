@@ -9,7 +9,6 @@
           </div>
 
           <div class="card-body">
-            <!-- Notificaciones -->
             <div v-if="successMessage" class="alert alert-success alert-dismissible fade show" role="alert">
               {{ successMessage }}
               <button type="button" class="btn-close" @click="successMessage = null"></button>
@@ -19,12 +18,14 @@
               <button type="button" class="btn-close" @click="error = null"></button>
             </div>
 
-            <!-- Barra de progreso dinámica -->
             <div class="mb-3">
               <label>Progreso del formulario</label>
               <div class="progress" style="height: 8px;">
-                <div class="progress-bar bg-unefa" role="progressbar" :style="{ width: formProgress + '%' }"
-                  :aria-valuenow="formProgress" aria-valuemin="0" aria-valuemax="100"></div>
+                <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
+                     :style="{ width: formProgress + '%' }"
+                     :aria-valuenow="formProgress" aria-valuemin="0" aria-valuemax="100"
+                     style="background-color: rgb(34, 197, 74);">
+                </div>
               </div>
             </div>
 
@@ -34,7 +35,7 @@
                 <div class="col-12 position-relative">
                   <label for="nombre" class="form-label">Nombre del Simulador</label>
                   <input type="text" class="form-control" id="nombre" v-model="simulador.nombre_del_simulador" required
-                    placeholder="SQLMaster - Simulador de Bases de Datos" />
+                         placeholder="SQLMaster - Simulador de Bases de Datos" />
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
                     {{ simulador.nombre_del_simulador.length }}/100
                   </small>
@@ -43,8 +44,9 @@
                 <!-- Descripción -->
                 <div class="col-12 position-relative">
                   <label for="descripcion" class="form-label">Descripción</label>
-                  <textarea class="form-control" id="descripcion" rows="3" v-model="simulador.descripcion_del_simulador"
-                    required placeholder="Entorno seguro para practicar consultas, diseño y optimización..."></textarea>
+                  <textarea class="form-control" id="descripcion" rows="3"
+                            v-model="simulador.descripcion_del_simulador" required
+                            placeholder="Entorno seguro para practicar consultas, diseño y optimización..."></textarea>
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
                     {{ simulador.descripcion_del_simulador.length }}/300
                   </small>
@@ -93,14 +95,14 @@
                 <div class="col-md-6">
                   <label for="enlace" class="form-label">Enlace del Simulador</label>
                   <input type="url" class="form-control" id="enlace" v-model="simulador.enlace" required
-                    placeholder="https://www.ejemplo.com" />
+                         placeholder="https://www.ejemplo.com" />
                 </div>
 
                 <!-- Categoría -->
                 <div class="col-md-6 position-relative">
                   <label for="categoria" class="form-label">Categoría</label>
                   <input type="text" class="form-control" id="categoria" v-model="simulador.categoria"
-                    placeholder="Ej: Compilador, Diagramador, IDE..." />
+                         placeholder="Ej: Compilador, Diagramador, IDE..." />
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
                     {{ simulador.categoria.length }}/50
                   </small>
@@ -110,7 +112,7 @@
                 <div class="col-md-6">
                   <label for="fecha" class="form-label">Fecha de Registro</label>
                   <input type="datetime-local" class="form-control" id="fecha" v-model="simulador.created_at"
-                    readonly />
+                         readonly />
                 </div>
 
                 <!-- Botones -->
@@ -118,8 +120,7 @@
                   <button type="button" class="btn btn-outline-danger" @click="resetForm">
                     <i class="bi bi-x-circle me-2"></i>Cancelar
                   </button>
-
-                  <button type="submit" class="btn btn-unefa" :disabled="loading">
+                  <button type="submit" class="btn btn-success" :disabled="loading">
                     <template v-if="loading">
                       <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                       Procesando...
@@ -134,6 +135,33 @@
           </div>
         </div>
       </div>
+
+      <!-- Modal de advertencia -->
+      <div v-if="modalAdvertencia" class="modal fade show d-block" tabindex="-1" style="background:rgba(0,0,0,0.4)">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-warning">
+              <h5 class="modal-title text-dark">
+                <i class="bi bi-exclamation-triangle me-2"></i>
+                ¡Atención!
+              </h5>
+              <button type="button" class="btn-close" @click="modalAdvertencia = false"></button>
+            </div>
+            <div class="modal-body text-dark">
+              <p>
+                Solo dispones de <b>8 horas</b> para modificar o eliminar este simulador en caso de algún
+                error o cambio necesario.
+                <br />
+                Después de ese tiempo, no podrás realizar cambios.
+              </p>
+            </div>
+            <div class="modal-footer">
+              <button class="btn btn-success" @click="modalAdvertencia = false">Ok!</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </template>
@@ -145,7 +173,7 @@ import { forbiddenKeywords } from '@/utils/validate_form.js'
 export default {
   data() {
     const now = new Date()
-    const venezuelaOffsetMinutes = 4 * 60 // UTC-4
+    const venezuelaOffsetMinutes = 4 * 60
     const localOffsetMinutes = now.getTimezoneOffset()
     const adjustedTime = new Date(now.getTime() + (localOffsetMinutes + venezuelaOffsetMinutes) * 60000)
     const formattedNow = adjustedTime.toISOString().slice(0, 16)
@@ -163,18 +191,31 @@ export default {
       loading: false,
       error: null,
       successMessage: null,
+      modalAdvertencia: false,
     }
   },
+
   computed: {
     formProgress() {
-      let totalFields = 5
+      const camposRequeridos = [
+        this.simulador.nombre_del_simulador.length >= 7,
+        this.simulador.descripcion_del_simulador.length >= 7,
+        this.isValidUrl(this.simulador.enlace),
+        !!this.simulador.asignatura,
+      ]
+
+      if (camposRequeridos.every(campo => !campo)) {
+        return 0
+      }
+
+      const totalFields = 5
       let validCount = 0
 
-      if (this.simulador.nombre_del_simulador.length >= 7) validCount++
-      if (this.simulador.descripcion_del_simulador.length >= 7) validCount++
-      if (!this.simulador.categoria || this.simulador.categoria.length >= 7) validCount++
-      if (this.isValidUrl(this.simulador.enlace)) validCount++
-      if (this.simulador.asignatura) validCount++
+      if (camposRequeridos[0]) validCount++
+      if (camposRequeridos[1]) validCount++
+      if (this.simulador.categoria?.length >= 7) validCount++
+      if (camposRequeridos[2]) validCount++
+      if (camposRequeridos[3]) validCount++
 
       return Math.floor((validCount / totalFields) * 100)
     },
@@ -182,13 +223,27 @@ export default {
       return this.simulador.asignatura === 'Otra...'
     },
   },
+
   methods: {
-    containsForbiddenKeyword(url, forbiddenKeywords) {
+    containsForbiddenKeyword(url, keywords) {
       const lowerUrl = url.toLowerCase()
-      return forbiddenKeywords.some(keyword => lowerUrl.includes(keyword.toLowerCase()))
+      return keywords.some(k => lowerUrl.includes(k.toLowerCase()))
     },
 
-    validateForm() {
+    normalizeUrl(url) {
+      return url.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '')
+    },
+
+    isValidUrl(url) {
+      try {
+        new URL(url)
+        return true
+      } catch (_) {
+        return false
+      }
+    },
+
+    async validateForm() {
       if (this.simulador.nombre_del_simulador.length < 7) {
         this.error = 'El nombre del simulador debe tener al menos 7 caracteres.'
         return false
@@ -206,31 +261,47 @@ export default {
         return false
       }
       if (this.containsForbiddenKeyword(this.simulador.enlace, forbiddenKeywords)) {
-        this.error = 'Este enlace no es apto para registrarse como recurso educativo. '
+        this.error = 'Este enlace no es apto para registrarse como recurso educativo.'
         return false
       }
+
+      const nuxtApp = useNuxtApp()
+      const supabaseClient = nuxtApp.$supabase
+      const inputUrl = this.normalizeUrl(this.simulador.enlace)
+
+      const { data: existing, error: fetchError } = await supabaseClient
+        .from('simuladores')
+        .select('enlace')
+
+      if (fetchError) {
+        this.error = 'No se pudo verificar si el enlace ya existe.'
+        return false
+      }
+
+      const urlYaExiste = (existing || []).some(entry =>
+        this.normalizeUrl(entry.enlace) === inputUrl
+      )
+
+      if (urlYaExiste) {
+        this.error = 'Este enlace ya ha sido registrado previamente.'
+        return false
+      }
+
       if (!this.simulador.asignatura) {
         this.error = 'Debe seleccionar una asignatura.'
         return false
       }
+
       if (this.mostrarOtraAsignatura && !this.simulador.otra_asignatura) {
         this.error = 'Debe seleccionar una asignatura en "Otra asignatura".'
         return false
       }
+
       return true
     },
 
-    isValidUrl(url) {
-      try {
-        new URL(url)
-        return true
-      } catch (_) {
-        return false
-      }
-    },
-
     async submitForm() {
-      if (!this.validateForm()) return
+      if (!(await this.validateForm())) return
 
       this.loading = true
       this.error = null
@@ -249,23 +320,21 @@ export default {
         const nuxtApp = useNuxtApp()
         const supabaseClient = nuxtApp.$supabase
 
-        const { data, error } = await supabaseClient
+        const { error } = await supabaseClient
           .from('simuladores')
-          .insert([
-            {
-              nombre_del_simulador: this.simulador.nombre_del_simulador,
-              descripcion_del_simulador: this.simulador.descripcion_del_simulador,
-              categoria: this.simulador.categoria,
-              enlace: this.simulador.enlace,
-              asignatura: asignaturaFinal,
-              created_at: venezuelaTime.toISOString(),
-            },
-          ])
-          .select()
+          .insert([{
+            nombre_del_simulador: this.simulador.nombre_del_simulador,
+            descripcion_del_simulador: this.simulador.descripcion_del_simulador,
+            categoria: this.simulador.categoria,
+            enlace: this.simulador.enlace,
+            asignatura: asignaturaFinal,
+            created_at: venezuelaTime.toISOString(),
+          }])
 
         if (error) throw error
 
         this.showSuccess('Simulador registrado con éxito!')
+        this.modalAdvertencia = true
         this.resetForm()
       } catch (error) {
         this.error = error.message || 'Ocurrió un error al registrar el simulador'
@@ -301,21 +370,10 @@ export default {
     },
   },
 }
-
 </script>
->
 
 <style scoped>
 .unefa-primary-bg {
   background-color: #003366;
-}
-
-.btn-unefa {
-  background-color: rgb(34, 197, 74);
-  color: white;
-}
-
-.btn-unefa:hover {
-  background-color: rgb(22, 163, 74);
 }
 </style>
