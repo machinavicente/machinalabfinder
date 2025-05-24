@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   css: [],
   app: {
@@ -17,11 +16,17 @@ export default defineNuxtConfig({
         {
           src: '/assets/bootstrap/bootstrap.bundle.min.js',
           defer: true,
-          tagPosition: 'bodyClose' // Equivalente a body: true en Nuxt 2
+          tagPosition: 'bodyClose'
         }
       ]
     }
   },
-  modules: [],
-  plugins: ['~/plugins/supabase']
+  modules: ['@nuxtjs/supabase'], // 👈 asegúrate de tener esto
+  plugins: ['~/plugins/supabase'],
+  runtimeConfig: {
+    public: {
+      supabaseUrl: process.env.NUXT_SUPABASE_URL, // 👈 usa NUXT_
+      supabaseKey: process.env.NUXT_SUPABASE_KEY
+    }
+  }
 })

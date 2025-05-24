@@ -139,15 +139,16 @@
 </template>
 
 <script>
+import { useNuxtApp } from '#app'
 import { forbiddenKeywords } from '@/utils/validate_form.js'
-import { createClient } from '@supabase/supabase-js'
 
 export default {
   data() {
     const now = new Date()
-    const venezuelaOffset = -4 * 60 * 60 * 1000
-    const venezuelaTime = new Date(now.getTime() + venezuelaOffset)
-    const formattedNow = venezuelaTime.toISOString().slice(0, 16)
+    const venezuelaOffsetMinutes = 4 * 60 // UTC-4
+    const localOffsetMinutes = now.getTimezoneOffset()
+    const adjustedTime = new Date(now.getTime() + (localOffsetMinutes + venezuelaOffsetMinutes) * 60000)
+    const formattedNow = adjustedTime.toISOString().slice(0, 16)
 
     return {
       simulador: {
@@ -162,11 +163,7 @@ export default {
       loading: false,
       error: null,
       successMessage: null,
-      supabase: null,
     }
-  },
-  created() {
-    this.initializeSupabase()
   },
   computed: {
     formProgress() {
@@ -186,11 +183,52 @@ export default {
     },
   },
   methods: {
-    initializeSupabase() {
-      const supabaseUrl = 'https://nthgofwioyfrjvocyvrs.supabase.co'
-      const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im50aGdvZndpb3lmcmp2b2N5dnJzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1NDcyOTQsImV4cCI6MjA2MTEyMzI5NH0.J80rYjQg6NWbo_yNNxcVnTbPavKmpxwZIi5UNrBTG84'
-      this.supabase = createClient(supabaseUrl, supabaseKey)
+    containsForbiddenKeyword(url, forbiddenKeywords) {
+      const lowerUrl = url.toLowerCase()
+      return forbiddenKeywords.some(keyword => lowerUrl.includes(keyword.toLowerCase()))
     },
+
+    validateForm() {
+      if (this.simulador.nombre_del_simulador.length < 7) {
+        this.error = 'El nombre del simulador debe tener al menos 7 caracteres.'
+        return false
+      }
+      if (this.simulador.descripcion_del_simulador.length < 7) {
+        this.error = 'La descripción del simulador debe tener al menos 7 caracteres.'
+        return false
+      }
+      if (this.simulador.categoria && this.simulador.categoria.length < 7) {
+        this.error = 'Si la categoría está llena, debe tener al menos 7 caracteres.'
+        return false
+      }
+      if (!this.isValidUrl(this.simulador.enlace)) {
+        this.error = 'El enlace no es válido.'
+        return false
+      }
+      if (this.containsForbiddenKeyword(this.simulador.enlace, forbiddenKeywords)) {
+        this.error = 'Este enlace no es apto para registrarse como recurso educativo. '
+        return false
+      }
+      if (!this.simulador.asignatura) {
+        this.error = 'Debe seleccionar una asignatura.'
+        return false
+      }
+      if (this.mostrarOtraAsignatura && !this.simulador.otra_asignatura) {
+        this.error = 'Debe seleccionar una asignatura en "Otra asignatura".'
+        return false
+      }
+      return true
+    },
+
+    isValidUrl(url) {
+      try {
+        new URL(url)
+        return true
+      } catch (_) {
+        return false
+      }
+    },
+
     async submitForm() {
       if (!this.validateForm()) return
 
@@ -200,14 +238,18 @@ export default {
 
       try {
         const now = new Date()
-        const venezuelaOffset = -4 * 60 * 60 * 1000
-        const venezuelaTime = new Date(now.getTime() + venezuelaOffset)
+        const venezuelaOffsetMinutes = 4 * 60
+        const localOffsetMinutes = now.getTimezoneOffset()
+        const venezuelaTime = new Date(now.getTime() + (localOffsetMinutes + venezuelaOffsetMinutes) * 60000)
 
         const asignaturaFinal = this.mostrarOtraAsignatura
           ? this.simulador.otra_asignatura
           : this.simulador.asignatura
 
-        const { data, error } = await this.supabase
+        const nuxtApp = useNuxtApp()
+        const supabaseClient = nuxtApp.$supabase
+
+        const { data, error } = await supabaseClient
           .from('simuladores')
           .insert([
             {
@@ -231,11 +273,13 @@ export default {
         this.loading = false
       }
     },
+
     resetForm() {
       const now = new Date()
-      const venezuelaOffset = -4 * 60 * 60 * 1000
-      const venezuelaTime = new Date(now.getTime() + venezuelaOffset)
-      const formattedNow = venezuelaTime.toISOString().slice(0, 16)
+      const venezuelaOffsetMinutes = 4 * 60
+      const localOffsetMinutes = now.getTimezoneOffset()
+      const adjustedTime = new Date(now.getTime() + (localOffsetMinutes + venezuelaOffsetMinutes) * 60000)
+      const formattedNow = adjustedTime.toISOString().slice(0, 16)
 
       this.simulador = {
         nombre_del_simulador: '',
@@ -248,83 +292,20 @@ export default {
       }
       this.error = null
     },
-    validateForm() {
-      const fieldsToCheck = [
-        this.simulador.enlace,
-        this.simulador.nombre_del_simulador,
-        this.simulador.descripcion_del_simulador,
-      ]
 
-      for (const field of fieldsToCheck) {
-        if (!field) continue
-        for (const keyword of forbiddenKeywords) {
-          if (field.toLowerCase().includes(keyword)) {
-            this.error = 'Este tipo de enlaces no pueden ser registrados.'
-            return false
-          }
-        }
-      }
-
-      if (!this.simulador.nombre_del_simulador || this.simulador.nombre_del_simulador.length < 7) {
-        this.error = 'El nombre del simulador debe tener al menos 7 caracteres'
-        return false
-      }
-
-      if (!this.simulador.descripcion_del_simulador || this.simulador.descripcion_del_simulador.length < 7) {
-        this.error = 'La descripción debe tener al menos 7 caracteres'
-        return false
-      }
-
-      if (this.simulador.categoria && this.simulador.categoria.length < 7) {
-        this.error = 'La categoría debe tener al menos 7 caracteres si se ingresa'
-        return false
-      }
-
-      if (!this.simulador.enlace || !this.isValidUrl(this.simulador.enlace)) {
-        this.error = 'Por favor ingrese un enlace válido'
-        return false
-      }
-
-      if (!this.simulador.asignatura) {
-        this.error = 'Debe seleccionar una asignatura'
-        return false
-      }
-
-      if (this.mostrarOtraAsignatura && !this.simulador.otra_asignatura) {
-        this.error = 'Debe seleccionar una opción para "Otra Asignatura"'
-        return false
-      }
-
-      return true
-    },
-    isValidUrl(string) {
-      try {
-        new URL(string)
-        return true
-      } catch (_) {
-        return false
-      }
-    },
-    showSuccess(message) {
-      this.successMessage = message
+    showSuccess(msg) {
+      this.successMessage = msg
       setTimeout(() => {
         this.successMessage = null
-      }, 5000)
+      }, 4000)
     },
   },
 }
+
 </script>
+>
 
 <style scoped>
-.card {
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-.card-header {
-  border-bottom: 2px solid #ffc72c;
-}
-
 .unefa-primary-bg {
   background-color: #003366;
 }
@@ -332,47 +313,9 @@ export default {
 .btn-unefa {
   background-color: rgb(34, 197, 74);
   color: white;
-  border: none;
 }
 
 .btn-unefa:hover {
   background-color: rgb(22, 163, 74);
-}
-
-.form-control:focus,
-.form-select:focus {
-  border-color: #ffc72c;
-  box-shadow: 0 0 0 0.2rem rgba(255, 199, 44, 0.25);
-}
-
-.alert {
-  position: relative;
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border: 1px solid transparent;
-  border-radius: 0.25rem;
-}
-
-.alert-success {
-  color: #0f5132;
-  background-color: #d1e7dd;
-  border-color: #badbcc;
-}
-
-.alert-danger {
-  color: #842029;
-  background-color: #f8d7da;
-  border-color: #f5c2c7;
-}
-
-.btn-close {
-  position: absolute;
-  top: 0;
-  right: 0;
-  padding: 1.25rem 1rem;
-}
-
-.progress-bar.bg-unefa {
-  background-color: rgb(34, 197, 74);
 }
 </style>
