@@ -1,6 +1,6 @@
 <template>
   <div class="layout-wrapper">
-    <nav class="navbar navbar-expand-lg navbar-dark" aria-label="Main navbar">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-dark" aria-label="Main navbar">
       <div class="container-fluid">
         <!-- Botón hamburguesa (pantallas pequeñas) -->
         <div class="mobile-toggle-container">
@@ -156,15 +156,12 @@ a:hover, .nav-link:hover {
 /* Pantallas pequeñas */
 @media (max-width: 991.98px) {
   .navbar-collapse {
-    position: fixed;
-    top: 56px;
-    left: 0;
     bottom: 0;
     width: 250px;
     padding: 20px;
     background-color: #002147;
     border-right: 1px solid #ffc72c;
-    z-index: 1101;
+    z-index: 1;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
   }
