@@ -24,10 +24,6 @@
           ref="menuRef"
         >
           <ul class="navbar-nav">
-            <li class="nav-item d-none d-lg-block desktop-logo-name">
-              <!-- Logo solo visible en pantallas grandes -->
-              <img src="/logo.png" alt="Logo" class="navbar-logo" />
-            </li>
             <li class="nav-item">
               <NuxtLink class="nav-link" to="/">Inicio</NuxtLink>
             </li>
@@ -151,10 +147,6 @@ a:hover, .nav-link:hover {
     white-space: nowrap;
   }
 
-  .desktop-logo-name {
-    display: flex !important;
-    align-items: center;
-  }
 
   .navbar-logo {
     height: 50px;
