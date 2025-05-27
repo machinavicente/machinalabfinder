@@ -95,7 +95,7 @@ const descargasPorSO = computed<Record<string, Descarga[]>>(() => {
 function iconoPorSO(sistemaOperativo: string): string {
     const mapaIconos: Record<string, string> = {
         'Windows': 'bi-windows',
-        'Linux': 'bi-ubuntu',
+        'Linux': 'bi-tux',
         'macOS': 'bi-apple',
         'Multiplataforma': 'bi-layers',
         'Android': 'bi-android2',
@@ -130,7 +130,7 @@ onMounted(() => {
             <!-- Descargas agrupadas por SO -->
             <template v-if="descargas.length > 0">
                 <div v-for="(grupoDescargas, so) in descargasPorSO" :key="so" class="mb-5">
-                    <h4 class="mb-3 text-uppercase text-primary font-weight-bold">
+                    <h4 class="mb-3 text-uppercase text-dark font-weight-bold titulo">
                         <i :class="['bi', iconoPorSO(so), 'me-2']"></i>
                         {{ so }}
                     </h4>
@@ -225,5 +225,10 @@ onMounted(() => {
 }
 small{
     font-weight: 800;
+}
+.titulo {
+   
+    font-weight: 800;
+    
 }
 </style>

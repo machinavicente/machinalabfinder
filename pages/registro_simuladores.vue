@@ -22,9 +22,8 @@
               <label>Progreso del formulario</label>
               <div class="progress" style="height: 8px;">
                 <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                     :style="{ width: formProgress + '%' }"
-                     :aria-valuenow="formProgress" aria-valuemin="0" aria-valuemax="100"
-                     style="background-color: rgb(34, 197, 74);">
+                  :style="{ width: formProgress + '%' }" :aria-valuenow="formProgress" aria-valuemin="0"
+                  aria-valuemax="100" style="background-color: rgb(34, 197, 74);">
                 </div>
               </div>
             </div>
@@ -35,20 +34,19 @@
                 <div class="col-12 position-relative">
                   <label for="nombre" class="form-label">Nombre del Simulador</label>
                   <input type="text" class="form-control" id="nombre" v-model="simulador.nombre_del_simulador" required
-                         placeholder="SQLMaster - Simulador de Bases de Datos" />
+                    placeholder="SQLMaster - Simulador de Bases de Datos" />
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
-                    {{ simulador.nombre_del_simulador.length }}/100
+                    {{ simulador.nombre_del_simulador.length }}
                   </small>
                 </div>
 
                 <!-- Descripción -->
                 <div class="col-12 position-relative">
                   <label for="descripcion" class="form-label">Descripción</label>
-                  <textarea class="form-control" id="descripcion" rows="3"
-                            v-model="simulador.descripcion_del_simulador" required
-                            placeholder="Entorno seguro para practicar consultas, diseño y optimización..."></textarea>
+                  <textarea class="form-control" id="descripcion" rows="3" v-model="simulador.descripcion_del_simulador"
+                    required placeholder="Entorno seguro para practicar consultas, diseño y optimización..."></textarea>
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
-                    {{ simulador.descripcion_del_simulador.length }}/300
+                    {{ simulador.descripcion_del_simulador.length }}
                   </small>
                 </div>
 
@@ -95,16 +93,16 @@
                 <div class="col-md-6">
                   <label for="enlace" class="form-label">Enlace del Simulador</label>
                   <input type="url" class="form-control" id="enlace" v-model="simulador.enlace" required
-                         placeholder="https://www.ejemplo.com" />
+                    placeholder="https://www.ejemplo.com" />
                 </div>
 
                 <!-- Categoría -->
                 <div class="col-md-6 position-relative">
                   <label for="categoria" class="form-label">Categoría</label>
                   <input type="text" class="form-control" id="categoria" v-model="simulador.categoria"
-                         placeholder="Ej: Compilador, Diagramador, IDE..." />
+                    placeholder="Ej: Compilador, Diagramador, IDE..." />
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
-                    {{ simulador.categoria.length }}/50
+                    {{ simulador.categoria.length }}
                   </small>
                 </div>
 
@@ -112,7 +110,7 @@
                 <div class="col-md-6">
                   <label for="fecha" class="form-label">Fecha de Registro</label>
                   <input type="datetime-local" class="form-control" id="fecha" v-model="simulador.created_at"
-                         readonly />
+                    readonly />
                 </div>
 
                 <!-- Botones -->
@@ -170,14 +168,20 @@
 import { useNuxtApp } from '#app'
 import { forbiddenKeywords } from '@/utils/validate_form.js'
 
+// ✅ Función confiable que usa la zona horaria de Venezuela correctamente
+function getVenezuelaDateTimeString() {
+  const now = new Date()
+  const venezuelaDate = new Date(now.toLocaleString('en-US', { timeZone: 'America/Caracas' }))
+  const year = venezuelaDate.getFullYear()
+  const month = String(venezuelaDate.getMonth() + 1).padStart(2, '0')
+  const day = String(venezuelaDate.getDate()).padStart(2, '0')
+  const hours = String(venezuelaDate.getHours()).padStart(2, '0')
+  const minutes = String(venezuelaDate.getMinutes()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+}
+
 export default {
   data() {
-    const now = new Date()
-    const venezuelaOffsetMinutes = 4 * 60
-    const localOffsetMinutes = now.getTimezoneOffset()
-    const adjustedTime = new Date(now.getTime() + (localOffsetMinutes + venezuelaOffsetMinutes) * 60000)
-    const formattedNow = adjustedTime.toISOString().slice(0, 16)
-
     return {
       simulador: {
         nombre_del_simulador: '',
@@ -186,7 +190,7 @@ export default {
         enlace: '',
         asignatura: '',
         otra_asignatura: '',
-        created_at: formattedNow,
+        created_at: getVenezuelaDateTimeString(),
       },
       loading: false,
       error: null,
@@ -308,10 +312,7 @@ export default {
       this.successMessage = null
 
       try {
-        const now = new Date()
-        const venezuelaOffsetMinutes = 4 * 60
-        const localOffsetMinutes = now.getTimezoneOffset()
-        const venezuelaTime = new Date(now.getTime() + (localOffsetMinutes + venezuelaOffsetMinutes) * 60000)
+        const created_at = getVenezuelaDateTimeString()
 
         const asignaturaFinal = this.mostrarOtraAsignatura
           ? this.simulador.otra_asignatura
@@ -328,7 +329,7 @@ export default {
             categoria: this.simulador.categoria,
             enlace: this.simulador.enlace,
             asignatura: asignaturaFinal,
-            created_at: venezuelaTime.toISOString(),
+            created_at,
           }])
 
         if (error) throw error
@@ -344,12 +345,6 @@ export default {
     },
 
     resetForm() {
-      const now = new Date()
-      const venezuelaOffsetMinutes = 4 * 60
-      const localOffsetMinutes = now.getTimezoneOffset()
-      const adjustedTime = new Date(now.getTime() + (localOffsetMinutes + venezuelaOffsetMinutes) * 60000)
-      const formattedNow = adjustedTime.toISOString().slice(0, 16)
-
       this.simulador = {
         nombre_del_simulador: '',
         descripcion_del_simulador: '',
@@ -357,7 +352,7 @@ export default {
         enlace: '',
         asignatura: '',
         otra_asignatura: '',
-        created_at: formattedNow,
+        created_at: getVenezuelaDateTimeString(),
       }
       this.error = null
     },
@@ -371,6 +366,7 @@ export default {
   },
 }
 </script>
+
 
 <style scoped>
 .unefa-primary-bg {

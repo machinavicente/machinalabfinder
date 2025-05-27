@@ -57,14 +57,14 @@
               </div>
 
               <!-- Simuladores Recientes -->
-              <div class="col-md-6 col-lg-3">
+                <div class="col-md-6 col-lg-3">
                 <div class="metric-card">
                   <div class="metric-icon">
-                    <i class="bi bi-clock-history"></i>
+                    <i class="bi bi-filetype-exe"></i>
                   </div>
                   <div class="metric-content">
-                    <h3>Simuladores Recientes</h3>
-                    <p class="metric-value">{{ simuladoresRecientes.length }}</p>
+                    <h3>Total de Simuladores Descargables </h3>
+                    <p class="metric-value">{{ totalSimuladores }}</p>
                   </div>
                 </div>
               </div>
@@ -87,7 +87,7 @@
           <!-- Sección de los 3 simuladores más recientes -->
           <section class="ultimos-simuladores-section mb-5">
             <h2 class="section-title mb-4">
-              <i class="bi bi-star-fill me-2"></i>Últimos Simuladores Agregados
+              <i class="bi bi-clock-history me-2 text-warning"></i>Últimos Simuladores Agregados
             </h2>
 
             <div v-if="isLoading" class="text-center py-5">
@@ -145,7 +145,7 @@
               <div class="col-md-6 mt-3">
                 <div class="action-card stats-card">
                   <div class="action-icon">
-                    <i class="bi bi-file-earmark-pdf"></i>
+                    <i class="bi bi-journal-arrow-down"></i>
                   </div>
                   <div class="action-content">
                     <h3>Descargar Reporte</h3>
