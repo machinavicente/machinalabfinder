@@ -24,7 +24,7 @@
                 </div>
               </div>
 
-              <div class="d-grid d-md-flex flex-row gap-2 mb-2">
+              <div class="d-grid d-md-flex flex-row gap-2 mb-5">
                 <NuxtLink to="/order_simulators" class="btn btn-unefa btn-lg">
                   Comenzar
                 </NuxtLink>
