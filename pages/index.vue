@@ -19,12 +19,12 @@
                     MachinaLab Finder
                   </h1>
                   <p class="mb-0">
-                    MachinaLab Finder es una plataforma innovadora diseñada para facilitar la búsqueda y acceso a simuladores virtuales de laboratorios. Inspirada en la necesidad de optimizar la formación práctica en entornos educativos, esta herramienta permite a estudiantes y docentes encontrar de manera rápida y sencilla recursos digitales que complementan el aprendizaje teórico.
+                    <strong>MachinaLab Finder</strong> es una plataforma innovadora diseñada para facilitar la búsqueda y acceso a simuladores virtuales de laboratorios. Inspirada en la necesidad de optimizar la formación práctica en entornos educativos, esta herramienta permite a estudiantes y docentes encontrar de manera rápida y sencilla recursos digitales que complementan el aprendizaje teórico.
                   </p>
                 </div>
               </div>
 
-              <div class="d-grid d-md-flex flex-row gap-2">
+              <div class="d-grid d-md-flex flex-row gap-2 mb-2">
                 <NuxtLink to="/order_simulators" class="btn btn-unefa btn-lg">
                   Comenzar
                 </NuxtLink>
