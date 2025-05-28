@@ -19,7 +19,7 @@
                     MachinaLab Finder
                   </h1>
                   <p class="mb-0">
-                    <strong>MachinaLab Finder</strong> es una plataforma innovadora diseñada para facilitar la búsqueda y acceso a simuladores virtuales de laboratorios. Inspirada en la necesidad de optimizar la formación práctica en entornos educativos, esta herramienta permite a estudiantes y docentes encontrar de manera rápida y sencilla recursos digitales que complementan el aprendizaje teórico.
+                    <strong>MachinaLab Finder. </strong>Es una plataforma innovadora diseñada para facilitar la búsqueda y acceso a simuladores virtuales de laboratorios. Inspirada en la necesidad de optimizar la formación práctica en entornos educativos, esta herramienta permite a estudiantes y docentes encontrar de manera rápida y sencilla recursos digitales que complementan el aprendizaje teórico.
                   </p>
                 </div>
               </div>
@@ -105,11 +105,6 @@ const features = [
     icon: 'bi bi-code-square',
     title: 'Entornos de programación',
     description: 'Simuladores con compiladores y editores para practicar código en tiempo real.',
-  },
-  {
-    icon: 'bi bi-people',
-    title: 'Trabajo colaborativo',
-    description: 'Espacios para compartir proyectos y trabajar con compañeros y docentes.',
   },
 ]
 </script>

@@ -18,6 +18,7 @@ const descargas = ref<Descarga[]>([])
 const isLoading = ref(true)
 const error = ref<string | null>(null)
 const terminoBusqueda = ref('')
+const filtroAsignatura = ref('')
 
 async function cargarDescargas() {
     try {
@@ -62,6 +63,10 @@ const sistemasOperativosDisponibles = computed<string[]>(() => {
     return [...new Set(descargas.value.map(d => d.sistema_operativo))].sort()
 })
 
+const asignaturasDisponibles = computed(() =>
+    [...new Set(descargas.value.map(d => d.asignatura))].sort()
+)
+
 const descargasFiltradas = computed<Descarga[]>(() => {
     const termino = normalizarTexto(terminoBusqueda.value)
 
@@ -71,10 +76,14 @@ const descargasFiltradas = computed<Descarga[]>(() => {
         const textoCompleto = [
             descarga.nombre_del_programa,
             descarga.descripcion_del_programa,
-            descarga.sistema_operativo
+            descarga.sistema_operativo,
+            descarga.asignatura
         ].join(' ')
 
-        return termino === '' || normalizarTexto(textoCompleto).includes(termino)
+        const coincideBusqueda = normalizarTexto(textoCompleto).includes(termino)
+        const coincideAsignatura = filtroAsignatura.value === '' || descarga.asignatura === filtroAsignatura.value
+
+        return coincideBusqueda && coincideAsignatura
     })
 })
 
@@ -105,6 +114,10 @@ function iconoPorSO(sistemaOperativo: string): string {
     return mapaIconos[sistemaOperativo] || mapaIconos['Otros']
 }
 
+function toggleAsignatura(asignatura: string) {
+  filtroAsignatura.value = filtroAsignatura.value === asignatura ? '' : asignatura
+}
+
 onMounted(() => {
     cargarDescargas()
 })
@@ -125,6 +138,22 @@ onMounted(() => {
             <div class="mb-4">
                 <input v-model="terminoBusqueda" type="text" class="form-control" placeholder="Buscar programas..."
                     autocomplete="off" />
+            </div>
+
+            <!-- Filtros por asignatura -->
+            <div class="mb-4">
+                <h6 class="text-dark fw-bold mb-2">Filtrar por asignatura:</h6>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <button 
+                        v-for="asig in asignaturasDisponibles" 
+                        :key="asig" 
+                        @click="toggleAsignatura(asig)" 
+                        class="btn btn-sm"
+                        :class="filtroAsignatura === asig ? 'btn-success text-white' : 'btn-outline-secondary'"
+                    >
+                        {{ asig }}
+                    </button>
+                </div>
             </div>
 
             <!-- Descargas agrupadas por SO -->
@@ -227,8 +256,12 @@ small{
     font-weight: 800;
 }
 .titulo {
-   
     font-weight: 800;
-    
+}
+
+/* Estilo para los botones de filtro */
+.btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
 }
 </style>
