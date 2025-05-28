@@ -31,55 +31,49 @@
           <section class="metrics-section mb-5">
             <div class="row g-4">
               <!-- Total de Simuladores -->
-              <div class="col-md-6 col-lg-3">
-                <div class="metric-card">
-                  <div class="metric-icon">
-                    <i class="bi bi-cpu"></i>
-                  </div>
-                  <div class="metric-content">
-                    <h3>Total de Simuladores</h3>
-                    <p class="metric-value">{{ totalSimuladores }}</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Total de Asignaturas -->
-              <div class="col-md-6 col-lg-3">
-                <div class="metric-card">
-                  <div class="metric-icon">
-                    <i class="bi bi-journal-bookmark"></i>
-                  </div>
-                  <div class="metric-content">
-                    <h3>Total de Asignaturas</h3>
-                    <p class="metric-value">{{ totalAsignaturas }}</p>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Simuladores Recientes -->
                 <div class="col-md-6 col-lg-3">
-                <div class="metric-card">
-                  <div class="metric-icon">
-                    <i class="bi bi-filetype-exe"></i>
-                  </div>
-                  <div class="metric-content">
-                    <h3>Total de Simuladores Descargables </h3>
-                    <p class="metric-value">{{ totalSimuladores }}</p>
-                  </div>
+                  <NuxtLink class="nav-link" to="/order_simulators">
+                    <div class="metric-card">
+                      <div class="metric-icon">
+                        <i class="bi bi-cpu"></i>
+                      </div>
+                      <div class="metric-content">
+                        <h3>Total de Simuladores Online</h3>
+                        <p class="metric-value">{{ totalSimuladores }}</p>
+                      </div>
+                    </div>
+                  </NuxtLink>
                 </div>
-              </div>
-
+              
+              <!-- Simuladores descargables -->
+                <div class="col-md-6 col-lg-3">
+                  <NuxtLink class="nav-link" to="/downloads">
+                    <div class="metric-card">
+                      <div class="metric-icon">
+                        <i class="bi bi-filetype-exe"></i>
+                      </div>
+                      <div class="metric-content">
+                        <h3>Total de Simuladores Descargables</h3>
+                        <p class="metric-value">{{ totalDescargables }}</p>
+                      </div>                
+                    </div>
+                  </NuxtLink>
+                </div>
               <!-- Asignaturas con Simuladores -->
               <div class="col-md-6 col-lg-3">
                 <div class="metric-card">
                   <div class="metric-icon">
-                    <i class="bi bi-list-check"></i>
+                    <i class="bi bi-window-stack"></i>
                   </div>
                   <div class="metric-content">
                     <h3>Asignaturas con Simuladores</h3>
                     <p class="metric-value">{{ asignaturasConSimuladores.length }}</p>
                   </div>
                 </div>
+              </div>
+              <!-- Promedio de Simuladores por Asignatura -->
+              <div class="col-md-6 col-lg-3">
+               <Promedio :simuladores="simuladores" :asignaturas="asignaturasConSimuladores" />
               </div>
             </div>
           </section>
@@ -149,7 +143,8 @@
                   </div>
                   <div class="action-content">
                     <h3>Descargar Reporte</h3>
-                    <p>Descarga los reportes completos de tus simuladores de laboratorio en formato PDF para su revisión y análisis.</p>
+                    <p>Descarga los reportes completos de tus simuladores de laboratorio en formato PDF para su revisión
+                      y análisis.</p>
                     <ReporteSimuladores :simuladores="simuladores" />
                   </div>
                 </div>
@@ -181,6 +176,7 @@ const supabase = $supabase as SupabaseClient
 
 // Datos del dashboard
 const simuladores = ref<Simulador[]>([])
+const totalDescargables = ref(0)
 const ultimosSimuladores = ref<Simulador[]>([])
 const totalSimuladores = ref(0)
 const totalAsignaturas = ref(0)
@@ -206,6 +202,15 @@ async function cargarDatosDashboard() {
 
     if (countError) throw countError
     totalSimuladores.value = countSimuladores || 0
+
+    // 1b. Contar total de simuladores descargables
+    const { count: countDescargables, error: countDescargablesError } = await supabase
+      .from('descargas')
+      .select('*', { count: 'exact', head: true })
+
+    if (countDescargablesError) throw countDescargablesError
+    totalDescargables.value = countDescargables || 0
+
 
     // 2. Obtener asignaturas únicas
     const { data: asignaturasData, error: asignaturasError } = await supabase
@@ -523,5 +528,32 @@ onBeforeUnmount(() => {
 .spinner-border {
   width: 3rem;
   height: 3rem;
+}
+
+.asignatura-badge {
+  max-width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1024px) {
+  .d-flex.justify-content-between.align-items-center {
+    flex-wrap: nowrap !important;
+    /* evitar salto de línea */
+    gap: 0.5rem;
+  }
+
+  .asignatura-badge {
+    max-width: 50%;
+    font-size: 0.85rem;
+  }
+
+  .btn.btn-sm.btn-primary {
+    flex-shrink: 0;
+    /* evitar que el botón se reduzca demasiado */
+    font-size: 0.85rem;
+    padding: 0.25rem 0.5rem;
+  }
 }
 </style>
