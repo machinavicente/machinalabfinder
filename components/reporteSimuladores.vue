@@ -36,11 +36,11 @@ function generarPDF() {
   doc.text('UNEFA - Extensión Zaraza', 14, y)
 
   y += 6
-  doc.setFontSize(18)
-  doc.setTextColor(255, 204, 0) // amarillo
-  doc.text('Machina', 14, y)
+  doc.setFontSize(16)
+  doc.setTextColor(0, 32, 68) 
+  doc.text('MachinaLab', 14, y)
   doc.setTextColor(0, 32, 68)
-  doc.text('SynthLabs', 46, y)
+  doc.text('Finder', 46, y)
 
   y += 10
   doc.setTextColor(0)
