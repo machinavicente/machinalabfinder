@@ -11,7 +11,8 @@ export default defineNuxtConfig({
       link: [
         { rel: 'stylesheet', href: '/assets/bootstrap/bootstrap.min.css' },
         { rel: 'stylesheet', href: '/assets/css/index.css' },
-        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css' }
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css' },
+        { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css' }
       ],
       script: [
         {

@@ -12,7 +12,7 @@
             aria-label="Toggle navigation"
             ref="burgerButton"
           >
-            <span class="navbar-toggler-icon"></span>
+            <span class="ri-menu-2-line"></span>
           </button>
         </div>
 

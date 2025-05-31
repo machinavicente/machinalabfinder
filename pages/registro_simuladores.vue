@@ -32,7 +32,9 @@
               <div class="row g-3">
                 <!-- Nombre -->
                 <div class="col-12 position-relative">
-                  <label for="nombre" class="form-label">Nombre del Simulador</label>
+                  <label for="nombre" class="form-label">
+                    <i class="ri-file-text-line me-1"></i> Nombre del Simulador
+                  </label>
                   <input type="text" class="form-control" id="nombre" v-model="simulador.nombre_del_simulador" required
                     placeholder="SQLMaster - Simulador de Bases de Datos" />
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
@@ -42,7 +44,9 @@
 
                 <!-- Descripción -->
                 <div class="col-12 position-relative">
-                  <label for="descripcion" class="form-label">Descripción</label>
+                  <label for="descripcion" class="form-label">
+                    <i class="ri-file-description-line me-1"></i> Descripción
+                  </label>
                   <textarea class="form-control" id="descripcion" rows="3" v-model="simulador.descripcion_del_simulador"
                     required placeholder="Entorno seguro para practicar consultas, diseño y optimización..."></textarea>
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
@@ -52,7 +56,9 @@
 
                 <!-- Asignatura -->
                 <div class="col-md-6">
-                  <label for="asignatura" class="form-label">Asignatura</label>
+                  <label for="asignatura" class="form-label">
+                    <i class="ri-book-2-line me-1"></i> Asignatura
+                  </label>
                   <select class="form-select" id="asignatura" v-model="simulador.asignatura" required>
                     <option value="" disabled>Seleccionar...</option>
                     <option value="Matemáticas">Matemáticas</option>
@@ -74,7 +80,9 @@
 
                 <!-- Otra Asignatura -->
                 <div v-if="mostrarOtraAsignatura" class="col-md-6">
-                  <label for="otra-asignatura" class="form-label">Otra Asignatura</label>
+                  <label for="otra-asignatura" class="form-label">
+                    <i class="ri-book-open-line me-1"></i> Otra Asignatura
+                  </label>
                   <select id="otra-asignatura" class="form-select" v-model="simulador.otra_asignatura" required>
                     <option value="" disabled>Seleccionar...</option>
                     <option value="Cálculo Numérico">Cálculo Numérico</option>
@@ -91,14 +99,18 @@
 
                 <!-- Enlace -->
                 <div class="col-md-6">
-                  <label for="enlace" class="form-label">Enlace del Simulador</label>
+                  <label for="enlace" class="form-label">
+                    <i class="ri-link-m"></i> Enlace del Simulador
+                  </label>
                   <input type="url" class="form-control" id="enlace" v-model="simulador.enlace" required
                     placeholder="https://www.ejemplo.com" />
                 </div>
 
                 <!-- Categoría -->
                 <div class="col-md-6 position-relative">
-                  <label for="categoria" class="form-label">Categoría</label>
+                  <label for="categoria" class="form-label">
+                    <i class="ri-folder-4-line me-1"></i> Categoría
+                  </label>
                   <input type="text" class="form-control" id="categoria" v-model="simulador.categoria"
                     placeholder="Ej: Compilador, Diagramador, IDE..." />
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
@@ -108,7 +120,9 @@
 
                 <!-- Fecha -->
                 <div class="col-md-6">
-                  <label for="fecha" class="form-label">Fecha de Registro</label>
+                  <label for="fecha" class="form-label">
+                    <i class="ri-calendar-event-line me-1"></i> Fecha de Registro
+                  </label>
                   <input type="datetime-local" class="form-control" id="fecha" v-model="simulador.created_at"
                     readonly />
                 </div>
@@ -116,7 +130,7 @@
                 <!-- Botones -->
                 <div class="col-12 mt-4 d-flex justify-content-between">
                   <button type="button" class="btn btn-outline-danger" @click="resetForm">
-                    <i class="bi bi-x-circle me-2"></i>Cancelar
+                    <i class="ri-close-circle-line me-2"></i> Vaciar
                   </button>
                   <button type="submit" class="btn btn-success" :disabled="loading">
                     <template v-if="loading">
@@ -124,12 +138,13 @@
                       Procesando...
                     </template>
                     <template v-else>
-                      <i class="bi bi-save me-2"></i>Guardar Simulador
+                      <i class="ri-save-line me-2"></i> Guardar Simulador
                     </template>
                   </button>
                 </div>
               </div>
             </form>
+
           </div>
         </div>
       </div>
@@ -233,6 +248,7 @@ export default {
       const lowerUrl = url.toLowerCase()
       return keywords.some(k => lowerUrl.includes(k.toLowerCase()))
     },
+
 
     normalizeUrl(url) {
       return url.trim().toLowerCase().replace(/^https?:\/\//, '').replace(/\/$/, '')
