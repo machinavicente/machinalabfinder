@@ -191,7 +191,7 @@ onMounted(() => {
                                         </small>
                                         <a :href="descarga.enlace_del_programa" class="btn btn-success btn-sm"
                                             target="_blank">
-                                            <i class="bi bi-cloud-download"></i> Descargar
+                                            <i class="ri-mobile-download-line"></i> Descargar
                                         </a>
                                     </div>
                                 </div>
