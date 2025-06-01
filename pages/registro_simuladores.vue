@@ -134,7 +134,7 @@
                   </button>
                   <button type="submit" class="btn btn-success" :disabled="loading">
                     <template v-if="loading">
-                      <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <span class="spinner-border" role="status" aria-hidden="true"></span>
                       Procesando...
                     </template>
                     <template v-else>

@@ -85,7 +85,7 @@
             </h2>
 
             <div v-if="isLoading" class="text-center py-5">
-              <div class="spinner-border text-primary" role="status">
+              <div class="spinner-grow  text-danger" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
             </div>
