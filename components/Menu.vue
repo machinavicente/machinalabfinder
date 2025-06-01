@@ -26,19 +26,35 @@
         >
           <ul class="navbar-nav">
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/" @click="closeMenu">Inicio</NuxtLink>
+               
+              <NuxtLink class="nav-link" to="/" @click="closeMenu">
+                <i class="ri-home-line"></i>
+                Inicio
+              </NuxtLink>
             </li>
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/dashboard" @click="closeMenu">Dashboard</NuxtLink>
+              <NuxtLink class="nav-link" to="/dashboard" @click="closeMenu">
+                <i class="ri-dashboard-line"></i>
+                Dashboard
+              </NuxtLink>
             </li> 
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/order_simulators" @click="closeMenu">Simuladores Online</NuxtLink>
+              <NuxtLink class="nav-link" to="/order_simulators" @click="closeMenu">
+                <i class="ri-rocket-line"></i>
+                Simuladores Online
+              </NuxtLink>
             </li>
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/downloads" @click="closeMenu">Simuladores Descargables</NuxtLink>
+              <NuxtLink class="nav-link" to="/downloads" @click="closeMenu">
+                <i class="ri-download-2-line"></i>
+                Simuladores Descargables
+              </NuxtLink>
             </li>
             <li class="nav-item">
-              <NuxtLink class="nav-link" to="/registro_simuladores" @click="closeMenu">Expande la colección</NuxtLink>
+              <NuxtLink class="nav-link" to="/registro_simuladores" @click="closeMenu">
+                <i class="ri-edit-box-line"></i>
+                Expande la colección
+              </NuxtLink>
             </li>
           </ul>
         </div>
