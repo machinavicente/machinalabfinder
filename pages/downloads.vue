@@ -126,7 +126,7 @@ onMounted(() => {
 <template>
     <div class="container py-4">
         <div v-if="isLoading" class="text-center py-5">
-            <div class="spinner-border text-primary" role="status">
+            <div class="spinner-grow text-danger" role="status">
                 <span class="visually-hidden">Cargando...</span>
             </div>
         </div>
@@ -191,7 +191,7 @@ onMounted(() => {
                                         </small>
                                         <a :href="descarga.enlace_del_programa" class="btn btn-success btn-sm"
                                             target="_blank">
-                                            <i class="bi bi-cloud-download"></i> Descargar
+                                            <i class="ri-mobile-download-line"></i> Descargar
                                         </a>
                                     </div>
                                 </div>
