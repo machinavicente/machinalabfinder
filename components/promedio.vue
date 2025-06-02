@@ -32,25 +32,29 @@ const promedio = computed(() => {
 
 <style scoped>
 .metric-card {
-   background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   padding: 1rem;
   display: flex;
   align-items: center;
   gap: 1rem;
 }
+
 .metric-card:hover {
   background: rgba(255, 255, 255, 0.15);
   transform: translateY(-5px);
 }
+
 .metric-icon {
   font-size: 2.5rem;
 }
+
 .metric-content h3 {
   font-size: 1rem;
   margin-bottom: 0.5rem;
   opacity: 0.8;
 }
+
 .metric-value {
   font-size: 1.75rem;
   font-weight: bold;
