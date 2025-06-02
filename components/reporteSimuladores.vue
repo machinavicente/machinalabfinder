@@ -25,21 +25,27 @@ function formatDate(dateString: string) {
   return new Date(dateString).toLocaleDateString('es-ES', options)
 }
 
+function normalizarTexto(texto: string): string {
+  return texto
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+}
+
 function generarPDF() {
-  // Orientación vertical para hoja tipo carta
   const doc = new jsPDF({ orientation: 'portrait' })
   let y = 20
 
   // Identidad institucional
-  doc.setTextColor(0, 32, 68) // azul UNEFA
+  doc.setTextColor(0, 32, 68)
   doc.setFontSize(10)
   doc.text('UNEFA - Extensión Zaraza', 14, y)
 
   y += 6
   doc.setFontSize(16)
-  doc.setTextColor(0, 32, 68) 
-  doc.text('MachinaLab', 14, y)
   doc.setTextColor(0, 32, 68)
+  doc.text('MachinaLab', 14, y)
   doc.text('Finder', 46, y)
 
   y += 10
@@ -51,8 +57,15 @@ function generarPDF() {
 
   // Resumen general
   const totalSimuladores = props.simuladores.length
-  const asignaturasUnicas = [...new Set(props.simuladores.map(s => s.asignatura))]
-  const totalAsignaturas = asignaturasUnicas.length
+
+  const asignaturasMap = new Map<string, string>()
+  props.simuladores.forEach(s => {
+    const key = normalizarTexto(s.asignatura)
+    if (!asignaturasMap.has(key)) {
+      asignaturasMap.set(key, s.asignatura)
+    }
+  })
+  const totalAsignaturas = asignaturasMap.size
 
   doc.setFontSize(14)
   doc.text('Resumen general', 14, y)
@@ -68,10 +81,11 @@ function generarPDF() {
   doc.text('Simuladores por asignatura', 14, y)
   y += 6
 
-  const simuladoresPorAsignatura = asignaturasUnicas.map(asig => [
-    asig,
-    props.simuladores.filter(s => s.asignatura === asig).length,
-  ])
+  const simuladoresPorAsignatura: [string, number][] = []
+  asignaturasMap.forEach((valorOriginal, claveNormalizada) => {
+    const total = props.simuladores.filter(s => normalizarTexto(s.asignatura) === claveNormalizada).length
+    simuladoresPorAsignatura.push([valorOriginal, total])
+  })
 
   autoTable(doc, {
     head: [['Asignatura', 'Total de simuladores']],
@@ -100,16 +114,24 @@ function generarPDF() {
 
   y = (doc as any).lastAutoTable.finalY + 10
 
-  // Simuladores por tipo
+  // Simuladores por tipo (categoría)
   doc.setFontSize(14)
   doc.text('Simuladores por tipo', 14, y)
   y += 6
 
-  const categoriasUnicas = [...new Set(props.simuladores.map(s => s.categoria))]
-  const simuladoresPorTipo = categoriasUnicas.map(cat => [
-    cat,
-    props.simuladores.filter(s => s.categoria === cat).length,
-  ])
+  const categoriasMap = new Map<string, string>()
+  props.simuladores.forEach(s => {
+    const key = normalizarTexto(s.categoria)
+    if (!categoriasMap.has(key)) {
+      categoriasMap.set(key, s.categoria)
+    }
+  })
+
+  const simuladoresPorTipo: [string, number][] = []
+  categoriasMap.forEach((valorOriginal, claveNormalizada) => {
+    const total = props.simuladores.filter(s => normalizarTexto(s.categoria) === claveNormalizada).length
+    simuladoresPorTipo.push([valorOriginal, total])
+  })
 
   autoTable(doc, {
     head: [['Tipo de simulador', 'Total']],
@@ -138,7 +160,7 @@ function generarPDF() {
 
   y = (doc as any).lastAutoTable.finalY + 10
 
-  // Tabla completa de simuladores (ajustada para hoja carta)
+  // Tabla completa
   doc.setFontSize(14)
   doc.setTextColor(0)
   doc.text('Listado completo de simuladores', 14, y)
@@ -173,11 +195,11 @@ function generarPDF() {
       fillColor: [240, 240, 240],
     },
     columnStyles: {
-      0: { cellWidth: 30 },  // Nombre
-      1: { cellWidth: 70 },  // Descripción
-      2: { cellWidth: 40 },  // Enlace
-      3: { cellWidth: 22 },  // Categoría
-      4: { cellWidth: 20 },  // Asignatura
+      0: { cellWidth: 30 },
+      1: { cellWidth: 70 },
+      2: { cellWidth: 40 },
+      3: { cellWidth: 22 },
+      4: { cellWidth: 21 },
     },
     margin: { top: 10, bottom: 20, left: 14, right: 14 },
     tableWidth: 'auto',
@@ -186,7 +208,7 @@ function generarPDF() {
 
   y = (doc as any).lastAutoTable.finalY + 10
 
-  // Notas adicionales con líneas
+  // Notas adicionales
   doc.setFontSize(12)
   doc.setTextColor(0)
   doc.text('Notas adicionales:', 14, y)
