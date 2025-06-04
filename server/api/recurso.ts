@@ -1,16 +1,19 @@
-export default defineEventHandler(async () => {
-  const baseURL =
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:3000'
-      : 'https://TU_DOMINIO.vercel.app' // cambia esto por tu dominio real
+import fs from 'fs'
+import path from 'path'
 
-  const res = await fetch(`${baseURL}/guides_png/index.json`)
-  const archivos: string[] = await res.json()
+export default defineEventHandler(() => {
+  const carpeta = path.resolve('public/guides_png')
+
+  if (!fs.existsSync(carpeta)) return []
+
+  const archivos = fs
+    .readdirSync(carpeta)
+    .filter((nombre) => /\.(png|jpe?g|gif|jfif)$/i.test(nombre))
 
   const imagenes = archivos.map((nombre, index) => ({
     id: index + 1,
     nombre: nombre
-      .replace(/\.(png|jpg|jpeg|gif|jfif)$/i, '')
+      .replace(/\.(png|jpe?g|gif|jfif)$/i, '')
       .replace(/[-_]/g, ' '),
     url: `/guides_png/${nombre}`
   }))
