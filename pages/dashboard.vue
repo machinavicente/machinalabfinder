@@ -31,34 +31,34 @@
           <section class="metrics-section mb-5">
             <div class="row g-4">
               <!-- Total de Simuladores -->
-                <div class="col-md-6 col-lg-3">
-                  <NuxtLink class="nav-link" to="/order_simulators">
-                    <div class="metric-card">
-                      <div class="metric-icon">
-                        <i class="bi bi-cpu"></i>
-                      </div>
-                      <div class="metric-content">
-                        <h3>Total de Simuladores Online</h3>
-                        <p class="metric-value">{{ totalSimuladores }}</p>
-                      </div>
+              <div class="col-md-6 col-lg-3">
+                <NuxtLink class="nav-link" to="/order_simulators">
+                  <div class="metric-card">
+                    <div class="metric-icon">
+                      <i class="bi bi-cpu"></i>
                     </div>
-                  </NuxtLink>
-                </div>
-              
+                    <div class="metric-content">
+                      <h3>Total de Simuladores Online</h3>
+                      <p class="metric-value">{{ totalSimuladores }}</p>
+                    </div>
+                  </div>
+                </NuxtLink>
+              </div>
+
               <!-- Simuladores descargables -->
-                <div class="col-md-6 col-lg-3">
-                  <NuxtLink class="nav-link" to="/downloads">
-                    <div class="metric-card">
-                      <div class="metric-icon">
-                        <i class="bi bi-filetype-exe"></i>
-                      </div>
-                      <div class="metric-content">
-                        <h3>Total de Simuladores Descargables</h3>
-                        <p class="metric-value">{{ totalDescargables }}</p>
-                      </div>                
+              <div class="col-md-6 col-lg-3">
+                <NuxtLink class="nav-link" to="/downloads">
+                  <div class="metric-card">
+                    <div class="metric-icon">
+                      <i class="bi bi-filetype-exe"></i>
                     </div>
-                  </NuxtLink>
-                </div>
+                    <div class="metric-content">
+                      <h3>Total de Simuladores Descargables</h3>
+                      <p class="metric-value">{{ totalDescargables }}</p>
+                    </div>
+                  </div>
+                </NuxtLink>
+              </div>
               <!-- Asignaturas con Simuladores -->
               <div class="col-md-6 col-lg-3">
                 <div class="metric-card">
@@ -73,7 +73,7 @@
               </div>
               <!-- Promedio de Simuladores por Asignatura -->
               <div class="col-md-6 col-lg-3">
-               <Promedio :simuladores="simuladores" :asignaturas="asignaturasConSimuladores" />
+                <Promedio :simuladores="simuladores" :asignaturas="asignaturasConSimuladores" />
               </div>
             </div>
           </section>
@@ -97,19 +97,25 @@
             <div v-else class="row g-4">
               <div v-for="sim in ultimosSimuladores" :key="sim.id" class="col-md-4">
                 <div class="ultimo-simulador-card">
+                  <!-- Header: Contiene los badges de categoría -->
                   <div class="card-header">
                     <span class="badge bg-warning text-dark">Nuevo</span>
                     <span class="badge category-badge">{{ sim.categoria }}</span>
                   </div>
+
+                  <!-- Body: Contiene el título y descripción (parte variable) -->
                   <div class="card-body">
                     <h5>{{ sim.nombre_del_simulador }}</h5>
-                    <p class="small">{{ sim.descripcion_del_simulador }}</p>
+                    <p class="small description-text">{{ sim.descripcion_del_simulador }}</p>
+                  </div>
+
+                  <!-- Footer: Contiene los elementos fijos (asignatura, botón y fecha) -->
+                  <div class="card-footer ">
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="badge asignatura-badge">{{ sim.asignatura }}</span>
                       <a :href="sim.enlace" target="_blank" class="btn btn-sm btn-primary">
                         <i class="bi bi-play-fill"></i> Usar
                       </a>
-
                     </div>
                     <span class="small text-success">Agregado: {{ formatDate(sim.created_at) }}</span>
                   </div>
@@ -421,18 +427,18 @@ onBeforeUnmount(() => {
 }
 
 .ultimo-simulador-card .card-body {
-  padding: 1.5rem;
+  padding: 2rem;
   flex-grow: 1;
 }
 
 .ultimo-simulador-card .card-footer {
-  padding: 0.75rem 1rem;
+  padding: 0.65rem 0.85rem;
   background: rgba(0, 0, 0, 0.1);
 }
 
 /* Estilos para los simuladores normales */
 .simuladores-section .card {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(5, 209, 199, 0.05);
   border: none;
   transition: transform 0.3s ease;
 }

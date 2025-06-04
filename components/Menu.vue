@@ -39,6 +39,12 @@
               </NuxtLink>
             </li> 
             <li class="nav-item">
+              <NuxtLink class="nav-link" to="/guides" @click="closeMenu">
+                <i class="ri-book-open-line"></i>
+                Biblioteca
+              </NuxtLink>
+            </li>
+            <li class="nav-item">
               <NuxtLink class="nav-link" to="/order_simulators" @click="closeMenu">
                 <i class="ri-rocket-line"></i>
                 Simuladores Online
