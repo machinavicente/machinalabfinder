@@ -20,6 +20,16 @@ function normalizarTexto(texto: string): string {
     .trim()
 }
 
+// Función que quita extensión y normaliza nombre para mostrar
+function normalizarNombreParaMostrar(nombre: string): string {
+  const nombreSinExt = nombre.replace(/\.[^/.]+$/, '')
+  return nombreSinExt
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '') // quitar tildes
+    .replace(/[^a-zA-Z0-9\s]/g, '') // solo letras, números y espacios
+    .trim()
+}
+
 const imagenesFiltradas = computed(() => {
   const termino = normalizarTexto(terminoBusqueda.value)
   if (!termino) return imagenes.value
@@ -68,8 +78,12 @@ function obtenerURL(nombre: string): string {
 
 // Función para descargar el archivo cuando se presione el botón
 function descargarArchivo(url: string) {
-  // Extraemos nombre del archivo para el download
-  const nombreArchivo = url.split('/').pop() || 'imagen-descarga'
+  const nombreOriginal = url.split('/').pop() || 'imagen-descarga.png'
+  const extension = nombreOriginal.match(/\.[^/.]+$/)?.[0] || ''
+  
+  // Reutilizar normalización pero sin quitar extensión para descarga
+  const nombreArchivo = normalizarNombreParaMostrar(nombreOriginal.replace(/\.[^/.]+$/, '')) + extension
+
   fetch(url)
     .then(response => response.blob())
     .then(blob => {
@@ -95,11 +109,11 @@ onMounted(() => {
 <template>
   <div class="container py-4">
     <div class="mb-3">
-      <input v-model="terminoBusqueda" class="form-control" placeholder="Buscar imagen..." />
+      <input v-model="terminoBusqueda" class="form-control" placeholder="Buscar guia..." />
     </div>
 
     <div v-if="isLoading" class="text-center py-5">
-      <div class="spinner-border text-primary" role="status">
+      <div class="spinner-grow text-danger" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
     </div>
@@ -121,13 +135,14 @@ onMounted(() => {
               style="object-fit: cover; height: 200px;"
             />
             <div class="card-body text-center">
-              <p class="card-text text-truncate">{{ nombre }}</p>
+              <p class="card-text text-truncate">{{ normalizarNombreParaMostrar(nombre) }}</p>
               <button
-                class="btn btn-outline-primary btn-sm"
+                class="btn btn-info btn-sm"
                 @click="imagenSeleccionada = obtenerURL(nombre)"
                 data-bs-toggle="modal"
                 data-bs-target="#modalImagen"
               >
+                <i class="ri-eye-line"></i>
                 Visualizar
               </button>
             </div>
@@ -150,9 +165,13 @@ onMounted(() => {
               class="btn btn-success"
               @click="descargarArchivo(imagenSeleccionada)"
             >
+            <i class="ri-download-2-line"></i>
               Descargar
             </button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                <i class="ri-close-circle-line"></i>
+                Cerrar
+            </button>
           </div>
         </div>
       </div>
