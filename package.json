@@ -7,7 +7,9 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "generate:resources": "ts-node utils/generarIndexJson.ts",
+    "postbuild": "ts-node utils/generarIndexJson.ts"
   },
   "dependencies": {
     "@nuxtjs/bootstrap": "^0.0.1",
@@ -19,5 +21,8 @@
     "nuxt": "^3.17.2",
     "vue": "^3.5.13",
     "vue-router": "^4.5.1"
+  },
+  "devDependencies": {
+    "ts-node": "^10.9.2"
   }
 }
