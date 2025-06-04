@@ -132,6 +132,6 @@ export const forbiddenKeywords = [
   "chaturbate.com",
   "stripchat.com",
   "imlive.com",
-  'vercel','juegos','friv','minijuegos'
+  'machina','juegos','friv','minijuegos'
 
 ]

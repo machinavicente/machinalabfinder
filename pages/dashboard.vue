@@ -128,7 +128,7 @@
                   </div>
                   <div class="action-content">
                     <h3>Manual de Usuario</h3>
-                    <p>Descarga la guía completa para usar MachinaSynthLabs</p>
+                    <p>Descarga la guía completa para usar MachinaLab Finder</p>
                     <button class="btn btn-download" @click="descargarManual">
                       <i class="bi bi-download me-2"></i> Descargar
                     </button>
