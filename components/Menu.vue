@@ -2,115 +2,55 @@
   <div class="layout-wrapper">
     <nav class="navbar navbar-expand-lg fixed-top navbar-dark" aria-label="Main navbar">
       <div class="container-fluid">
-        <!-- Botón hamburguesa (pantallas pequeñas) -->
-        <div class="mobile-toggle-container">
-          <button
-            class="navbar-toggler"
-            type="button"
-            @click="toggleMenu"
-            :aria-expanded="menuOpen.toString()"
-            aria-label="Toggle navigation"
-            ref="burgerButton"
-          >
-            <span class="ri-menu-2-line"></span>
-          </button>
-        </div>
-
-        <!-- Menú lateral (pantallas pequeñas) -->
-        <div
-          class="navbar-collapse justify-content-md-center collapse"
-          :class="{ show: menuOpen }"
-          id="navbarsExample10"
-          ref="menuRef"
-          @click.stop
-        >
-          <ul class="navbar-nav">
-            <li class="nav-item">
-               
-              <NuxtLink class="nav-link" to="/" @click="closeMenu">
-                <i class="ri-home-line"></i>
-                Inicio
-              </NuxtLink>
-            </li>
-            <li class="nav-item">
-              <NuxtLink class="nav-link" to="/dashboard" @click="closeMenu">
-                <i class="ri-dashboard-line"></i>
-                Dashboard
-              </NuxtLink>
-            </li> 
-            <li class="nav-item">
-              <NuxtLink class="nav-link" to="/guides" @click="closeMenu">
-                <i class="ri-book-open-line"></i>
-                Biblioteca
-              </NuxtLink>
-            </li>
-            <li class="nav-item">
-              <NuxtLink class="nav-link" to="/order_simulators" @click="closeMenu">
-                <i class="ri-rocket-line"></i>
-                Simuladores Online
-              </NuxtLink>
-            </li>
-            <li class="nav-item">
-              <NuxtLink class="nav-link" to="/downloads" @click="closeMenu">
-                <i class="ri-download-2-line"></i>
-                Simuladores Descargables
-              </NuxtLink>
-            </li>
-            <li class="nav-item">
-              <NuxtLink class="nav-link" to="/registro_simuladores" @click="closeMenu">
-                <i class="ri-edit-box-line"></i>
-                Expande la colección
-              </NuxtLink>
-            </li>
-          </ul>
-        </div>
-
-        <!-- Overlay -->
-        <div v-if="menuOpen" class="overlay" @click="closeMenu" aria-hidden="true"></div>
+        <!-- Menú horizontal siempre visible en escritorio, oculto en móvil -->
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <NuxtLink class="nav-link" to="/">
+              <i class="ri-home-line"></i>
+              Inicio
+            </NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" to="/dashboard">
+              <i class="ri-dashboard-line"></i>
+              Dashboard
+            </NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" to="/guides">
+              <i class="ri-book-open-line"></i>
+              Biblioteca
+            </NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" to="/order_simulators">
+              <i class="ri-rocket-line"></i>
+              Simuladores Online
+            </NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" to="/downloads">
+              <i class="ri-download-2-line"></i>
+              Simuladores Descargables
+            </NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" to="/registro_simuladores">
+              <i class="ri-edit-box-line"></i>
+              Expande la colección
+            </NuxtLink>
+          </li>
+        </ul>
       </div>
     </nav>
-
-    <!-- Contenido principal con compensación -->
     <div class="main-content">
-      <slot /> <!-- Aquí se inyecta el contenido de la página -->
+      <slot />
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-
-const menuOpen = ref(false)
-const menuRef = ref(null)
-const burgerButton = ref(null)
-
-const toggleMenu = () => {
-  menuOpen.value = !menuOpen.value
-}
-
-const closeMenu = () => {
-  menuOpen.value = false
-}
-
-const handleClickOutside = (event) => {
-  if (
-    menuOpen.value &&
-    menuRef.value &&
-    burgerButton.value &&
-    !menuRef.value.contains(event.target) &&
-    !burgerButton.value.contains(event.target)
-  ) {
-    closeMenu()
-  }
-}
-
-onMounted(() => {
-  document.addEventListener('click', handleClickOutside)
-})
-
-onBeforeUnmount(() => {
-  document.removeEventListener('click', handleClickOutside)
-})
+// Ya no necesitas lógica para menú lateral ni burger
 </script>
 
 <style scoped>
@@ -121,7 +61,6 @@ onBeforeUnmount(() => {
   right: 0;
   z-index: 1100;
   background-color: #002147;
-  border-bottom: 1px solid #ffc72c;
 }
 
 a, .nav-link {
@@ -132,49 +71,34 @@ a:hover, .nav-link:hover {
   color: #fff;
 }
 
-/* Barra horizontal que ocupa todo el ancho y contiene el botón burger */
-.mobile-toggle-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw; /* ancho total horizontal */
-  height: 56px;
-  background-color: #002147; /* fondo barra completo */
-  z-index: 1115; /* sobre overlay y menú */
-  display: flex;
-  align-items: center;
-  padding-left: 12px; /* espacio a la izquierda */
-  border-bottom: 1px solid #ffc72c;
-  box-sizing: border-box;
-}
-
-/* Botón burger estilo */
-.mobile-toggle-container button.navbar-toggler {
-  background: transparent;
-  border: none;
-  padding: 0;
-  margin: 0;
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Contenido principal con compensación */
 .main-content {
   padding-top: 56px;
+}
+.nav-item:active,
+.nav-item:focus,
+.nav-item:hover {
+  color: #ffc72c; /* Amarillo UNEFA al interactuar */
+}
+
+/* Nueva regla para el enlace activo */
+.nav-link.active {
+  color: #ffc72c !important;
+}
+
+.nav-link.router-link-active,
+.nav-link.router-link-active:focus,
+.nav-link.router-link-active:hover {
+  color: #ffc72c !important;
 }
 
 /* Pantallas grandes */
 @media (min-width: 992px) {
-  .mobile-toggle-container {
-    display: none;
-  }
-
   .navbar-nav {
     flex-direction: row;
+    justify-content: center; /* Centra horizontalmente en escritorio */
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
   }
 
   .nav-item {
@@ -195,57 +119,15 @@ a:hover, .nav-link:hover {
 
 /* Pantallas pequeñas */
 @media (max-width: 991.98px) {
-  /* Menú lateral con fondo y no ocupa todo el ancho */
-  .navbar-collapse {
-    position: fixed;
-    top: 56px; /* justo debajo del burger */
-    left: 0;
-    width: 280px; /* ancho fijo para el menú lateral */
-    height: calc(100vh - 56px);
-    padding: 20px;
-    background-color: rgba(0, 33, 71, 0.95); /* fondo oscuro con opacidad */
-    z-index: 1110; /* menos que burger para que botón esté encima */
-    overflow-y: auto;
-    transform: translateX(-100%);
-    transition: transform 0.3s ease-in-out;
-    box-shadow: 2px 0 12px rgba(0, 0, 0, 0.4);
-    border-right: 1px solid #ffc72c;
-    border-radius: 0 8px 8px 0;
-  }
-
-  .navbar-collapse.show {
-    transform: translateX(0);
-  }
-
   .navbar-nav {
-    flex-direction: column;
-    height: 100%;
-  }
-
-  .nav-item {
-    display: block;
-    margin-bottom: 15px;
-  }
-
-  .nav-link {
-    padding: 0.8rem 1rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .desktop-logo-name {
     display: none !important;
   }
-
-  /* Overlay ocupa toda la pantalla menos la parte del burger */
-  .overlay {
-    position: fixed;
-    top: 56px;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: 1100;
-    transition: opacity 0.3s ease;
+  .navbar {
+    min-height: 56px;
+    height: 56px;
+    background-color: #002147;
+    display: flex !important;
+    align-items: center;
   }
 }
 </style>

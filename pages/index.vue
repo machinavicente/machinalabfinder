@@ -51,7 +51,7 @@
                   de simuladores virtuales disponibles. Explora, practica y potencia tu aprendizaje.
                 </p>
                 <p>
-                  Explora simuladores, guías y entornos colaborativos diseñados para ayudarte a
+                  Explora simuladores y guías diseñados para ayudarte a
                   maximizar tu experiencia en la UNEFA Zaraza.
                 </p>
                 <button class="btn btn-sm btn-unefa mt-3" @click="showHelp = false">

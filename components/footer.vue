@@ -12,8 +12,9 @@
         </NuxtLink>
       </div>
       <p class="small mb-0 text-white-50">© {{ new Date().getFullYear() }} Vicente Machina. Todos los derechos reservados.</p>
-    </div>
+    </div> 
   </footer>
+  
 </template>
 
 <style scoped>

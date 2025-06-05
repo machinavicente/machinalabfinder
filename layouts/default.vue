@@ -1,14 +1,22 @@
 <template>
-    <div class="contenedor">
-        <Menu />
-        <slot></slot>
-        <Footer />
-    </div>
+  <div class="contenedor">
+    <Menu />
+    <slot></slot>
+    <BottomMenu />
+    <Footer />  
+  </div>
 </template>
 
 <style>
 .contenedor {
-    width: 100%;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+
+@media (max-width: 991.98px) {
+  .contenedor {
+    padding-bottom: 20px;
+  }
 }
 </style>

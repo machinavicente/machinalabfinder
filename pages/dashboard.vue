@@ -346,7 +346,7 @@ onBeforeUnmount(() => {
 }
 
 .dashboard-header {
-  background-color: rgba(0, 0, 0, 0.1);
+  background-color: #002147;
 }
 
 .dashboard-main {
