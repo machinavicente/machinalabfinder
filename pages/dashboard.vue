@@ -315,8 +315,15 @@ function updateDateTime() {
   })
 }
 function descargarManual() {
-  alert('Descargando manual de usuario...')
-  // window.open('/path/to/manual.pdf', '_blank')
+  // Cambia el nombre si tu archivo PDF tiene otro nombre
+  const url = '/Manual_MachinaLab_Finder.pdf'
+  // Esto fuerza la descarga en la mayoría de navegadores
+  const link = document.createElement('a')
+  link.href = url
+  link.download = 'Manual_MachinaLab_Finder.pdf' // Nombre sugerido para el usuario
+  document.body.appendChild(link)
+  link.click()
+  document.body.removeChild(link)
 }
 
 // Inicialización
