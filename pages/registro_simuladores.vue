@@ -61,7 +61,9 @@
                   </label>
                   <select class="form-select" id="asignatura" v-model="simulador.asignatura" required>
                     <option value="" disabled>Seleccionar...</option>
-                    <option value="Matemáticas">Matemáticas</option>
+                    <option value="Matemáticas I">Matemáticas I</option>
+                    <option value="Matemáticas II">Matemáticas II</option>
+                    <option value="Matemáticas III">Matemáticas III</option>
                     <option value="Quimica">Química</option>
                     <option value="Física I">Física I</option>
                     <option value="Física II">Física II</option>
@@ -85,6 +87,8 @@
                   </label>
                   <select id="otra-asignatura" class="form-select" v-model="simulador.otra_asignatura" required>
                     <option value="" disabled>Seleccionar...</option>
+                    <option value="Matemática General">Matemática General</option>
+                    <option value="Física General">Física General</option>
                     <option value="Cálculo Numérico">Cálculo Numérico</option>
                     <option value="Probabilidad y Estadística">Probabilidad y Estadística</option>
                     <option value="Lógica Matemática">Lógica Matemática</option>
