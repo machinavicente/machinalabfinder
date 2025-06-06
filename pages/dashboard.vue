@@ -569,7 +569,7 @@ onBeforeUnmount(() => {
     padding: 0.25rem 0.5rem;
   }
 }
-.content{
+template{
   height: 100vh;
 }
 </style>

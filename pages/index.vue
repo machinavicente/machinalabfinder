@@ -197,7 +197,7 @@ const features = [
 .fade-leave-to {
   opacity: 0;
 }
-.content{
+template{
   height: 100vh;
 }
 </style>

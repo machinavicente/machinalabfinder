@@ -124,7 +124,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container py-4 content">
+  <div class="container py-4">
     <div class="mb-3">
       <input v-model="terminoBusqueda" class="form-control" placeholder="Buscar guia..." />
     </div>
@@ -273,7 +273,7 @@ onMounted(() => {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
 }
-.content{
+template{
   height: 100vh;
 }
 </style>
