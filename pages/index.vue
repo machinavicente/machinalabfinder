@@ -1,7 +1,7 @@
 <template>
   <ClientOnly>
-    <section class="py-xl-8 py-6 unefa-primary-bg text-white">
-      <div class="container  py-5">
+    <section class="py-xl-8 py-6 unefa-primary-bg text-white content">
+      <div class="container py-5">
         <div class="row align-items-center gy-6 gy-xl-0">
           <!-- Texto principal y botones -->
           <div class="col-lg-5 col-xxl-5 col-12">
@@ -196,5 +196,8 @@ const features = [
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+.content{
+  height: 100vh;
 }
 </style>

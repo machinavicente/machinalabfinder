@@ -248,7 +248,7 @@ function cerrarModales() {
 }
 </script>
 <template>
-  <div class="container containerr py-4">
+  <div class="container containerr content py-4">
     <div v-if="isLoading" class="text-center py-5">
       <div class="spinner-grow  text-danger" role="status">
         <span class="visually-hidden">Cargando...</span>
@@ -579,5 +579,7 @@ function cerrarModales() {
     border: none;
     transition: background-color .3s ease;
 }
-
+.content{
+  height: 100vh;
+}
 </style>

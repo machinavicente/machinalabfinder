@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <div class="dashboard-container unefa-primary-bg text-white">
+    <div class="dashboard-container unefa-primary-bg text-white content">
       <!-- Header del Dashboard -->
       <header class="dashboard-header py-3">
         <div class="container">
@@ -568,5 +568,8 @@ onBeforeUnmount(() => {
     font-size: 0.85rem;
     padding: 0.25rem 0.5rem;
   }
+}
+.content{
+  height: 100vh;
 }
 </style>

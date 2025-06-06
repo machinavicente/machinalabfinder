@@ -124,7 +124,7 @@ onMounted(() => {
 </script>
 
 <template>
-    <div class="container py-4">
+    <div class="container py-4 content">
         <div v-if="isLoading" class="text-center py-5">
             <div class="spinner-grow text-danger" role="status">
                 <span class="visually-hidden">Cargando...</span>
@@ -263,5 +263,8 @@ small{
 .btn-sm {
     padding: 0.25rem 0.5rem;
     font-size: 0.875rem;
+}
+.content{
+  height: 100vh;
 }
 </style>

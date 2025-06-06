@@ -1,5 +1,5 @@
 <template>
-  <div class="container py-5">
+  <div class="container content py-5">
     <div class="row justify-content-center">
       <div class="col-lg-8">
         <div class="card shadow-lg border-0 rounded-4">
@@ -394,5 +394,8 @@ input{
 }
 .unefa-primary-bg {
   background-color: #003366;
+}
+.content{
+  height: 100vh;
 }
 </style>

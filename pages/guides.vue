@@ -124,7 +124,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="container py-4">
+  <div class="container py-4 content">
     <div class="mb-3">
       <input v-model="terminoBusqueda" class="form-control" placeholder="Buscar guia..." />
     </div>
@@ -272,5 +272,8 @@ onMounted(() => {
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+.content{
+  height: 100vh;
 }
 </style>
