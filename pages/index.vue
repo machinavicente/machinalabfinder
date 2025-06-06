@@ -111,6 +111,7 @@ const features = [
 
 <style scoped>
 .unefa-primary-bg {
+  padding-bottom: ;
   background-color: #002147;
 }
 
@@ -197,7 +198,5 @@ const features = [
 .fade-leave-to {
   opacity: 0;
 }
-template{
-  height: 100vh;
-}
+
 </style>

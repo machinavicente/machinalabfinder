@@ -395,7 +395,5 @@ input{
 .unefa-primary-bg {
   background-color: #003366;
 }
-template{
-  height: 100vh;
-}
+
 </style>

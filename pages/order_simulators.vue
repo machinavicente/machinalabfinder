@@ -579,7 +579,5 @@ function cerrarModales() {
     border: none;
     transition: background-color .3s ease;
 }
-template{
-  height: 100vh;
-}
+
 </style>

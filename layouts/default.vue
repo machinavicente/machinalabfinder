@@ -18,5 +18,8 @@
   .contenedor {
     padding-bottom: 20px;
   }
+  footer{
+    height: ;
+  }
 }
 </style>
