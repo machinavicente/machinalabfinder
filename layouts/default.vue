@@ -1,7 +1,9 @@
 <template>
   <div class="contenedor">
     <Menu />
-    <slot></slot>
+    <main class="contenido">
+      <slot />
+    </main>
     <BottomMenu />
     <Footer />  
   </div>
@@ -15,7 +17,9 @@
   box-sizing: border-box;
 
 }
-
+.contenido {
+  flex: 1;
+}
 
 @media (max-width: 991.98px) {
   .contenedor {
