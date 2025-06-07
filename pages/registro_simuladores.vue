@@ -116,7 +116,7 @@
                     <i class="ri-folder-4-line me-1"></i> Categoría
                   </label>
                   <input type="text" class="form-control" id="categoria" v-model="simulador.categoria"
-                    placeholder="Ej: Compilador, Diagramador, IDE..." />
+                    placeholder="Ej: Compilador, Diagramador, Calculadora..." />
                   <small class="text-muted position-absolute" style="bottom: 5px; right: 10px; font-size: 0.8rem;">
                     {{ simulador.categoria.length }}
                   </small>
@@ -268,18 +268,38 @@ export default {
     },
 
     async validateForm() {
-      if (this.simulador.nombre_del_simulador.length < 7) {
-        this.error = 'El nombre del simulador debe tener al menos 7 caracteres.'
-        return false
+      // Validar que ningún campo esté vacío (excepto otra_asignatura si no aplica y created_at)
+      const campos = [
+        { valor: this.simulador.nombre_del_simulador, nombre: 'nombre del simulador' },
+        { valor: this.simulador.descripcion_del_simulador, nombre: 'descripción del simulador' },
+        { valor: this.simulador.categoria, nombre: 'categoría' },
+        { valor: this.simulador.enlace, nombre: 'enlace' },
+        { valor: this.simulador.asignatura, nombre: 'asignatura' }
+      ];
+
+      for (const campo of campos) {
+        if (!campo.valor || campo.valor.trim().length === 0) {
+          this.error = `El campo ${campo.nombre} no puede estar vacío.`;
+          return false;
+        }
+        if (campo.valor.trim().length < 5) {
+          this.error = `El campo ${campo.nombre} debe tener al menos 5 caracteres.`;
+          return false;
+        }
       }
-      if (this.simulador.descripcion_del_simulador.length < 7) {
-        this.error = 'La descripción del simulador debe tener al menos 7 caracteres.'
-        return false
+
+      // Si se selecciona "Otra..." validar el campo otra_asignatura
+      if (this.mostrarOtraAsignatura) {
+        if (!this.simulador.otra_asignatura || this.simulador.otra_asignatura.trim().length === 0) {
+          this.error = 'Debe seleccionar una asignatura en "Otra asignatura".';
+          return false;
+        }
+        if (this.simulador.otra_asignatura.trim().length < 5) {
+          this.error = 'La asignatura seleccionada debe tener al menos 5 caracteres.';
+          return false;
+        }
       }
-      if (this.simulador.categoria && this.simulador.categoria.length < 7) {
-        this.error = 'Si la categoría está llena, debe tener al menos 7 caracteres.'
-        return false
-      }
+
       if (!this.isValidUrl(this.simulador.enlace)) {
         this.error = 'El enlace no es válido.'
         return false

@@ -314,7 +314,7 @@ function cerrarModales() {
         'me-3',
         'fs-1',
         'text-unefa-primary',
-        'text-secondary'
+        'text-info'
       ]"
       aria-hidden="true"
     ></i>
@@ -337,7 +337,7 @@ function cerrarModales() {
       <i class="bi bi-play-fill"></i> Usar
     </a>
   </div>
-  <span class="small text-danger mt-2">
+  <span class="small date text-danger mt-2">
     Agregado: {{ formatDate(sim.created_at) }}
   </span>
 
@@ -466,7 +466,7 @@ function cerrarModales() {
 
 /* Botones modificar y eliminar */
 .ultimo-simulador-card .btn-warning {
-  font-weight: 600;
+  font-weight: 800;
   box-shadow: 0 0 4px #f0ad4ecc;
   border-radius: 3px;
 }
@@ -479,7 +479,6 @@ function cerrarModales() {
 
 /* Badges */
 .category-badge {
-  
   color: #000;
   font-weight: 800;
   padding: 0.3rem 0.6rem;
@@ -488,10 +487,9 @@ function cerrarModales() {
 }
 
 .asignatura-badge {
-  background-color: #036;
-  color: white;
-  font-weight: 600;
-  padding: 0.3rem 0.5rem;
+  color: gray;
+  font-weight: 800;
+  padding: 0.3rem 0.6rem;
   border-radius: 4px;
   text-transform: none;
 }
@@ -579,5 +577,7 @@ function cerrarModales() {
     border: none;
     transition: background-color .3s ease;
 }
-
+.date{
+  font-weight: 800;
+}
 </style>
