@@ -1,30 +1,36 @@
 <template>
   <div class="contenedor">
     <Menu />
-    <div class="main">
-      <slot></slot>
-    </div>
-    <slot></slot>
+    <main class="contenido">
+      <slot />
+    </main>
+    <Footer />
     <BottomMenu />
-    <Footer />  
   </div>
 </template>
 
-<style>
+<style scoped>
 .contenedor {
   display: flex;
   flex-direction: column;
+  min-height: 100vh;
+  padding-bottom: 60px; /* altura del BottomMenu */
+  box-sizing: border-box;
 }
 
-.main{
-  height: 100vh;
+.contenido {
+  flex: 1;
 }
-@media (max-width: 991.98px) {
-  .contenedor {
-    padding-bottom: 20px;
-  }
-  footer{
-    height: ;
-  }
+
+/* Estilos del BottomMenu */
+:deep(.bottom-menu) {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 60px;
+  background: #fff;
+  z-index: 1000;
+  border-top: 1px solid #ccc;
 }
 </style>
