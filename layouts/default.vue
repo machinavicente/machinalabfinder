@@ -14,7 +14,6 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  padding-bottom: 60px; /* altura del BottomMenu */
   box-sizing: border-box;
 }
 
