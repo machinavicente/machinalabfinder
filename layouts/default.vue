@@ -5,7 +5,7 @@
       <slot />
     </main>
     <Footer />
-    <BottomMenu />
+    <BottomMenu class="bottom-menu" />
   </div>
 </template>
 
@@ -19,17 +19,30 @@
 
 .contenido {
   flex: 1;
+  padding: 1rem;
 }
 
-/* Estilos del BottomMenu */
+/* BottomMenu por defecto oculto */
 :deep(.bottom-menu) {
+  display: none;
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   height: 60px;
-  background: #fff;
-  z-index: 1000;
+  background-color: white;
   border-top: 1px solid #ccc;
+  z-index: 1000;
+}
+
+/* Solo en móviles (hasta 768px) se muestra el BottomMenu y se reserva espacio */
+@media (max-width: 768px) {
+  .contenedor {
+    padding-bottom: 60px; /* espacio para el BottomMenu */
+  }
+
+  :deep(.bottom-menu) {
+    display: block;
+  }
 }
 </style>
