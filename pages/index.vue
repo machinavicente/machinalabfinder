@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <section class="py-xl-8 py-6 unefa-primary-bg text-white content">
+    <section class="py-xl-8 py-6 unefa-primary-bg text-white">
       <div class="container py-5">
         <div class="row align-items-center gy-6 gy-xl-0">
           <!-- Texto principal y botones -->
@@ -111,7 +111,7 @@ const features = [
 
 <style scoped>
 .unefa-primary-bg {
-  padding-bottom: ;
+  min-height: 100vh;
   background-color: #002147;
 }
 
