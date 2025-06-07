@@ -1,6 +1,9 @@
 <template>
   <div class="contenedor">
     <Menu />
+    <div class="main">
+      <slot></slot>
+    </div>
     <slot></slot>
     <BottomMenu />
     <Footer />  
@@ -13,7 +16,9 @@
   flex-direction: column;
 }
 
-
+.main{
+  height: 100vh;
+}
 @media (max-width: 991.98px) {
   .contenedor {
     padding-bottom: 20px;
