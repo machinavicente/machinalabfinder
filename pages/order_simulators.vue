@@ -162,7 +162,7 @@ function puedeEditarEliminar(fechaCreacion: string) {
   const fecha = new Date(fechaCreacion)
   const ahora = new Date()
   const diffHoras = (ahora.getTime() - fecha.getTime()) / (1000 * 60 * 60)
-  return diffHoras <= 8 
+  return diffHoras <= 8
 }
 
 // --- Abrir modal modificar y llenar form ---
@@ -180,7 +180,7 @@ function abrirModificar(sim: simuladores) {
 // --- Guardar cambios ---
 async function guardarCambios() {
   if (!simuladorSeleccionado.value) return
-  
+
   // Validación de contenido inapropiado
   if (contieneContenidoInapropiado(formEnlace.value)) {
     alert('Este enlace contiene contenido no apto para un entorno educativo. Por favor, ingrese un enlace válido.')
@@ -298,69 +298,53 @@ function cerrarModales() {
             <div class="ultimo-simulador-card card shadow-sm h-100 flex-fill">
               <div class="card-header d-flex justify-content-between align-items-center">
                 <span class="badge category-badge">{{ sim.categoria.charAt(0).toUpperCase() + sim.categoria.slice(1)
-                  }}</span>
+                }}</span>
                 <div class="win-window-controls ms-auto d-flex">
                   <span class="win-btn win-minimize"><i class="bi bi-dash"></i></span>
                   <span class="win-btn win-maximize"><i class="bi bi-square"></i></span>
                   <span class="win-btn win-close"><i class="bi bi-x"></i></span>
                 </div>
               </div>
-<div class="card-body d-flex flex-column">
-  <div class="d-flex align-items-center mb-3">
-    <i
-      :class="[
-        'bi',
-        iconoPorAsignatura(sim.asignatura),
-        'me-3',
-        'fs-1',
-        'text-unefa-primary',
-        'text-info'
-      ]"
-      aria-hidden="true"
-    ></i>
-    <h5 class="profesional-title text-unefa-dark">
-      {{ sim.nombre_del_simulador }}
-    </h5>
-  </div>
-  <p class="small text-muted flex-grow-1">
-    {{ sim.descripcion_del_simulador }}
-  </p>
-  <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap" style="gap: 0.5rem;">
-    <span class="badge asignatura-badge flex-shrink-0" style="white-space: nowrap;">
-      {{ sim.asignatura }}
-    </span>
-    <a
-      :href="sim.enlace"
-      target="_blank"
-      class="btn btn-primary btn-sm btn-unefa-primary text-white flex-shrink-0"
-    >
-      <i class="bi bi-play-fill"></i> Usar
-    </a>
-  </div>
-  <span class="small date text-danger mt-2">
-    Agregado: {{ formatDate(sim.created_at) }}
-  </span>
+              <div class="card-body d-flex flex-column">
+                <div class="d-flex align-items-center mb-3">
+                  <i :class="[
+                    'bi',
+                    iconoPorAsignatura(sim.asignatura),
+                    'me-3',
+                    'fs-1',
+                    'text-unefa-primary',
+                    'text-info'
+                  ]" aria-hidden="true"></i>
+                  <h5 class="profesional-title text-unefa-dark">
+                    {{ sim.nombre_del_simulador }}
+                  </h5>
+                </div>
+                <p class="small text-muted flex-grow-1">
+                  {{ sim.descripcion_del_simulador }}
+                </p>
+                <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap" style="gap: 0.5rem;">
+                  <span class="badge asignatura-badge flex-shrink-0" style="white-space: nowrap;">
+                    {{ sim.asignatura }}
+                  </span>
+                  <a :href="sim.enlace" target="_blank"
+                    class="btn btn-primary btn-sm btn-unefa-primary text-white flex-shrink-0">
+                    <i class="bi bi-play-fill"></i> Usar
+                  </a>
+                </div>
+                <span class="small date text-danger mt-2">
+                  Agregado: {{ formatDate(sim.created_at) }}
+                </span>
 
-  <!-- Botones modificar y eliminar - Solo si están dentro de 72h -->
-  <div v-if="puedeEditarEliminar(sim.created_at)" class="botones-accion mt-3 d-flex gap-2 flex-wrap">
-    <button
-      @click="abrirModificar(sim)"
-      class="btn btn-outline-warning"
-      type="button"
-      title="Modificar"
-    >
-      <i class="bi bi-pencil-square"></i> Modificar
-    </button>
-    <button
-      @click="abrirEliminar(sim)"
-      class="btn btn-outline-danger"
-      type="button"
-      title="Eliminar"
-    >
-      <i class="bi bi-trash"></i> Eliminar
-    </button>
-  </div>
-</div>
+                <!-- Botones modificar y eliminar - Solo si están dentro de 72h -->
+                <div v-if="puedeEditarEliminar(sim.created_at)" class="botones-accion mt-3 d-flex gap-2 flex-wrap">
+                  <button @click="abrirModificar(sim)" class="btn btn-outline-warning" type="button" title="Modificar">
+                    <i class="bi bi-pencil-square"></i> Modificar
+                  </button>
+                  <button @click="abrirEliminar(sim)" class="btn btn-outline-danger" type="button" title="Eliminar">
+                    <i class="bi bi-trash"></i> Eliminar
+                  </button>
+                </div>
+              </div>
 
             </div>
           </div>
@@ -414,7 +398,7 @@ function cerrarModales() {
         <div class="modal-window">
           <h5 class="modal-title text-danger">Confirmar Eliminación</h5>
           <p>¿Está seguro que desea eliminar el simulador <strong>{{ simuladorSeleccionado?.nombre_del_simulador
-              }}</strong>?</p>
+          }}</strong>?</p>
           <div class="d-flex justify-content-end gap-2">
             <button type="button" class="btn btn-secondary" @click="cerrarModales">Cancelar</button>
             <button type="button" class="btn btn-danger" @click="confirmarEliminar">Eliminar</button>
@@ -572,12 +556,14 @@ function cerrarModales() {
   background-color: #e81123;
   color: white;
 }
+
 .btn-unefa-primary {
-    background-color: #007a3d;
-    border: none;
-    transition: background-color .3s ease;
+  background-color: #007a3d;
+  border: none;
+  transition: background-color .3s ease;
 }
-.date{
+
+.date {
   font-weight: 800;
 }
 </style>

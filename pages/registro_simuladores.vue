@@ -409,11 +409,11 @@ export default {
 
 
 <style scoped>
-input{
-     text-overflow: ellipsis;
+input {
+  text-overflow: ellipsis;
 }
+
 .unefa-primary-bg {
   background-color: #003366;
 }
-
 </style>

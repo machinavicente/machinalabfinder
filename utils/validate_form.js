@@ -6,9 +6,10 @@ export const forbiddenKeywords = [
   'twitter', 'x.com', 'whats', 'messenger', 'telegram', 'reddit', 'pinterest', 'linkedin',
   'discord', 'wechat', 'line.me', 'threads', 'games', 'gamer', 'juego', 'roblox', 'fortnite',
   'minecraft', 'steam', 'epicgames', 'valorant', 'leagueoflegends', 'lol', 'riotgames', 'xbox',
-  'nintendo', 'pokemon', 'callofduty', 'counterstrike', 'csgo', 'dota', 'pubg', 'freefire','patria', 'provincial','provinet', 'bdv'
+  'nintendo', 'pokemon', 'callofduty', 'counterstrike', 'csgo', 'dota', 'pubg', 'freefire','patria', 'provincial','provinet', 'bdv','mercantil'
   , 'garena', 'twitch',
-  '3movs', 'alphaporno', 'analdin', 'assparade', 'azporn', 'babes.com', 'badjojo', 'beeg',
+  '3movs', 'alphaporno', 'analdin', 'assparade', 'azporn', 'babes.com', 'badjojo', 'beeg','mercantil',
+  'bestporn', 'bestpornsites', 'bestpornvideos', 'bestpornhub', 'bestpornhd', 'bestpornmovies',
   'bestgore', 'bigass', 'bigtits', 'blackporn', 'boyfriendtv', 'bravoporn', 'busty', 'cumlouder',
   'czechcasting', 'czechav', 'devilslust', 'drtuber', 'efukt', 'empflix', 'eurosex', 'extremetube',
   'femjoy', 'fleshlight', 'fuq', 'fux', 'gagfactor', 'gaytube', 'girlsdoporn', 'hardsextube',

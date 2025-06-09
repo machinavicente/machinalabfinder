@@ -24,7 +24,7 @@
           </li>
           <li class="nav-item">
             <NuxtLink class="nav-link" to="/order_simulators">
-              <i class="ri-rocket-line"></i>
+              <i class="bi bi-cpu"></i>
               Simuladores Online
             </NuxtLink>
           </li>
@@ -32,6 +32,12 @@
             <NuxtLink class="nav-link" to="/downloads">
               <i class="ri-download-2-line"></i>
               Simuladores Descargables
+            </NuxtLink>
+          </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" to="/info_simuladores">
+              <i class="bi bi-info-square"></i>
+              Info
             </NuxtLink>
           </li>
           <li class="nav-item">
@@ -49,10 +55,6 @@
   </div>
 </template>
 
-<script setup>
-// Ya no necesitas lógica para menú lateral ni burger
-</script>
-
 <style scoped>
 .navbar {
   position: fixed !important;
@@ -62,25 +64,34 @@
   z-index: 1100;
   background-color: #002147;
 }
-
-a, .nav-link {
+  .navbar-nav {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    gap: 0.5rem;
+    white-space: nowrap;
+  }
+a,.nav-link {
   color: #fff;
 }
 
-a:hover, .nav-link:hover {
+a:hover,
+.nav-link:hover {
   color: #fff;
 }
 
 .main-content {
   padding-top: 56px;
 }
+
 .nav-item:active,
 .nav-item:focus,
 .nav-item:hover {
-  color: #ffc72c; /* Amarillo UNEFA al interactuar */
+  color: #ffc72c;
+  /* Amarillo UNEFA al interactuar */
 }
 
-/* Nueva regla para el enlace activo */
 .nav-link.active {
   color: #ffc72c !important;
 }
@@ -91,29 +102,18 @@ a:hover, .nav-link:hover {
   color: #ffc72c !important;
 }
 
-/* Pantallas grandes */
-@media (min-width: 992px) {
+@media (max-width: 1100px) and (min-width: 992px) {
   .navbar-nav {
     flex-direction: row;
-    justify-content: center; /* Centra horizontalmente en escritorio */
+    justify-content: center;
     align-items: center;
     width: 100%;
     gap: 0.5rem;
-  }
-
-  .nav-item {
-    display: flex;
-    align-items: center;
-    margin-right: 15px;
-  }
-
-  .nav-link {
-    padding: 0.5rem 1rem;
     white-space: nowrap;
   }
-
-  .navbar-logo {
-    height: 50px;
+  .nav-link {
+    font-size: 0.93rem;
+    padding: 0.5rem 0.7rem;
   }
 }
 
@@ -122,6 +122,7 @@ a:hover, .nav-link:hover {
   .navbar-nav {
     display: none !important;
   }
+
   .navbar {
     min-height: 56px;
     height: 56px;
@@ -130,4 +131,5 @@ a:hover, .nav-link:hover {
     align-items: center;
   }
 }
+
 </style>
