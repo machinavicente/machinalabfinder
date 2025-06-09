@@ -64,15 +64,18 @@
   z-index: 1100;
   background-color: #002147;
 }
-  .navbar-nav {
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    gap: 0.5rem;
-    white-space: nowrap;
-  }
-a,.nav-link {
+
+.navbar-nav {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+a,
+.nav-link {
   color: #fff;
 }
 
@@ -111,6 +114,7 @@ a:hover,
     gap: 0.5rem;
     white-space: nowrap;
   }
+
   .nav-link {
     font-size: 0.93rem;
     padding: 0.5rem 0.7rem;
@@ -131,5 +135,4 @@ a:hover,
     align-items: center;
   }
 }
-
 </style>

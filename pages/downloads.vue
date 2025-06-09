@@ -115,7 +115,7 @@ function iconoPorSO(sistemaOperativo: string): string {
 }
 
 function toggleAsignatura(asignatura: string) {
-  filtroAsignatura.value = filtroAsignatura.value === asignatura ? '' : asignatura
+    filtroAsignatura.value = filtroAsignatura.value === asignatura ? '' : asignatura
 }
 
 onMounted(() => {
@@ -144,13 +144,9 @@ onMounted(() => {
             <div class="mb-4">
                 <h6 class="text-dark fw-bold mb-2">Filtrar por asignatura:</h6>
                 <div class="d-flex flex-wrap gap-2 mb-3">
-                    <button 
-                        v-for="asig in asignaturasDisponibles" 
-                        :key="asig" 
-                        @click="toggleAsignatura(asig)" 
+                    <button v-for="asig in asignaturasDisponibles" :key="asig" @click="toggleAsignatura(asig)"
                         class="btn btn-sm"
-                        :class="filtroAsignatura === asig ? 'btn-success text-white' : 'btn-outline-secondary'"
-                    >
+                        :class="filtroAsignatura === asig ? 'btn-success text-white' : 'btn-outline-secondary'">
                         {{ asig }}
                     </button>
                 </div>
@@ -224,18 +220,19 @@ onMounted(() => {
 
 /* Diferentes colores al pasar el mouse para cada botón */
 .win-minimize:hover {
-  background-color: #999;
-  color: white;
+    background-color: #999;
+    color: white;
 }
 
 .win-maximize:hover {
-  background-color: #0078d7;
-  color: white;
+    background-color: #0078d7;
+    color: white;
 }
 
 .win-close:hover {
-  background-color: #e81123;
+    background-color: #e81123;
 }
+
 .card {
     transition: transform 0.2s, box-shadow 0.2s;
     border: none;
@@ -252,9 +249,11 @@ onMounted(() => {
     padding: 0.5rem 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-small{
+
+small {
     font-weight: 800;
 }
+
 .titulo {
     font-weight: 800;
 }
@@ -264,7 +263,8 @@ small{
     padding: 0.25rem 0.5rem;
     font-size: 0.875rem;
 }
-template{
-  height: 100vh;
+
+template {
+    height: 100vh;
 }
 </style>

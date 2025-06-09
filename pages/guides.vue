@@ -1,3 +1,74 @@
+<template>
+  <div class="container py-4">
+    <div class="mb-3">
+      <input v-model="terminoBusqueda" class="form-control" placeholder="Buscar guia..." />
+    </div>
+
+    <div v-if="isLoading" class="text-center py-5">
+      <div class="spinner-grow text-danger" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+    </div>
+
+    <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
+
+    <div v-else>
+      <div v-if="imagenesFiltradas.length === 0" class="text-center text-muted py-4">
+        No se encontraron imágenes.
+      </div>
+
+      <div class="row g-4" v-else>
+        <div v-for="nombre in imagenesFiltradas" :key="nombre" class="col-sm-6 col-md-4 col-lg-3">
+          <div class="card h-100 shadow-sm">
+            <img :src="obtenerURL(nombre)" class="card-img-top" :alt="nombre"
+              style="object-fit: contain; max-height: 200px; cursor: pointer;"
+              @click="imagenSeleccionada = obtenerURL(nombre)" data-bs-toggle="modal" data-bs-target="#modalImagen" />
+            <div class="card-body text-center">
+              <p class="card-text text-truncate">{{ normalizarNombreParaMostrar(nombre) }}</p>
+              <button class="btn btn-info btn-sm me-2" @click="imagenSeleccionada = obtenerURL(nombre)"
+                data-bs-toggle="modal" data-bs-target="#modalImagen">
+                <i class="ri-eye-line"></i>
+                Visualizar
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal de imagen -->
+    <div class="modal fade" id="modalImagen" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-xl">
+        <div class="modal-content border-0">
+          <div class="modal-header border-0">
+            <h5 class="modal-title">
+              {{ imagenSeleccionada ? normalizarNombreParaMostrar((imagenSeleccionada.split('/').pop() ||
+                '').split('?')[0]) : '' }}
+            </h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+              @click="cerrarModal"></button>
+          </div>
+          <div class="modal-body text-center p-0 d-flex justify-content-center align-items-center bg-light">
+            <img v-if="imagenSeleccionada" :src="imagenSeleccionada" class="img-fluid rounded"
+              style="max-height: 500px; max-width: 100%; object-fit: contain;" />
+            <div v-else class="text-muted py-5 w-100">No hay imagen seleccionada.</div>
+          </div>
+          <div class="modal-footer border-0">
+            <button v-if="imagenSeleccionada" type="button" class="btn btn-success"
+              @click="descargarArchivo(imagenSeleccionada)">
+              <i class="ri-download-2-line"></i>
+              Descargar
+            </button>
+            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="cerrarModal">
+              <i class="ri-close-line"></i>
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -122,83 +193,14 @@ onMounted(() => {
   cargarImagenes()
 })
 </script>
-
-<template>
-  <div class="container py-4">
-    <div class="mb-3">
-      <input v-model="terminoBusqueda" class="form-control" placeholder="Buscar guia..." />
-    </div>
-
-    <div v-if="isLoading" class="text-center py-5">
-      <div class="spinner-grow text-danger" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
-    </div>
-
-    <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
-
-    <div v-else>
-      <div v-if="imagenesFiltradas.length === 0" class="text-center text-muted py-4">
-        No se encontraron imágenes.
-      </div>
-
-      <div class="row g-4" v-else>
-        <div v-for="nombre in imagenesFiltradas" :key="nombre" class="col-sm-6 col-md-4 col-lg-3">
-          <div class="card h-100 shadow-sm">
-            <img :src="obtenerURL(nombre)" class="card-img-top" :alt="nombre"
-              style="object-fit: contain; max-height: 200px; cursor: pointer;"
-              @click="imagenSeleccionada = obtenerURL(nombre)" data-bs-toggle="modal" data-bs-target="#modalImagen" />
-            <div class="card-body text-center">
-              <p class="card-text text-truncate">{{ normalizarNombreParaMostrar(nombre) }}</p>
-              <button class="btn btn-info btn-sm me-2" @click="imagenSeleccionada = obtenerURL(nombre)"
-                data-bs-toggle="modal" data-bs-target="#modalImagen">
-                <i class="ri-eye-line"></i>
-                Visualizar
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Modal de imagen -->
-    <div class="modal fade" id="modalImagen" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-xl">
-        <div class="modal-content border-0">
-          <div class="modal-header border-0">
-            <h5 class="modal-title">
-              {{ imagenSeleccionada ? normalizarNombreParaMostrar((imagenSeleccionada.split('/').pop() || '').split('?')[0]) : '' }}
-            </h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" @click="cerrarModal"></button>
-          </div>
-          <div class="modal-body text-center p-0 d-flex justify-content-center align-items-center bg-light">
-            <img v-if="imagenSeleccionada" :src="imagenSeleccionada" class="img-fluid rounded"
-              style="max-height: 500px; max-width: 100%; object-fit: contain;" />
-            <div v-else class="text-muted py-5 w-100">No hay imagen seleccionada.</div>
-          </div>
-          <div class="modal-footer border-0">
-            <button v-if="imagenSeleccionada" type="button" class="btn btn-success"
-              @click="descargarArchivo(imagenSeleccionada)">
-              <i class="ri-download-2-line"></i>
-              Descargar
-            </button>
-            <button type="button" class="btn btn-danger" data-bs-dismiss="modal" @click="cerrarModal">
-              <i class="ri-close-line"></i>
-              Cerrar
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <style scoped>
 .modal-dialog {
-  max-width: 700px; /* Ajusta este valor al ancho de tu sección principal */
+  max-width: 700px;
+  /* Ajusta este valor al ancho de tu sección principal */
   width: 100%;
   margin: 1.75rem auto;
-  max-height: 90vh;         /* Limita el alto total de la modal */
+  max-height: 90vh;
+  /* Limita el alto total de la modal */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -215,10 +217,11 @@ onMounted(() => {
   backdrop-filter: blur(16px) saturate(180%);
   -webkit-backdrop-filter: blur(16px) saturate(180%);
   border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
   overflow: auto;
-  max-height: 95vh;         /* Limita el alto del contenido */
+  max-height: 95vh;
+  /* Limita el alto del contenido */
   display: flex;
   flex-direction: column;
 }
@@ -243,10 +246,11 @@ onMounted(() => {
 }
 
 .modal-body {
-  
+
   flex: 1 1 auto;
   overflow: auto;
-  max-height: 66vh;         /* Ajusta según tu preferencia */
+  max-height: 66vh;
+  /* Ajusta según tu preferencia */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -273,5 +277,4 @@ onMounted(() => {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
 }
-
 </style>

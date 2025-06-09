@@ -5,7 +5,7 @@
       <slot />
     </main>
     <BottomMenu />
-    <Footer />  
+    <Footer />
   </div>
 </template>
 
@@ -17,6 +17,7 @@
   box-sizing: border-box;
 
 }
+
 .contenido {
   flex: 1;
 }

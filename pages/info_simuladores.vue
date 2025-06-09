@@ -33,7 +33,9 @@
               </div>
               <p class="small text-muted flex-grow-1">
                 <strong>Definición:</strong><br>
-                Un simulador online es una herramienta digital que permite emular procesos, entornos o dispositivos reales (como laboratorios, redes, circuitos o lenguajes de programación) sin necesidad de instalación, accesible desde un navegador web.
+                Un simulador online es una herramienta digital que permite emular procesos, entornos o dispositivos
+                reales (como laboratorios, redes, circuitos o lenguajes de programación) sin necesidad de instalación,
+                accesible desde un navegador web.
               </p>
               <strong class="small">Ejemplos:</strong>
               <ul class="small text-muted mb-3 ps-3">
@@ -59,13 +61,8 @@
               <section>
                 <h5 class="mb-3"><i class="ri-terminal-box-line text-primary me-2"></i>1. Compilador de Python</h5>
                 <ClientOnly>
-                  <iframe
-                    src="https://onecompiler.com/python"
-                    width="100%"
-                    height="400px"
-                    frameborder="0"
-                    style="border-radius: 8px; background: #f8fafc;"
-                  ></iframe>
+                  <iframe src="https://onecompiler.com/python" width="100%" height="400px" frameborder="0"
+                    style="border-radius: 8px; background: #f8fafc;"></iframe>
                 </ClientOnly>
               </section>
             </div>
@@ -75,7 +72,7 @@
         <div class="col d-flex">
           <div class="ultimo-simulador-card card shadow-sm h-100 flex-fill">
             <div class="card-header d-flex justify-content-between align-items-center">
-              <span class="badge text-dark">Ventajas Online</span>
+              <span class="badge text-dark">Ventajas de un Simulador Online</span>
               <div class="win-window-controls ms-auto d-flex">
                 <span class="win-btn win-minimize"><i class="bi bi-dash"></i></span>
                 <span class="win-btn win-maximize"><i class="bi bi-square"></i></span>
@@ -92,7 +89,8 @@
               <ul class="mb-0 ps-3 small">
                 <li><strong>✔ Accesibilidad:</strong> Funcionan en cualquier dispositivo con internet.</li>
                 <li><strong>✔ Ahorro de recursos:</strong> No requieren instalación ni hardware potente.</li>
-                <li><strong>✔ Aprendizaje interactivo:</strong> Permiten experimentar sin riesgos (ej.: probar código sin romper un sistema real).</li>
+                <li><strong>✔ Aprendizaje interactivo:</strong> Permiten experimentar sin riesgos (ej.: probar código
+                  sin romper un sistema real).</li>
               </ul>
             </div>
           </div>
@@ -142,8 +140,9 @@
                 </h5>
               </div>
               <ul class="small mb-0 ps-3 text-muted">
-                <li>Algunos recursos (como <span class="text-success">Packet Tracer</span> o <span class="text-success">MySQL</span>) requieren descarga.</li>
-                <li>Incluimos enlaces oficiales y descargas directas.</li>
+                <li>Algunos recursos (como <span class="text-success">Packet Tracer</span> o <span
+                    class="text-success">MySQL</span>) requieren descarga.</li>
+                <li>unicamente disponibles descargas directas y enlaces oficiales.</li>
               </ul>
             </div>
           </div>
@@ -183,16 +182,19 @@
 .text-unefa {
   color: #002147 !important;
 }
-.badge{
-    font-weight: 900;
+
+.badge {
+  font-weight: 900;
 }
+
 .desktop-system-bg {
   background: linear-gradient(135deg, #f8fafc 80%, #e9f0fb 100%);
-  box-shadow: 0 8px 32px 0 rgba(0,33,71,0.07);
+  box-shadow: 0 8px 32px 0 rgba(0, 33, 71, 0.07);
   border-radius: 1.5rem;
   min-height: 80vh;
   border: 1.5px solid #e4e9f2;
 }
+
 .ultimo-simulador-card {
   border-radius: 0.8rem !important;
   background: #fff;
@@ -203,27 +205,31 @@
   flex-direction: column;
   height: 100%;
 }
+
 .ultimo-simulador-card:hover:not(.embed) {
-  box-shadow: 0 8px 32px 0 rgba(0,33,71,0.13);
+  box-shadow: 0 8px 32px 0 rgba(0, 33, 71, 0.13);
   background: #f6fafd;
   transform: translateY(-2px) scale(1.01);
 }
+
 .ultimo-simulador-card .card-header {
   padding: 0.6rem 1.2rem;
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(230,240,255,0.85);
+  background: rgba(230, 240, 255, 0.85);
   border-bottom: 1px solid #e4e9f2;
   min-height: 38px;
   border-top-left-radius: 0.8rem;
   border-top-right-radius: 0.8rem;
 }
+
 .win-window-controls {
   margin-left: auto;
   display: flex;
   gap: 0.4rem;
 }
+
 .win-btn {
   display: flex;
   justify-content: center;
@@ -237,31 +243,38 @@
   color: #444;
   transition: background-color 0.2s, color 0.2s;
 }
+
 .win-btn:hover {
   background-color: #0078d7;
   color: white;
 }
+
 .win-minimize:hover {
   background-color: #999;
   color: white;
 }
+
 .win-maximize:hover {
   background-color: #0078d7;
   color: white;
 }
+
 .win-close:hover {
   background-color: #e81123;
   color: white;
 }
+
 .card-body {
   background: transparent;
   border-radius: 0.7rem;
-  padding: 1.5rem 1.3rem 1.5rem 1.3rem; /* Más padding para mejor lectura */
+  padding: 1.5rem 1.3rem 1.5rem 1.3rem;
+  /* Más padding para mejor lectura */
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
+
 .icon-square {
   width: 44px;
   height: 44px;
@@ -270,14 +283,17 @@
   align-items: center;
   justify-content: center;
 }
+
 @media (max-width: 991.98px) {
   .desktop-system-bg {
     padding: 1rem !important;
     border-radius: 1rem;
   }
+
   .ultimo-simulador-card {
     min-height: unset;
   }
+
   .card-body {
     padding: 1.1rem 0.8rem 1.1rem 0.8rem;
   }

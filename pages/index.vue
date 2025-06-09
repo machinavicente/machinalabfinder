@@ -19,7 +19,10 @@
                     MachinaLab Finder
                   </h1>
                   <p class="mb-0">
-                    <strong>MachinaLab Finder. </strong>Es una plataforma innovadora diseñada para facilitar la búsqueda y acceso a simuladores virtuales de laboratorios. Inspirada en la necesidad de optimizar la formación práctica en entornos educativos, esta herramienta permite a estudiantes y docentes encontrar de manera rápida y sencilla recursos digitales que complementan el aprendizaje teórico.
+                    <strong>MachinaLab Finder. </strong>Es una plataforma innovadora diseñada para facilitar la búsqueda
+                    y acceso a simuladores virtuales de laboratorios. Inspirada en la necesidad de optimizar la
+                    formación práctica en entornos educativos, esta herramienta permite a estudiantes y docentes
+                    encontrar de manera rápida y sencilla recursos digitales que complementan el aprendizaje teórico.
                   </p>
                 </div>
               </div>
@@ -28,7 +31,8 @@
                 <NuxtLink to="/order_simulators" class="btn btn-unefa btn-lg">
                   Comenzar
                 </NuxtLink>
-                <button class="btn btn-outline-unefa btn-lg" @click="toggleHelp" :aria-expanded="showHelp.toString()" aria-controls="helpPanel">
+                <button class="btn btn-outline-unefa btn-lg" @click="toggleHelp" :aria-expanded="showHelp.toString()"
+                  aria-controls="helpPanel">
                   ¿Cómo usar?
                 </button>
               </div>
@@ -38,14 +42,8 @@
           <!-- Imagen o panel lateral con info -->
           <div class="col-xxl-6 offset-xxl-1 col-lg-7 col-12">
             <transition name="fade">
-              <div
-                v-if="showHelp"
-                id="helpPanel"
-                class="info-panel p-4 rounded bg-light text-dark mb-5"
-                style="max-width: 700px;"
-                role="region"
-                aria-live="polite"
-              >
+              <div v-if="showHelp" id="helpPanel" class="info-panel p-4 rounded bg-light text-dark mb-5"
+                style="max-width: 700px;" role="region" aria-live="polite">
                 <p>
                   Para iniciar, presiona el botón <strong>Comenzar</strong> y accede a la colección
                   de simuladores virtuales disponibles. Explora, practica y potencia tu aprendizaje.
@@ -61,11 +59,7 @@
             </transition>
 
             <div class="row gx-4 gy-4">
-              <div
-                v-for="(feature, index) in features"
-                :key="index"
-                class="col-6 col-md-6"
-              >
+              <div v-for="(feature, index) in features" :key="index" class="col-6 col-md-6">
                 <div class="feature-card d-flex flex-column align-items-center text-center p-4 rounded">
                   <i :class="feature.icon" class="feature-icon mb-3" aria-hidden="true"></i>
                   <h5 class="feature-title mb-1">{{ feature.title }}</h5>
@@ -194,9 +188,9 @@ const features = [
 .fade-leave-active {
   transition: opacity 0.3s ease;
 }
+
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
 }
-
 </style>
