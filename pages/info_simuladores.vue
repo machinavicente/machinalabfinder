@@ -24,15 +24,15 @@
                 <span class="win-btn win-close"><i class="bi bi-x"></i></span>
               </div>
             </div>
-            <div class="card-body d-flex flex-column">
+            <div class="card-body d-flex flex-column definition-card">
               <div class="d-flex align-items-center mb-3">
                 <i class="ri-global-line fs-1 text-primary me-3"></i>
                 <h5 class="profesional-title text-unefa-dark mb-0">
                   ¿Qué es un simulador online?
                 </h5>
               </div>
-              <p class="small text-muted flex-grow-1">
-                <strong>Definición:</strong><br>
+              <p class="small text-muted flex-grow-1 definition-text">
+                <strong class="definition-title">Definición:</strong><br>
                 Un simulador online es una herramienta digital que permite emular procesos, entornos o dispositivos
                 reales (como laboratorios, redes, circuitos o lenguajes de programación) sin necesidad de instalación,
                 accesible desde un navegador web.
@@ -40,8 +40,8 @@
               <strong class="small">Ejemplos:</strong>
               <ul class="small text-muted mb-3 ps-3">
                 <li>Compiladores de código online <span class="text-primary">(Programiz, OneCompiler)</span>.</li>
-                <li>Diagramadores <span class="text-primary">(SmartDraw - Diagramas)</span>.</li>
-                <li>Editores de bases de datos <span class="text-primary">(Online PostgreSQL Editor)</span>.</li>
+                <li>Diagramadores <a href='https://www.smartdraw.com/flowchart/diagramas-de-flujo.htm?srsltid=AfmBOor6puoq-bGZbvl2G8a77DInJWUs6ae792r4NfNe-HvMPQHumiL7' target="_blank" class="text-primary">(SmartDraw - Diagramas)</a>.</li>
+                <li>Bases de datos <a  href='https://onecompiler.com/postgresql' target="_blank" class="text-primary">(Online PostgreSQL Editor)</a>.</li>
               </ul>
             </div>
           </div>
@@ -61,7 +61,7 @@
               <section>
                 <h5 class="mb-3"><i class="ri-terminal-box-line text-primary me-2"></i>1. Compilador de Python</h5>
                 <ClientOnly>
-                  <iframe src="https://onecompiler.com/python" width="100%" height="400px" frameborder="0"
+                  <iframe src="https://onecompiler.com/python" width="100%" height="350px" frameborder="0"
                     style="border-radius: 8px; background: #f8fafc;"></iframe>
                 </ClientOnly>
               </section>
@@ -87,10 +87,13 @@
                 </h5>
               </div>
               <ul class="mb-0 ps-3 small">
-                <li><strong>✔ Accesibilidad:</strong> Funcionan en cualquier dispositivo con internet.</li>
-                <li><strong>✔ Ahorro de recursos:</strong> No requieren instalación ni hardware potente.</li>
-                <li><strong>✔ Aprendizaje interactivo:</strong> Permiten experimentar sin riesgos (ej.: probar código
+                <li><strong>Accesibilidad:</strong> Funcionan en cualquier dispositivo con internet.</li>
+                <li><strong>Ahorro de recursos:</strong> No requieren instalación ni hardware potente.</li>
+                <li><strong>Aprendizaje interactivo:</strong> Permiten experimentar sin riesgos (ej.: probar código
                   sin romper un sistema real).</li>
+                <li><strong>Disponibilidad inmediata:</strong> Acceso 24/7 desde cualquier lugar.</li>
+                <li><strong>Variedad de recursos:</strong> Existen simuladores para diferentes áreas y niveles educativos.</li>
+                <li><strong>Práctica ilimitada:</strong> Puedes repetir ejercicios y experimentos tantas veces como desees.</li>
               </ul>
             </div>
           </div>
@@ -179,6 +182,14 @@
 </template>
 
 <style scoped>
+.definition-text {
+  text-align: justify;
+  font-size: 1.1em;
+  line-height: 1.5;
+}
+.definition-title {
+  text-decoration: underline;
+}
 .text-unefa {
   color: #002147 !important;
 }
@@ -188,7 +199,6 @@
 }
 
 .desktop-system-bg {
-  background: linear-gradient(135deg, #f8fafc 80%, #e9f0fb 100%);
   box-shadow: 0 8px 32px 0 rgba(0, 33, 71, 0.07);
   border-radius: 1.5rem;
   min-height: 80vh;
@@ -196,7 +206,7 @@
 }
 
 .ultimo-simulador-card {
-  border-radius: 0.8rem !important;
+  border-radius: 4px em !important;
   background: #fff;
   border: 1.5px solid #dbeafe;
   transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
@@ -217,11 +227,8 @@
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  background: rgba(230, 240, 255, 0.85);
   border-bottom: 1px solid #e4e9f2;
   min-height: 38px;
-  border-top-left-radius: 0.8rem;
-  border-top-right-radius: 0.8rem;
 }
 
 .win-window-controls {
@@ -282,6 +289,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+a{
+  text-decoration: none;
 }
 
 @media (max-width: 991.98px) {

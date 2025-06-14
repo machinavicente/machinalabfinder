@@ -8,10 +8,10 @@
           <i class="bi bi-plus-circle me-1"></i> Agrega un Simulador Nuevo
         </NuxtLink>
         <NuxtLink to="/order_simulators" class="footer-link">
-          <i class="bi bi-cpu me-1"></i> Simuladores
+          <i class="bi bi-cpu me-1"></i> Simuladores Online
         </NuxtLink>
       </div>
-      <p class="small mb-0 text-white-50">© {{ new Date().getFullYear() }} Vicente Machina. Todos los derechos
+      <p class="small mb-0 text-white-50">© 2025 - Vicente Machina. Todos los derechos
         reservados.</p>
     </div>
   </footer>

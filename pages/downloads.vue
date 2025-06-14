@@ -1,3 +1,83 @@
+<template>
+    <div class="container py-4 content">
+        <div v-if="isLoading" class="text-center py-5">
+            <div class="spinner-grow text-danger" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+        </div>
+
+        <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
+
+        <div v-else>
+            <!-- Barra de búsqueda -->
+            <div class="mb-4">
+                <input v-model="terminoBusqueda" type="text" class="form-control" placeholder="Buscar programas..."
+                    autocomplete="off" />
+            </div>
+
+            <!-- Filtros por asignatura -->
+            <div class="mb-4">
+                <h6 class="text-dark fw-bold mb-2">Filtrar por asignatura:</h6>
+                <div class="d-flex flex-wrap gap-2 mb-3">
+                    <button v-for="asig in asignaturasDisponibles" :key="asig" @click="toggleAsignatura(asig)"
+                        class="btn btn-sm"
+                        :class="filtroAsignatura === asig ? 'btn-success text-white' : 'btn-outline-secondary'">
+                        {{ asig }}
+                    </button>
+                </div>
+            </div>
+
+            <!-- Descargas agrupadas por SO -->
+            <template v-if="descargas.length > 0">
+                <div v-for="(grupoDescargas, so) in descargasPorSO" :key="so" class="mb-5">
+                    <h4 class="mb-3 text-uppercase text-dark font-weight-bold titulo">
+                        <i :class="['bi', iconoPorSO(so), 'me-2']"></i>
+                        {{ so }}
+                    </h4>
+
+                    <div class="row g-4">
+                        <div v-for="descarga in grupoDescargas" :key="descarga.id" class="col-md-4 d-flex">
+                            <div class="card shadow-sm h-100 w-100">
+                                <div class="card-header bg-light d-flex justify-content-between">
+                                    <div class="d-flex align-items-center">
+                                        <i
+                                            :class="['bi', iconoPorSO(descarga.sistema_operativo), 'me-2 text-muted']"></i>
+                                        <small class="text-muted">{{ descarga.sistema_operativo }}</small>
+                                    </div>
+                                    <div class="d-flex gap-2">
+                                        <span class="win-btn win-minimize"><i class="bi bi-dash"></i></span>
+                                        <span class="win-btn win-maximize"><i class="bi bi-square"></i></span>
+                                        <span class="win-btn win-close"><i class="bi bi-x"></i></span>
+                                    </div>
+                                </div>
+
+                                <div class="card-body d-flex flex-column">
+                                    <h5 class="card-title">{{ descarga.nombre_del_programa }}</h5>
+                                    <p class="card-text text-muted small flex-grow-1">
+                                        {{ descarga.descripcion_del_programa }}
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <small class="text-muted">
+                                            {{ descarga.asignatura }}
+                                        </small>
+                                        <a :href="descarga.enlace_del_programa" class="btn btn-success btn-sm"
+                                            target="_blank">
+                                            <i class="ri-mobile-download-line"></i> Descargar
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+
+            <div v-else class="text-center text-muted py-4">
+                No se encontraron programas disponibles.
+            </div>
+        </div>
+    </div>
+</template>
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -122,87 +202,6 @@ onMounted(() => {
     cargarDescargas()
 })
 </script>
-
-<template>
-    <div class="container py-4 content">
-        <div v-if="isLoading" class="text-center py-5">
-            <div class="spinner-grow text-danger" role="status">
-                <span class="visually-hidden">Cargando...</span>
-            </div>
-        </div>
-
-        <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
-
-        <div v-else>
-            <!-- Barra de búsqueda -->
-            <div class="mb-4">
-                <input v-model="terminoBusqueda" type="text" class="form-control" placeholder="Buscar programas..."
-                    autocomplete="off" />
-            </div>
-
-            <!-- Filtros por asignatura -->
-            <div class="mb-4">
-                <h6 class="text-dark fw-bold mb-2">Filtrar por asignatura:</h6>
-                <div class="d-flex flex-wrap gap-2 mb-3">
-                    <button v-for="asig in asignaturasDisponibles" :key="asig" @click="toggleAsignatura(asig)"
-                        class="btn btn-sm"
-                        :class="filtroAsignatura === asig ? 'btn-success text-white' : 'btn-outline-secondary'">
-                        {{ asig }}
-                    </button>
-                </div>
-            </div>
-
-            <!-- Descargas agrupadas por SO -->
-            <template v-if="descargas.length > 0">
-                <div v-for="(grupoDescargas, so) in descargasPorSO" :key="so" class="mb-5">
-                    <h4 class="mb-3 text-uppercase text-dark font-weight-bold titulo">
-                        <i :class="['bi', iconoPorSO(so), 'me-2']"></i>
-                        {{ so }}
-                    </h4>
-
-                    <div class="row g-4">
-                        <div v-for="descarga in grupoDescargas" :key="descarga.id" class="col-md-4 d-flex">
-                            <div class="card shadow-sm h-100 w-100">
-                                <div class="card-header bg-light d-flex justify-content-between">
-                                    <div class="d-flex align-items-center">
-                                        <i
-                                            :class="['bi', iconoPorSO(descarga.sistema_operativo), 'me-2 text-muted']"></i>
-                                        <small class="text-muted">{{ descarga.sistema_operativo }}</small>
-                                    </div>
-                                    <div class="d-flex gap-2">
-                                        <span class="win-btn win-minimize"><i class="bi bi-dash"></i></span>
-                                        <span class="win-btn win-maximize"><i class="bi bi-square"></i></span>
-                                        <span class="win-btn win-close"><i class="bi bi-x"></i></span>
-                                    </div>
-                                </div>
-
-                                <div class="card-body d-flex flex-column">
-                                    <h5 class="card-title">{{ descarga.nombre_del_programa }}</h5>
-                                    <p class="card-text text-muted small flex-grow-1">
-                                        {{ descarga.descripcion_del_programa }}
-                                    </p>
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <small class="text-muted">
-                                            {{ descarga.asignatura }}
-                                        </small>
-                                        <a :href="descarga.enlace_del_programa" class="btn btn-success btn-sm"
-                                            target="_blank">
-                                            <i class="ri-mobile-download-line"></i> Descargar
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
-
-            <div v-else class="text-center text-muted py-4">
-                No se encontraron programas disponibles.
-            </div>
-        </div>
-    </div>
-</template>
 
 <style scoped>
 .win-btn {
