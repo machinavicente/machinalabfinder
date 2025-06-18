@@ -148,8 +148,8 @@
                     <i class="bi bi-journal-arrow-down"></i>
                   </div>
                   <div class="action-content">
-                    <h3>Descargar Reporte</h3>
-                    <p>Descarga los reportes completos de tus simuladores de laboratorio en formato PDF para su revisión
+                    <h3>Descargar Lista de Simuladores</h3>
+                    <p>Descarga la lista detallada de tus simuladores de laboratorio en formato PDF para su revisión
                       y análisis.</p>
                     <ReporteSimuladores :simuladores="simuladores" />
                   </div>
