@@ -94,7 +94,11 @@
                   {{ sim.descripcion_del_simulador }}
                 </p>
                 <div class="d-flex justify-content-between align-items-center mt-3 flex-wrap" style="gap: 0.5rem;">
-                  <span class="badge asignatura-badge flex-shrink-0" style="white-space: nowrap;">
+                  <span
+                    class="badge asignatura-badge flex-shrink-1"
+                    style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: inline-block;"
+                    :title="sim.asignatura"
+                  >
                     {{ sim.asignatura }}
                   </span>
                   <a :href="sim.enlace" target="_blank"
@@ -509,7 +513,7 @@ function cerrarModales() {
   font-size: 14px;
   text-decoration: underline;
   color: gray;
-  font-weight: 800;
+  font-weight: 900;
   padding: 0.3rem 0.6rem;
   text-transform: none;
 }
@@ -550,12 +554,20 @@ function cerrarModales() {
   display: flex;
   align-items: center;
   gap: 0.4rem;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .win-window-controls {
   margin-left: auto;
   display: flex;
   gap: 0.4rem;
+  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden;
+  flex-wrap: nowrap;
+  max-width: 100%;
+  /* Evita que los íconos se salgan */
 }
 
 .win-btn {
@@ -570,27 +582,9 @@ function cerrarModales() {
   border-radius: 3px;
   color: #444;
   transition: background-color 0.2s, color 0.2s;
-}
-
-.win-btn:hover {
-  background-color: #0078d7;
-  color: white;
-}
-
-/* Diferentes colores al pasar el mouse para cada botón */
-.win-minimize:hover {
-  background-color: #999;
-  color: white;
-}
-
-.win-maximize:hover {
-  background-color: #0078d7;
-  color: white;
-}
-
-.win-close:hover {
-  background-color: #e81123;
-  color: white;
+  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .btn-unefa-primary {
