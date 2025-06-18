@@ -108,6 +108,9 @@ const features = [
 .unefa-primary-bg {
   min-height: 100vh;
   background: linear-gradient(120deg, #002147 70%, #003366 100%);
+  display: flex;
+  align-items: center;
+  /* Centra verticalmente el contenido */
 }
 
 .text-unefa-accent {

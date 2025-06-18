@@ -15,6 +15,26 @@
           autocomplete="off" />
       </div>
 
+      <!-- Filtro de orden -->
+      <div class="mb-4">
+        <h6 class="text-unefa-dark fw-bold mb-2">Ordenar por fecha:</h6>
+        <div class="d-flex flex-wrap gap-2">
+          <button
+            class="btn btn-sm"
+            :class="ordenFecha === 'desc' ? 'btn-unefa-primary text-white' : 'btn-outline-secondary'"
+            @click="ordenFecha = ordenFecha === 'desc' ? '' : 'desc'"
+          >
+            Más recientes
+          </button>
+          <button
+            class="btn btn-sm"
+            :class="ordenFecha === 'asc' ? 'btn-unefa-primary text-white' : 'btn-outline-secondary'"
+            @click="ordenFecha = ordenFecha === 'asc' ? '' : 'asc'"
+          >
+            Más antiguos
+          </button>
+        </div>
+      </div>
       <!-- Filtros tipo chip -->
       <div class="mb-4">
         <h6 class="text-unefa-dark fw-bold mb-2">Filtrar por asignatura:</h6>
@@ -79,7 +99,7 @@
                   </span>
                   <a :href="sim.enlace" target="_blank"
                     class="btn btn-primary btn-sm btn-unefa-primary text-white flex-shrink-0">
-                    <i class="bi bi-play-fill"></i> Usar
+                    Ejecutar  <i class="ri-terminal-box-line"></i> 
                   </a>
                 </div>
                 <span class="small date text-danger mt-2">
@@ -184,6 +204,7 @@ const error = ref<string | null>(null)
 const filtroAsignatura = ref('')
 const filtroCategoria = ref('')
 const terminoBusqueda = ref('')
+const ordenFecha = ref<'desc' | 'asc' | ''>('')
 
 // --- Modales ---
 const modalModificarVisible = ref(false)
@@ -254,7 +275,7 @@ const simuladoresFiltrados = computed(() => {
   const termino = normalizarTexto(terminoBusqueda.value)
   const filtroCatNorm = normalizarTexto(filtroCategoria.value)
 
-  return simuladores.value.filter(sim => {
+  let filtrados = simuladores.value.filter(sim => {
     const textoCompleto =
       sim.nombre_del_simulador + ' ' +
       sim.descripcion_del_simulador + ' ' +
@@ -269,6 +290,19 @@ const simuladoresFiltrados = computed(() => {
       (termino === '' || coincideBusqueda)
     )
   })
+
+  // Solo ordenar si hay orden seleccionado
+  if (ordenFecha.value === 'desc') {
+    filtrados = filtrados.slice().sort((a, b) =>
+      new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    )
+  } else if (ordenFecha.value === 'asc') {
+    filtrados = filtrados.slice().sort((a, b) =>
+      new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+    )
+  }
+
+  return filtrados
 })
 
 const simuladoresPorAsignatura = computed(() => {
@@ -293,7 +327,9 @@ function formatDate(fechaISO: string) {
 function iconoPorAsignatura(asignatura: string) {
   const mapaIconos: Record<string, string> = {
     'Matemáticas': 'bi-calculator',
-    'Química': 'bi-flask',
+    'Matemática General': 'bi-calculator',
+    'Lógica Matemática': 'bi-file-binary',
+    'Quimica': 'bi-flask',
     'Física I': 'bi-lightning-charge',
     'Física II': 'bi-lightning-charge-fill',
     'Programación': 'bi-code-slash',
@@ -303,9 +339,9 @@ function iconoPorAsignatura(asignatura: string) {
     'Procesamiento de Datos': 'bi-diagram-3',
     'Bases de Datos': 'bi-database',
     'Redes': 'bi-wifi',
-    'Sistemas Operativos': 'bi-hdd-network',
+    'Sistemas Operativos': 'bi-window-stack',
     'Simulacion y Modelos': 'bi-diagram-3-fill',
-    'Otra...': 'bi-question-circle'
+    'Otra...': 'bi-journals'
   }
   return mapaIconos[asignatura] || mapaIconos['Otra...']
 }
@@ -470,10 +506,11 @@ function cerrarModales() {
 }
 
 .asignatura-badge {
+  font-size: 14px;
+  text-decoration: underline;
   color: gray;
   font-weight: 800;
   padding: 0.3rem 0.6rem;
-  border-radius: 4px;
   text-transform: none;
 }
 

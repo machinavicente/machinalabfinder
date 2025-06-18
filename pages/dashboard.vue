@@ -17,8 +17,8 @@
             <!-- Fecha y hora -->
             <div class="col-12 col-md-4">
               <div class="current-time">
-                <div class="date"><i class="bi bi-calendar-event me-1"></i>{{ currentDate }}</div>
-                <div class="time"><i class="bi bi-clock me-1"></i>{{ currentTime }}</div>
+                <div class="date"><i class="ri-calendar-todo-fill me-1"></i>{{ currentDate }}</div>
+                <div class="time"><i class="ri-time-line me-1"></i>{{ currentTime }}</div>
               </div>
             </div>
           </div>
@@ -123,8 +123,8 @@
                   <div class="card-footer d-flex flex-column gap-1">
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="badge asignatura-badge">{{ sim.asignatura }}</span>
-                      <a :href="sim.enlace" target="_blank" class="btn btn-sm btn-primary btn-simulator">
-                        <i class="bi bi-play-fill"></i> Usar
+                      <a :href="sim.enlace" target="_blank" class="btn btn-sm btn-success btn-simulator">
+                        <i class="ri-terminal-box-line"></i> Ejecutar
                       </a>
                     </div>
                     <span class="small text-success date"><i class="bi bi-calendar-plus me-1"></i>Agregado: {{ formatDate(sim.created_at) }}</span>
@@ -600,17 +600,7 @@ onBeforeUnmount(() => {
   letter-spacing: 1px;
 }
 
-.btn-simulator {
-  background-color: #c8102e;
-  color: white;
-  border: none;
-  font-weight: 600;
-  transition: background 0.2s;
-}
 
-.btn-simulator:hover {
-  background-color: #a00d26;
-}
 
 /* Spinner de carga */
 .spinner-border, .spinner-grow {

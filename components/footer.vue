@@ -2,7 +2,6 @@
   <footer class="unefa-footer unefa-primary-bg text-white py-5 ">
     <div class="container text-center">
       <h5 class="mb-4 fw-bold text-uppercase unefa-accent-text">UNEFA - Extensión Zaraza</h5>
-
       <div class="d-flex justify-content-center gap-4 flex-wrap mb-4">
         <NuxtLink to="/registro_simuladores" class="footer-link">
           <i class="bi bi-plus-circle me-1"></i> Agrega un Simulador Nuevo
@@ -15,14 +14,12 @@
         reservados.</p>
     </div>
   </footer>
-
 </template>
 
 <style scoped>
 .unefa-footer {
   border-top: 2px solid #C8102E;
 }
-
 .footer-link {
   color: #ffffffcc;
   text-decoration: none;
@@ -32,12 +29,10 @@
   display: inline-flex;
   align-items: center;
 }
-
 .footer-link:hover {
   color: #FFC72C;
   transform: translateY(-2px);
 }
-
 .unefa-accent-text {
   color: #FFC72C;
 }
