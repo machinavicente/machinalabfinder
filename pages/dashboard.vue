@@ -74,7 +74,15 @@
               </div>
               <!-- Promedio de Simuladores por Asignatura -->
               <div class="col-md-6 col-lg-3">
-                <Promedio :simuladores="simuladores" :asignaturas="asignaturasConSimuladores" />
+                <div class="metric-card glass-card h-100 d-flex align-items-center">
+                  <div class="metric-icon">
+                    <i class="bi bi-graph-up"></i>
+                  </div>
+                  <div class="metric-content">
+                    <h3>Promedio de Simuladores<br>por Asignatura</h3>
+                    <p class="metric-value">{{ promedio }}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
@@ -119,7 +127,7 @@
                         <i class="bi bi-play-fill"></i> Usar
                       </a>
                     </div>
-                    <span class="small text-success"><i class="bi bi-calendar-plus me-1"></i>Agregado: {{ formatDate(sim.created_at) }}</span>
+                    <span class="small text-success date"><i class="bi bi-calendar-plus me-1"></i>Agregado: {{ formatDate(sim.created_at) }}</span>
                   </div>
                 </div>
               </div>
@@ -290,6 +298,10 @@ const filteredSimuladores = computed(() => {
   )
 })
 
+const promedio = computed(() => {
+  if (asignaturasConSimuladores.value.length === 0) return 0
+  return Math.floor(totalSimuladores.value / asignaturasConSimuladores.value.length)
+})
 // Funciones auxiliares
 function countSimuladoresPorAsignatura(asignatura: string) {
   return simuladores.value.filter(sim => sim.asignatura === asignatura).length
@@ -343,6 +355,9 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.date{
+  font-weight: 800;
+}
 .dashboard-container {
   min-height: 100vh;
   background: linear-gradient(120deg, #002147 70%, #003366 100%);

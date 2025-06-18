@@ -55,7 +55,7 @@
         </div>
       </div>
 
-      <!-- Modal Bootstrap para "¿Cómo usar?" -->
+      <!-- Modal  "¿Cómo usar?" -->
       <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content border-0 glass-card">
@@ -68,7 +68,6 @@
                 <li class="mb-2"><i class="bi bi-play-circle text-unefa-accent me-2"></i>Haz clic en <b>Comenzar</b> para explorar los simuladores online.</li>
                 <li class="mb-2"><i class="bi bi-search text-unefa-accent me-2"></i>Utiliza el buscador para encontrar simuladores por nombre o materia.</li>
                 <li class="mb-2"><i class="bi bi-download text-unefa-accent me-2"></i>Descarga recursos y guías desde la sección correspondiente.</li>
-                <li class="mb-2"><i class="bi bi-lightbulb text-unefa-accent me-2"></i>Consulta las guías visuales para aprender a usar cada simulador.</li>
               </ul>
             </div>
             <div class="modal-footer border-0">
