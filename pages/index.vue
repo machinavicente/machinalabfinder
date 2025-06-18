@@ -31,57 +31,58 @@
                 <NuxtLink to="/order_simulators" class="btn btn-unefa btn-lg">
                   Comenzar
                 </NuxtLink>
-                <button class="btn btn-outline-unefa btn-lg" @click="toggleHelp" :aria-expanded="showHelp.toString()"
-                  aria-controls="helpPanel">
+                <button class="btn btn-outline-unefa btn-lg" data-bs-toggle="modal" data-bs-target="#helpModal">
                   ¿Cómo usar?
                 </button>
               </div>
             </div>
           </div>
 
-          <!-- Imagen o panel lateral con info -->
+          <!-- Panel lateral con features -->
           <div class="col-xxl-6 offset-xxl-1 col-lg-7 col-12">
-            <transition name="fade">
-              <div v-if="showHelp" id="helpPanel" class="info-panel p-4 rounded bg-light text-dark mb-5"
-                style="max-width: 700px;" role="region" aria-live="polite">
-                <p>
-                  Para iniciar, presiona el botón <strong>Comenzar</strong> y accede a la colección
-                  de simuladores virtuales disponibles. Explora, practica y potencia tu aprendizaje.
-                </p>
-                <p>
-                  Explora simuladores y guías diseñados para ayudarte a
-                  maximizar tu experiencia en la UNEFA Zaraza.
-                </p>
-                <button class="btn btn-sm btn-unefa mt-3" @click="showHelp = false">
-                  Cerrar
-                </button>
-              </div>
-            </transition>
-
             <div class="row gx-4 gy-4">
-              <div v-for="(feature, index) in features" :key="index" class="col-6 col-md-6">
-                <div class="feature-card d-flex flex-column align-items-center text-center p-4 rounded">
-                  <i :class="feature.icon" class="feature-icon mb-3" aria-hidden="true"></i>
+              <div v-for="(feature, index) in features" :key="index" class="col-12 col-md-6">
+                <div class="feature-card glass-card d-flex flex-column align-items-center text-center p-4 rounded h-100">
+                  <div class="feature-icon-wrap mb-3">
+                    <i :class="feature.icon" class="feature-icon" aria-hidden="true"></i>
+                  </div>
                   <h5 class="feature-title mb-1">{{ feature.title }}</h5>
                   <p class="feature-desc mb-0">{{ feature.description }}</p>
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
+
+      <!-- Modal  "¿Cómo usar?" -->
+      <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content border-0 glass-card">
+            <div class="modal-header border-0">
+              <h5 class="modal-title" id="helpModalLabel">¿Cómo usar MachinaLab Finder?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            </div>
+            <div class="modal-body text-dark">
+              <ul class="list-unstyled mb-3">
+                <li class="mb-2"><i class="bi bi-play-circle text-unefa-accent me-2"></i>Haz clic en <b>Comenzar</b> para explorar los simuladores online.</li>
+                <li class="mb-2"><i class="bi bi-search text-unefa-accent me-2"></i>Utiliza el buscador para encontrar simuladores por nombre o materia.</li>
+                <li class="mb-2"><i class="bi bi-download text-unefa-accent me-2"></i>Descarga recursos y guías desde la sección correspondiente.</li>
+              </ul>
+            </div>
+            <div class="modal-footer border-0">
+              <button type="button" class="btn btn-unefa" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </section>
   </ClientOnly>
 </template>
 
 <script setup>
 import { ref } from 'vue'
-
-const showHelp = ref(false)
-const toggleHelp = () => {
-  showHelp.value = !showHelp.value
-}
 
 // Datos para las características
 const features = [
@@ -106,7 +107,7 @@ const features = [
 <style scoped>
 .unefa-primary-bg {
   min-height: 100vh;
-  background-color: #002147;
+  background: linear-gradient(120deg, #002147 70%, #003366 100%);
 }
 
 .text-unefa-accent {
@@ -127,44 +128,53 @@ const features = [
 }
 
 .btn-outline-unefa {
-  border: 2px solid white;
-  color: white;
+  border: 2px solid #ffc72c;
+  color: #ffc72c;
+  background: transparent;
   transition: all 0.3s ease;
 }
 
 .btn-outline-unefa:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #ffc72c;
+  color: #002147;
+  border-color: #ffc72c;
   transform: translateY(-2px);
   cursor: pointer;
 }
 
-.info-panel {
-  border-left: 5px solid #ffc72c;
-  box-shadow: 0 0 15px rgba(255, 199, 44, 0.6);
-  font-size: 1rem;
-  line-height: 1.5;
-  color: #000;
-}
-
 .feature-card {
-  background-color: rgba(255, 199, 44, 0.15);
-  border-radius: 12px;
+  background-color: rgba(255, 199, 44, 0.10);
+  border-radius: 1rem;
   transition: all 0.3s ease;
   cursor: default;
   height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  min-width: 0;
+  min-height: 0;
+  word-break: break-word;
+  box-shadow: 0 2px 8px 0 rgba(0, 33, 71, 0.07);
+  position: relative;
 }
 
 .feature-card:hover {
-  background-color: rgba(255, 199, 44, 0.3);
-  box-shadow: 0 8px 20px rgba(255, 199, 44, 0.5);
-  transform: translateY(-6px) scale(1.05);
+  background-color: rgba(255, 199, 44, 0.18);
+  box-shadow: 0 8px 20px rgba(255, 199, 44, 0.18);
+  transform: translateY(-6px) scale(1.04);
 }
 
+.glass-card {
+  background: rgba(255,255,255,0.13) !important;
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+
+
 .feature-icon {
-  font-size: 4rem;
+  font-size: 2.8rem;
   color: #ffc72c;
   transition: color 0.3s ease;
 }
@@ -172,25 +182,64 @@ const features = [
 .feature-title {
   color: #ffc72c;
   font-weight: 700;
-  font-size: 1.25rem;
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
 }
 
 .feature-desc {
   color: #fff;
   font-weight: 400;
-  font-size: 0.9rem;
-  max-width: 220px;
+  font-size: 0.98rem;
+  max-width: 260px;
   margin: 0 auto;
+  word-break: break-word;
+  white-space: normal;
+  overflow-wrap: break-word;
+  text-align: center;
 }
 
-/* Animación fade para el panel */
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s ease;
+@media (max-width: 575.98px) {
+  .feature-card {
+    padding: 1rem 0.5rem !important;
+    min-width: 0;
+    max-width: 100%;
+  }
+  .feature-desc {
+    font-size: 0.98rem;
+    max-width: 100%;
+    word-break: break-word;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-align: center;
+  }
 }
 
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
+.modal-content.glass-card {
+  background: rgba(255,255,255,0.93) !important;
+  color: #002147;
+}
+
+.modal-header, .modal-footer {
+  border: none !important;
+  background: transparent !important;
+}
+
+.alert-info {
+  background: rgba(255, 199, 44, 0.13);
+  color: #002147;
+  border: none;
+}
+
+.list-unstyled li i {
+  vertical-align: middle;
+}
+
+@media (max-width: 767px) {
+  .display-2 {
+    font-size: 2rem;
+  }
+  .feature-icon-wrap {
+    padding: 0.7rem;
+  }
 }
 </style>

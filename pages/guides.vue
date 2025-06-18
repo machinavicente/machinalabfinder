@@ -1,35 +1,59 @@
 <template>
   <div class="container py-4">
-    <div class="mb-3">
-      <input v-model="terminoBusqueda" class="form-control" placeholder="Buscar guia..." />
+    <!-- Encabezado mejorado -->
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between mb-4 gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <i class="ri-book-open-line fs-3 text-primary"></i>
+      </div>
+      <input v-model="terminoBusqueda" class="form-control w-100 w-md-auto" style="max-width:350px" placeholder="Buscar guía..." />
     </div>
 
+    <!-- Barra de ayuda -->
+    <div class="alert alert-info d-flex align-items-center gap-2 mb-4" role="alert">
+      <i class="ri-lightbulb-flash-line fs-4"></i>
+      <div>
+        Haz clic en una guía para verla en grande y descargarla. Usa el buscador para filtrar por nombre.
+      </div>
+    </div>
+
+    <!-- Estado de carga -->
     <div v-if="isLoading" class="text-center py-5">
-      <div class="spinner-grow text-danger" role="status">
+      <div class="spinner-grow text-primary" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
+      <div class="mt-2 text-muted">Cargando guías, por favor espera...</div>
     </div>
 
+    <!-- Error -->
     <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
 
+    <!-- Sin resultados -->
     <div v-else>
-      <div v-if="imagenesFiltradas.length === 0" class="text-center text-muted py-4">
-        No se encontraron imágenes.
+      <div v-if="imagenesFiltradas.length === 0" class="text-center text-muted py-5">
+        <i class="ri-search-eye-line fs-1 mb-2"></i>
+        <div>No se encontraron guías con ese criterio.</div>
       </div>
 
+      <!-- Galería de guías -->
       <div class="row g-4" v-else>
-        <div v-for="nombre in imagenesFiltradas" :key="nombre" class="col-sm-6 col-md-4 col-lg-3">
-          <div class="card h-100 shadow-sm">
-            <img :src="obtenerURL(nombre)" class="card-img-top" :alt="nombre"
-              style="object-fit: contain; max-height: 200px; cursor: pointer;"
-              @click="imagenSeleccionada = obtenerURL(nombre)" data-bs-toggle="modal" data-bs-target="#modalImagen" />
-            <div class="card-body text-center">
-              <p class="card-text text-truncate">{{ normalizarNombreParaMostrar(nombre) }}</p>
-              <button class="btn btn-info btn-sm me-2" @click="imagenSeleccionada = obtenerURL(nombre)"
-                data-bs-toggle="modal" data-bs-target="#modalImagen">
-                <i class="ri-eye-line"></i>
-                Visualizar
-              </button>
+        <div v-for="nombre in imagenesFiltradas" :key="nombre" class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card h-100 shadow-sm border-0 guide-card position-relative">
+            <img :src="obtenerURL(nombre)" class="card-img-top guide-img"
+              :alt="nombre"
+              @click="imagenSeleccionada = obtenerURL(nombre)"
+              data-bs-toggle="modal" data-bs-target="#modalImagen" />
+            <span class="badge bg-primary position-absolute top-0 end-0 m-2 shadow-sm">Guía</span>
+            <div class="card-body text-center d-flex flex-column justify-content-between">
+              <p class="card-text guide-title mb-2" :title="normalizarNombreParaMostrar(nombre)">
+                {{ normalizarNombreParaMostrar(nombre) }}
+              </p>
+              <div class="d-flex flex-wrap gap-2 justify-content-center">
+                <button class="btn btn-outline-info btn-sm" @click="imagenSeleccionada = obtenerURL(nombre)"
+                  data-bs-toggle="modal" data-bs-target="#modalImagen">
+                  <i class="ri-eye-line"></i>
+                  Visualizar
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -53,7 +77,7 @@
               style="max-height: 500px; max-width: 100%; object-fit: contain;" />
             <div v-else class="text-muted py-5 w-100">No hay imagen seleccionada.</div>
           </div>
-          <div class="modal-footer border-0">
+          <div class="modal-footer border-0 d-flex justify-content-between flex-wrap gap-2">
             <button v-if="imagenSeleccionada" type="button" class="btn btn-success"
               @click="descargarArchivo(imagenSeleccionada)">
               <i class="ri-download-2-line"></i>
@@ -69,6 +93,7 @@
     </div>
   </div>
 </template>
+
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -193,14 +218,13 @@ onMounted(() => {
   cargarImagenes()
 })
 </script>
+
 <style scoped>
 .modal-dialog {
   max-width: 700px;
-  /* Ajusta este valor al ancho de tu sección principal */
   width: 100%;
   margin: 1.75rem auto;
   max-height: 90vh;
-  /* Limita el alto total de la modal */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -221,7 +245,6 @@ onMounted(() => {
   box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18);
   overflow: auto;
   max-height: 95vh;
-  /* Limita el alto del contenido */
   display: flex;
   flex-direction: column;
 }
@@ -246,11 +269,9 @@ onMounted(() => {
 }
 
 .modal-body {
-
   flex: 1 1 auto;
   overflow: auto;
   max-height: 66vh;
-  /* Ajusta según tu preferencia */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -276,5 +297,48 @@ onMounted(() => {
 .card:hover {
   transform: translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+}
+
+.guide-card {
+  border-radius: 4px;
+  background: #fff;
+  transition: box-shadow 0.2s, transform 0.2s, background 0.2s;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  box-shadow: 0 2px 8px 0 rgba(0, 33, 71, 0.07);
+  position: relative;
+}
+
+.guide-card:hover {
+  box-shadow: 0 8px 32px 0 rgba(0, 33, 71, 0.13);
+  background: #f6fafd;
+  transform: translateY(-2px) scale(1.01);
+}
+
+.guide-img {
+  object-fit: contain;
+  max-height: 200px;
+  min-height: 160px;
+  background: #f8fafc;
+  cursor: pointer;
+  transition: filter 0.2s;
+  border-bottom: 1px solid #f1f1f1;
+  width: 100%;
+}
+
+.guide-img:hover {
+  filter: brightness(0.95) blur(1px);
+}
+
+.guide-title {
+  font-weight: 600;
+  font-size: 1rem;
+  color: #002147;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  margin-bottom: 0.5rem;
 }
 </style>

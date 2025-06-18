@@ -2,22 +2,23 @@
   <ClientOnly>
     <div class="dashboard-container unefa-primary-bg text-white content">
       <!-- Header del Dashboard -->
-      <header class="dashboard-header py-3">
+      <header class="dashboard-header py-3 shadow-sm">
         <div class="container">
           <div class="row align-items-center text-center text-md-start">
             <!-- Logo + Título -->
             <div
               class="col-12 col-md-8 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start mb-3 mb-md-0">
-              <img src="/assets/images/logo.png" alt="logo" width="50" height="70">
-              <h1 class="ms-md-3 mt-3 mt-md-0 mb-0">Dashboard
+              <img src="/assets/images/logo.png" alt="logo" width="50" height="70" class="dashboard-logo me-md-3 mb-2 mb-md-0">
+              <h1 class="ms-md-3 mt-3 mt-md-0 mb-0 dashboard-title">
+                <span class="text-unefa-accent">Dashboard</span>
               </h1>
             </div>
 
             <!-- Fecha y hora -->
             <div class="col-12 col-md-4">
               <div class="current-time">
-                <div class="date">{{ currentDate }}</div>
-                <div class="time">{{ currentTime }}</div>
+                <div class="date"><i class="bi bi-calendar-event me-1"></i>{{ currentDate }}</div>
+                <div class="time"><i class="bi bi-clock me-1"></i>{{ currentTime }}</div>
               </div>
             </div>
           </div>
@@ -33,7 +34,7 @@
               <!-- Total de Simuladores -->
               <div class="col-md-6 col-lg-3">
                 <NuxtLink class="nav-link" to="/order_simulators">
-                  <div class="metric-card">
+                  <div class="metric-card glass-card h-100">
                     <div class="metric-icon">
                       <i class="bi bi-cpu"></i>
                     </div>
@@ -48,7 +49,7 @@
               <!-- Simuladores descargables -->
               <div class="col-md-6 col-lg-3">
                 <NuxtLink class="nav-link" to="/downloads">
-                  <div class="metric-card">
+                  <div class="metric-card glass-card h-100">
                     <div class="metric-icon">
                       <i class="bi bi-filetype-exe"></i>
                     </div>
@@ -61,7 +62,7 @@
               </div>
               <!-- Asignaturas con Simuladores -->
               <div class="col-md-6 col-lg-3">
-                <div class="metric-card">
+                <div class="metric-card glass-card h-100">
                   <div class="metric-icon">
                     <i class="bi bi-window-stack"></i>
                   </div>
@@ -73,19 +74,28 @@
               </div>
               <!-- Promedio de Simuladores por Asignatura -->
               <div class="col-md-6 col-lg-3">
-                <Promedio :simuladores="simuladores" :asignaturas="asignaturasConSimuladores" />
+                <div class="metric-card glass-card h-100 d-flex align-items-center">
+                  <div class="metric-icon">
+                    <i class="bi bi-graph-up"></i>
+                  </div>
+                  <div class="metric-content">
+                    <h3>Promedio de Simuladores<br>por Asignatura</h3>
+                    <p class="metric-value">{{ promedio }}</p>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
 
           <!-- Sección de los 3 simuladores más recientes -->
           <section class="ultimos-simuladores-section mb-5">
-            <h2 class="section-title mb-4">
-              <i class="bi bi-clock-history me-2 text-warning"></i>Últimos Simuladores Agregados
+            <h2 class="section-title mb-4 d-flex align-items-center">
+              <i class="bi bi-clock-history me-2 text-warning"></i>
+              Últimos Simuladores Agregados
             </h2>
 
             <div v-if="isLoading" class="text-center py-5">
-              <div class="spinner-grow  text-danger" role="status">
+              <div class="spinner-grow text-danger" role="status">
                 <span class="visually-hidden">Cargando...</span>
               </div>
             </div>
@@ -96,28 +106,28 @@
 
             <div v-else class="row g-4">
               <div v-for="sim in ultimosSimuladores" :key="sim.id" class="col-md-4">
-                <div class="ultimo-simulador-card">
+                <div class="ultimo-simulador-card glass-card h-100">
                   <!-- Header: Contiene los badges de categoría -->
-                  <div class="card-header">
+                  <div class="card-header d-flex gap-2">
                     <span class="badge bg-warning text-dark">Nuevo</span>
                     <span class="badge category-badge">{{ sim.categoria }}</span>
                   </div>
 
                   <!-- Body: Contiene el título y descripción (parte variable) -->
                   <div class="card-body">
-                    <h5>{{ sim.nombre_del_simulador }}</h5>
+                    <h5 class="sim-title mb-2"><i class="bi bi-terminal me-1"></i>{{ sim.nombre_del_simulador }}</h5>
                     <p class="small description-text">{{ sim.descripcion_del_simulador }}</p>
                   </div>
 
                   <!-- Footer: Contiene los elementos fijos (asignatura, botón y fecha) -->
-                  <div class="card-footer ">
+                  <div class="card-footer d-flex flex-column gap-1">
                     <div class="d-flex justify-content-between align-items-center">
                       <span class="badge asignatura-badge">{{ sim.asignatura }}</span>
-                      <a :href="sim.enlace" target="_blank" class="btn btn-sm btn-primary">
+                      <a :href="sim.enlace" target="_blank" class="btn btn-sm btn-primary btn-simulator">
                         <i class="bi bi-play-fill"></i> Usar
                       </a>
                     </div>
-                    <span class="small text-success">Agregado: {{ formatDate(sim.created_at) }}</span>
+                    <span class="small text-success date"><i class="bi bi-calendar-plus me-1"></i>Agregado: {{ formatDate(sim.created_at) }}</span>
                   </div>
                 </div>
               </div>
@@ -128,7 +138,7 @@
           <section class="actions-section">
             <div class="row">
               <div class="col-md-6 mt-3">
-                <div class="action-card download-card">
+                <div class="action-card download-card glass-card h-100">
                   <div class="action-icon">
                     <i class="bi bi-file-earmark-arrow-down"></i>
                   </div>
@@ -143,7 +153,7 @@
               </div>
               <!-- Reporte de Simuladores -->
               <div class="col-md-6 mt-3">
-                <div class="action-card stats-card">
+                <div class="action-card stats-card glass-card h-100">
                   <div class="action-icon">
                     <i class="bi bi-journal-arrow-down"></i>
                   </div>
@@ -288,6 +298,10 @@ const filteredSimuladores = computed(() => {
   )
 })
 
+const promedio = computed(() => {
+  if (asignaturasConSimuladores.value.length === 0) return 0
+  return Math.floor(totalSimuladores.value / asignaturasConSimuladores.value.length)
+})
 // Funciones auxiliares
 function countSimuladoresPorAsignatura(asignatura: string) {
   return simuladores.value.filter(sim => sim.asignatura === asignatura).length
@@ -341,12 +355,35 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
+.date{
+  font-weight: 800;
+}
 .dashboard-container {
   min-height: 100vh;
+  background: linear-gradient(120deg, #002147 70%, #003366 100%);
 }
 
 .dashboard-header {
-  background-color: #002147;
+  background: rgba(0, 33, 71, 0.98);
+  border-bottom: 2px solid #ffc72c;
+  box-shadow: 0 2px 12px 0 rgba(0, 33, 71, 0.07);
+}
+
+.dashboard-logo {
+  border-radius: 0.5rem;
+  background: #fff;
+  padding: 0.25rem;
+  box-shadow: 0 2px 8px rgba(0,33,71,0.08);
+}
+
+.dashboard-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.text-unefa-accent {
+  color: #ffc72c;
 }
 
 .dashboard-main {
@@ -355,104 +392,123 @@ onBeforeUnmount(() => {
 
 .current-time {
   text-align: right;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(0,33,71,0.04);
 }
 
 .current-time .date {
-  font-size: 0.9rem;
-  opacity: 0.8;
+  font-size: 0.95rem;
+  opacity: 0.85;
 }
 
 .current-time .time {
-  font-size: 1.5rem;
+  font-size: 1.3rem;
   font-weight: bold;
+  letter-spacing: 1px;
 }
 
 /* Tarjetas de métricas */
 .metric-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.10);
+  border-radius: 0.75rem;
   padding: 1.5rem;
   display: flex;
   align-items: center;
   height: 100%;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s, background 0.3s;
+  box-shadow: 0 2px 8px rgba(0,33,71,0.07);
+  border: none;
 }
 
 .metric-card:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.18);
+  transform: translateY(-5px) scale(1.03);
 }
 
 .metric-icon {
-  font-size: 2rem;
+  font-size: 2.2rem;
   color: #FFC72C;
   margin-right: 1.5rem;
+  filter: drop-shadow(0 2px 4px #ffc72c33);
 }
 
 .metric-content h3 {
-  font-size: 1rem;
+  font-size: 1.05rem;
   margin-bottom: 0.5rem;
-  opacity: 0.8;
+  opacity: 0.85;
+  font-weight: 600;
 }
 
 .metric-value {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: bold;
   margin-bottom: 0;
+  color: #ffc72c;
+  text-shadow: 0 1px 2px #00214733;
+}
+
+/* Glass effect */
+.glass-card {
+  background: rgba(255,255,255,0.13) !important;
+  backdrop-filter: blur(6px) saturate(120%);
+  -webkit-backdrop-filter: blur(6px) saturate(120%);
+  border: 1px solid rgba(255,255,255,0.18);
 }
 
 /* Sección de últimos simuladores */
 .ultimos-simuladores-section {
-  background: rgba(255, 255, 255, 0.05);
-  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 0.75rem;
   padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,33,71,0.05);
 }
 
 .ultimo-simulador-card {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.13);
+  border-radius: 0.75rem;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: transform 0.3s, box-shadow 0.3s;
   height: 100%;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 2px 8px rgba(0,33,71,0.07);
+  border: 1px solid rgba(255,255,255,0.13);
 }
 
 .ultimo-simulador-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px) scale(1.02);
+  box-shadow: 0 10px 24px rgba(0, 33, 71, 0.13);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .ultimo-simulador-card .card-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
+  gap: 0.5rem;
   padding: 0.75rem 1rem;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.13);
+  border-bottom: 1px solid rgba(255,255,255,0.09);
+}
+
+.sim-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #ffc72c;
+  text-shadow: 0 1px 2px #00214733;
 }
 
 .ultimo-simulador-card .card-body {
-  padding: 2rem;
+  padding: 1.5rem 1rem 1rem 1rem;
   flex-grow: 1;
 }
 
 .ultimo-simulador-card .card-footer {
   padding: 0.65rem 0.85rem;
-  background: rgba(0, 0, 0, 0.1);
-}
-
-/* Estilos para los simuladores normales */
-.simuladores-section .card {
-  background: rgba(5, 209, 199, 0.05);
-  border: none;
-  transition: transform 0.3s ease;
-}
-
-.simuladores-section .card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.08);
+  border-top: 1px solid rgba(255,255,255,0.09);
 }
 
 /* Badges */
@@ -461,36 +517,50 @@ onBeforeUnmount(() => {
 }
 
 .category-badge {
-  background-color: rgba(91, 124, 53, 0.986);
+  background-color: #5b7c35 !important;
+  color: #fff;
+  font-weight: 500;
 }
 
 .asignatura-badge {
-  background-color: rgba(200, 16, 46, 0.8);
+  background-color: #c8102e !important;
+  color: #fff;
+  font-weight: 500;
+  max-width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 0.95rem;
+  padding: 0.35em 0.8em;
 }
 
 /* Tarjetas de acciones */
 .action-card {
   display: flex;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   overflow: hidden;
   height: 100%;
+  box-shadow: 0 2px 8px rgba(0,33,71,0.07);
+  border: 1px solid rgba(255,255,255,0.13);
+  background: rgba(255,255,255,0.13);
 }
 
 .download-card {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.09);
 }
 
 .stats-card {
-  background: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.09);
 }
 
 .action-icon {
-  background: rgba(255, 199, 44, 0.2);
+  background: rgba(255, 199, 44, 0.18);
   color: #FFC72C;
-  font-size: 1.5rem;
-  padding: 1.5rem;
+  font-size: 2.2rem;
+  padding: 1.5rem 1.2rem;
   display: flex;
   align-items: center;
+  border-radius: 0.75rem 0 0 0.75rem;
 }
 
 .action-content {
@@ -500,24 +570,25 @@ onBeforeUnmount(() => {
 
 .action-content h3 {
   margin-bottom: 0.5rem;
+  font-weight: 700;
 }
 
 .action-content p {
-  opacity: 0.8;
+  opacity: 0.85;
   margin-bottom: 1rem;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 
 .btn-download {
   background-color: #C8102E;
   color: white;
+  border: none;
+  font-weight: 600;
+  transition: background 0.2s;
 }
 
-.btn-stats {
-  background-color: #002147;
-  color: white;
-  opacity: 0.7;
-  cursor: not-allowed;
+.btn-download:hover {
+  background-color: #a00d26;
 }
 
 .section-title {
@@ -525,35 +596,31 @@ onBeforeUnmount(() => {
   font-weight: 600;
   padding-bottom: 0.5rem;
   border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  color: #ffc72c;
+  letter-spacing: 1px;
 }
 
 .btn-simulator {
-  background-color: rgba(200, 16, 46, 0.8);
+  background-color: #c8102e;
   color: white;
   border: none;
+  font-weight: 600;
+  transition: background 0.2s;
 }
 
 .btn-simulator:hover {
-  background-color: rgba(200, 16, 46, 1);
+  background-color: #a00d26;
 }
 
 /* Spinner de carga */
-.spinner-border {
+.spinner-border, .spinner-grow {
   width: 3rem;
   height: 3rem;
-}
-
-.asignatura-badge {
-  max-width: 60%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 @media (max-width: 1024px) {
   .d-flex.justify-content-between.align-items-center {
     flex-wrap: nowrap !important;
-    /* evitar salto de línea */
     gap: 0.5rem;
   }
 
@@ -564,9 +631,24 @@ onBeforeUnmount(() => {
 
   .btn.btn-sm.btn-primary {
     flex-shrink: 0;
-    /* evitar que el botón se reduzca demasiado */
     font-size: 0.85rem;
     padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .dashboard-title {
+    font-size: 1.4rem;
+  }
+  .metric-card, .glass-card, .action-card, .ultimos-simuladores-section {
+    padding: 1rem !important;
+  }
+  .action-icon {
+    padding: 1rem 0.7rem;
+    font-size: 1.5rem;
+  }
+  .sim-title {
+    font-size: 1rem;
   }
 }
 </style>

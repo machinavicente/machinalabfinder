@@ -1,6 +1,6 @@
 <template>
   <ClientOnly>
-    <nav v-if="isMobile" class="bottom-nav">
+    <nav class="bottom-nav">
       <NuxtLink to="/" class="nav-item" active-class="active">
         <i class="ri-home-line"></i>
         <span>Inicio</span>
@@ -32,22 +32,6 @@
     </nav>
   </ClientOnly>
 </template>
-
-<script setup>
-import { ref, onMounted } from 'vue'
-
-const isMobile = ref(false)
-
-onMounted(() => {
-  // Detecta si el ancho de pantalla es menor a 992px (móvil)
-  isMobile.value = window.innerWidth < 992
-
-  // También actualiza si redimensionan la pantalla
-  window.addEventListener('resize', () => {
-    isMobile.value = window.innerWidth < 992
-  })
-})
-</script>
 
 <style scoped>
 .bottom-nav {
@@ -124,6 +108,12 @@ onMounted(() => {
   .nav-item span {
     font-size: 8.5px;
     max-width: 40px;
+  }
+}
+
+@media (min-width: 992px) {
+  .bottom-nav {
+    display: none !important;
   }
 }
 
