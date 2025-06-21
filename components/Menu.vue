@@ -36,7 +36,7 @@
           </li>
           <li class="nav-item">
             <NuxtLink class="nav-link" to="/info_simuladores">
-              <i class="bi bi-info-square"></i>
+              <i class="bi bi-info-lg"></i>
               Info
             </NuxtLink>
           </li>

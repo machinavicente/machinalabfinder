@@ -5,8 +5,11 @@
         <span class="visually-hidden">Cargando...</span>
       </div>
     </div>
-
-    <div v-else-if="error" class="alert alert-danger">{{ error }}</div>
+    <!-- Mensaje de error -->
+    <div v-else-if="error" class="alert alert-danger d-flex align-items-center gap-2">
+      <i class="bi bi-wifi-off fs-4"></i>
+      <span>{{ error }}</span>
+    </div>
 
     <div v-else>
       <!-- Barra de búsqueda -->
@@ -56,7 +59,8 @@
 
       <!-- Mensaje si no hay resultados -->
       <div v-if="Object.keys(simuladoresPorAsignatura).length === 0" class="text-muted text-center">
-        No se encontraron simuladores.
+        <i class="ri-search-eye-line fs-1 mb-2"></i>
+        <div>No se encontraron simuladores bajo ese criterio.</div>
       </div>
 
       <!-- Simuladores -->
@@ -120,7 +124,6 @@
                   </button>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -259,7 +262,7 @@ async function cargarSimuladores() {
       categoria: normalizarTexto(sim.categoria)
     }))
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Error de conexión, intente de nuevo'
+    error.value = err instanceof Error ? err.message : 'Error de Conexion, Verifique e intente de nuevo'
   } finally {
     isLoading.value = false
   }

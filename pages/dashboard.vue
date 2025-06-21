@@ -7,8 +7,15 @@
           <div class="row align-items-center text-center text-md-start">
             <!-- Logo + Título -->
             <div
-              class="col-12 col-md-8 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start mb-3 mb-md-0">
-              <img src="/assets/images/logo.png" alt="logo" width="50" height="70" class="dashboard-logo me-md-3 mb-2 mb-md-0">
+              class="col-12 col-md-8 d-flex flex-column flex-md-row align-items-center justify-content-center justify-content-md-start mb-3 mb-md-0"
+            >
+              <img
+                src="/assets/images/logo.png"
+                alt="logo"
+                width="50"
+                height="70"
+                class="dashboard-logo me-md-3 mb-2 mb-md-0"
+              />
               <h1 class="ms-md-3 mt-3 mt-md-0 mb-0 dashboard-title">
                 <span class="text-unefa-accent">Dashboard</span>
               </h1>
@@ -17,8 +24,12 @@
             <!-- Fecha y hora -->
             <div class="col-12 col-md-4">
               <div class="current-time">
-                <div class="date"><i class="ri-calendar-todo-fill me-1"></i>{{ currentDate }}</div>
-                <div class="time"><i class="ri-time-line me-1"></i>{{ currentTime }}</div>
+                <div class="date">
+                  <i class="ri-calendar-todo-fill me-1"></i>{{ currentDate }}
+                </div>
+                <div class="time">
+                  <i class="ri-time-line me-1"></i>{{ currentTime }}
+                </div>
               </div>
             </div>
           </div>
@@ -68,18 +79,22 @@
                   </div>
                   <div class="metric-content">
                     <h3>Asignaturas con Simuladores</h3>
-                    <p class="metric-value">{{ asignaturasConSimuladores.length }}</p>
+                    <p class="metric-value">
+                      {{ asignaturasConSimuladores.length }}
+                    </p>
                   </div>
                 </div>
               </div>
               <!-- Promedio de Simuladores por Asignatura -->
               <div class="col-md-6 col-lg-3">
-                <div class="metric-card glass-card h-100 d-flex align-items-center">
+                <div
+                  class="metric-card glass-card h-100 d-flex align-items-center"
+                >
                   <div class="metric-icon">
                     <i class="bi bi-graph-up"></i>
                   </div>
                   <div class="metric-content">
-                    <h3>Promedio de Simuladores<br>por Asignatura</h3>
+                    <h3>Promedio de Simuladores<br />por Asignatura</h3>
                     <p class="metric-value">{{ promedio }}</p>
                   </div>
                 </div>
@@ -100,34 +115,57 @@
               </div>
             </div>
 
-            <div v-else-if="error" class="alert alert-danger">
-              {{ error }}
+            <div v-else-if="error" class="alert alert-danger d-flex align-items-center gap-2">
+              <i class="bi bi-wifi-off fs-4"></i>
+              <span>{{ error }}</span>
             </div>
 
             <div v-else class="row g-4">
-              <div v-for="sim in ultimosSimuladores" :key="sim.id" class="col-md-4">
+              <div
+                v-for="sim in ultimosSimuladores"
+                :key="sim.id"
+                class="col-md-4"
+              >
                 <div class="ultimo-simulador-card glass-card h-100">
                   <!-- Header: Contiene los badges de categoría -->
                   <div class="card-header d-flex gap-2">
                     <span class="badge bg-warning text-dark">Nuevo</span>
-                    <span class="badge category-badge">{{ sim.categoria }}</span>
+                    <span class="badge category-badge">{{
+                      sim.categoria
+                    }}</span>
                   </div>
 
                   <!-- Body: Contiene el título y descripción (parte variable) -->
                   <div class="card-body">
-                    <h5 class="sim-title mb-2"><i class="bi bi-terminal me-1"></i>{{ sim.nombre_del_simulador }}</h5>
-                    <p class="small description-text">{{ sim.descripcion_del_simulador }}</p>
+                    <h5 class="sim-title mb-2">
+                      <i class="bi bi-terminal me-1"></i
+                      >{{ sim.nombre_del_simulador }}
+                    </h5>
+                    <p class="small description-text">
+                      {{ sim.descripcion_del_simulador }}
+                    </p>
                   </div>
 
                   <!-- Footer: Contiene los elementos fijos (asignatura, botón y fecha) -->
                   <div class="card-footer d-flex flex-column gap-1">
-                    <div class="d-flex justify-content-between align-items-center">
-                      <span class="badge asignatura-badge">{{ sim.asignatura }}</span>
-                      <a :href="sim.enlace" target="_blank" class="btn btn-sm btn-success btn-simulator">
-                        <i class="ri-terminal-box-line"></i> Ejecutar
+                    <div
+                      class="d-flex justify-content-between align-items-center"
+                    >
+                      <span class="badge asignatura-badge">{{
+                        sim.asignatura
+                      }}</span>
+                      <a
+                        :href="sim.enlace"
+                        target="_blank"
+                        class="btn btn-sm btn-success btn-simulator"
+                      >
+                        Ejecutar  <i class="ri-terminal-box-line"></i>
                       </a>
                     </div>
-                    <span class="small text-success date"><i class="bi bi-calendar-plus me-1"></i>Agregado: {{ formatDate(sim.created_at) }}</span>
+                    <span class="small text-success date"
+                      ><i class="bi bi-calendar-plus me-1"></i>Agregado:
+                      {{ formatDate(sim.created_at) }}</span
+                    >
                   </div>
                 </div>
               </div>
@@ -159,8 +197,10 @@
                   </div>
                   <div class="action-content">
                     <h3>Descargar Lista de Simuladores</h3>
-                    <p>Descarga la lista detallada de tus simuladores de laboratorio en formato PDF para su revisión
-                      y análisis.</p>
+                    <p>
+                      Descarga la lista detallada de tus simuladores de
+                      laboratorio en formato PDF para su revisión y análisis.
+                    </p>
                     <ReporteSimuladores :simuladores="simuladores" />
                   </div>
                 </div>
@@ -174,188 +214,198 @@
 </template>
 
 <script setup lang="ts">
-import ReporteSimuladores from '@/components/reporteSimuladores.vue'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import ReporteSimuladores from "@/components/reporteSimuladores.vue";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
 interface Simulador {
-  id: number
-  nombre_del_simulador: string
-  enlace: string
-  categoria: string
-  asignatura: string
-  descripcion_del_simulador: string
-  created_at: string
+  id: number;
+  nombre_del_simulador: string;
+  enlace: string;
+  categoria: string;
+  asignatura: string;
+  descripcion_del_simulador: string;
+  created_at: string;
 }
 
-const { $supabase } = useNuxtApp()
-const supabase = $supabase as SupabaseClient
+const { $supabase } = useNuxtApp();
+const supabase = $supabase as SupabaseClient;
 
 // Datos del dashboard
-const simuladores = ref<Simulador[]>([])
-const totalDescargables = ref(0)
-const ultimosSimuladores = ref<Simulador[]>([])
-const totalSimuladores = ref(0)
-const totalAsignaturas = ref(0)
-const isLoading = ref(true)
-const error = ref<string | null>(null)
-const searchTerm = ref('')
+const simuladores = ref<Simulador[]>([]);
+const totalDescargables = ref(0);
+const ultimosSimuladores = ref<Simulador[]>([]);
+const totalSimuladores = ref(0);
+const totalAsignaturas = ref(0);
+const isLoading = ref(true);
+const error = ref<string | null>(null);
+const searchTerm = ref("");
 
 // Fecha y hora actual
-const currentDate = ref('')
-const currentTime = ref('')
-const timeInterval = ref<NodeJS.Timeout>()
+const currentDate = ref("");
+const currentTime = ref("");
+const timeInterval = ref<NodeJS.Timeout>();
 
 // Cargar datos
 async function cargarDatosDashboard() {
   try {
-    isLoading.value = true
-    error.value = null
+    isLoading.value = true;
+    error.value = null;
 
     // 1. Contar total de simuladores
     const { count: countSimuladores, error: countError } = await supabase
-      .from('simuladores')
-      .select('*', { count: 'exact', head: true })
+      .from("simuladores")
+      .select("*", { count: "exact", head: true });
 
-    if (countError) throw countError
-    totalSimuladores.value = countSimuladores || 0
+    if (countError) throw countError;
+    totalSimuladores.value = countSimuladores || 0;
 
     // 1b. Contar total de simuladores descargables
-    const { count: countDescargables, error: countDescargablesError } = await supabase
-      .from('descargas')
-      .select('*', { count: 'exact', head: true })
+    const { count: countDescargables, error: countDescargablesError } =
+      await supabase
+        .from("descargas")
+        .select("*", { count: "exact", head: true });
 
-    if (countDescargablesError) throw countDescargablesError
-    totalDescargables.value = countDescargables || 0
-
+    if (countDescargablesError) throw countDescargablesError;
+    totalDescargables.value = countDescargables || 0;
 
     // 2. Obtener asignaturas únicas
     const { data: asignaturasData, error: asignaturasError } = await supabase
-      .from('simuladores')
-      .select('asignatura')
-      .not('asignatura', 'is', null)
+      .from("simuladores")
+      .select("asignatura")
+      .not("asignatura", "is", null);
 
-    if (asignaturasError) throw asignaturasError
+    if (asignaturasError) throw asignaturasError;
 
     // Calcular asignaturas únicas
-    const asignaturasUnicas = new Set<string>()
-    asignaturasData?.forEach(item => {
+    const asignaturasUnicas = new Set<string>();
+    asignaturasData?.forEach((item) => {
       if (item.asignatura) {
-        asignaturasUnicas.add(item.asignatura)
+        asignaturasUnicas.add(item.asignatura);
       }
-    })
-    totalAsignaturas.value = asignaturasUnicas.size
+    });
+    totalAsignaturas.value = asignaturasUnicas.size;
 
     // 3. Cargar los 3 simuladores más recientes
     const { data: ultimosTresData, error: ultimosTresError } = await supabase
-      .from('simuladores')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(3)
+      .from("simuladores")
+      .select("*")
+      .order("created_at", { ascending: false })
+      .limit(3);
 
-    if (ultimosTresError) throw ultimosTresError
-    ultimosSimuladores.value = ultimosTresData || []
+    if (ultimosTresError) throw ultimosTresError;
+    ultimosSimuladores.value = ultimosTresData || [];
 
     // 4. Cargar todos los simuladores para el listado completo
     const { data: simuladoresData, error: simuladoresError } = await supabase
-      .from('simuladores')
-      .select('*')
-      .order('nombre_del_simulador', { ascending: true })
+      .from("simuladores")
+      .select("*")
+      .order("nombre_del_simulador", { ascending: true });
 
-    if (simuladoresError) throw simuladoresError
-    simuladores.value = simuladoresData || []
-
+    if (simuladoresError) throw simuladoresError;
+    simuladores.value = simuladoresData || [];
   } catch (err) {
-    error.value = err instanceof Error ? err.message : 'Error de Conexion, Verifique e intente de nuevo'
-    console.error('Error al cargar datos del dashboard:', err)
+    error.value =
+      err instanceof Error
+        ? err.message
+        : "Error de Conexion, Verifique e intente de nuevo";
+    console.error("Error al cargar datos del dashboard:", err);
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
 }
 
 // Computed properties
 const asignaturasConSimuladores = computed(() => {
-  const asignaturas = new Set<string>()
-  simuladores.value.forEach(sim => {
+  const asignaturas = new Set<string>();
+  simuladores.value.forEach((sim) => {
     if (sim.asignatura) {
-      asignaturas.add(sim.asignatura)
+      asignaturas.add(sim.asignatura);
     }
-  })
-  return Array.from(asignaturas)
-})
+  });
+  return Array.from(asignaturas);
+});
 
 const simuladoresRecientes = computed(() => {
-  return simuladores.value.slice(0, 3)
-})
+  return simuladores.value.slice(0, 3);
+});
 
 const filteredSimuladores = computed(() => {
-  if (!searchTerm.value) return simuladores.value
+  if (!searchTerm.value) return simuladores.value;
 
-  const term = searchTerm.value.toLowerCase()
-  return simuladores.value.filter(sim =>
-    sim.nombre_del_simulador.toLowerCase().includes(term) ||
-    sim.categoria.toLowerCase().includes(term) ||
-    sim.asignatura.toLowerCase().includes(term)
-  )
-})
+  const term = searchTerm.value.toLowerCase();
+  return simuladores.value.filter(
+    (sim) =>
+      sim.nombre_del_simulador.toLowerCase().includes(term) ||
+      sim.categoria.toLowerCase().includes(term) ||
+      sim.asignatura.toLowerCase().includes(term)
+  );
+});
 
 const promedio = computed(() => {
-  if (asignaturasConSimuladores.value.length === 0) return 0
-  return Math.floor(totalSimuladores.value / asignaturasConSimuladores.value.length)
-})
+  if (asignaturasConSimuladores.value.length === 0) return 0;
+  return Math.floor(
+    totalSimuladores.value / asignaturasConSimuladores.value.length
+  );
+});
 // Funciones auxiliares
 function countSimuladoresPorAsignatura(asignatura: string) {
-  return simuladores.value.filter(sim => sim.asignatura === asignatura).length
+  return simuladores.value.filter((sim) => sim.asignatura === asignatura)
+    .length;
 }
 
 function formatDate(dateString: string) {
-  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'short', day: 'numeric' }
-  return new Date(dateString).toLocaleDateString('es-ES', options)
+  const options: Intl.DateTimeFormatOptions = {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  };
+  return new Date(dateString).toLocaleDateString("es-ES", options);
 }
 
 function updateDateTime() {
-  const now = new Date()
-  currentDate.value = now.toLocaleDateString('es-ES', {
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  })
+  const now = new Date();
+  currentDate.value = now.toLocaleDateString("es-ES", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   // Formato de 12 horas con AM/PM
-  currentTime.value = now.toLocaleTimeString('es-ES', {
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true
-  })
+  currentTime.value = now.toLocaleTimeString("es-ES", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
 }
 function descargarManual() {
   // Cambia el nombre si tu archivo PDF tiene otro nombre
-  const url = '/Manual_MachinaLab_Finder.pdf'
+  const url = "/Manual_MachinaLab_Finder.pdf";
   // Esto fuerza la descarga en la mayoría de navegadores
-  const link = document.createElement('a')
-  link.href = url
-  link.download = 'Manual_MachinaLab_Finder.pdf' // Nombre sugerido para el usuario
-  document.body.appendChild(link)
-  link.click()
-  document.body.removeChild(link)
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "Manual_MachinaLab_Finder.pdf"; // Nombre sugerido para el usuario
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
 }
 
 // Inicialización
 onMounted(() => {
-  cargarDatosDashboard()
-  updateDateTime()
-  timeInterval.value = setInterval(updateDateTime, 60000)
-})
+  cargarDatosDashboard();
+  updateDateTime();
+  timeInterval.value = setInterval(updateDateTime, 60000);
+});
 
 onBeforeUnmount(() => {
   if (timeInterval.value) {
-    clearInterval(timeInterval.value)
+    clearInterval(timeInterval.value);
   }
-})
+});
 </script>
 
 <style scoped>
-.date{
+.date {
   font-weight: 800;
 }
 .dashboard-container {
@@ -373,7 +423,7 @@ onBeforeUnmount(() => {
   border-radius: 0.5rem;
   background: #fff;
   padding: 0.25rem;
-  box-shadow: 0 2px 8px rgba(0,33,71,0.08);
+  box-shadow: 0 2px 8px rgba(0, 33, 71, 0.08);
 }
 
 .dashboard-title {
@@ -395,8 +445,8 @@ onBeforeUnmount(() => {
   background: rgba(255, 255, 255, 0.08);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
-  font-family: 'Segoe UI', Arial, sans-serif;
-  box-shadow: 0 2px 8px rgba(0,33,71,0.04);
+  font-family: "Segoe UI", Arial, sans-serif;
+  box-shadow: 0 2px 8px rgba(0, 33, 71, 0.04);
 }
 
 .current-time .date {
@@ -412,14 +462,14 @@ onBeforeUnmount(() => {
 
 /* Tarjetas de métricas */
 .metric-card {
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.1);
   border-radius: 0.75rem;
   padding: 1.5rem;
   display: flex;
   align-items: center;
   height: 100%;
   transition: transform 0.3s, background 0.3s;
-  box-shadow: 0 2px 8px rgba(0,33,71,0.07);
+  box-shadow: 0 2px 8px rgba(0, 33, 71, 0.07);
   border: none;
 }
 
@@ -430,7 +480,7 @@ onBeforeUnmount(() => {
 
 .metric-icon {
   font-size: 2.2rem;
-  color: #FFC72C;
+  color: #ffc72c;
   margin-right: 1.5rem;
   filter: drop-shadow(0 2px 4px #ffc72c33);
 }
@@ -452,10 +502,10 @@ onBeforeUnmount(() => {
 
 /* Glass effect */
 .glass-card {
-  background: rgba(255,255,255,0.13) !important;
+  background: rgba(255, 255, 255, 0.13) !important;
   backdrop-filter: blur(6px) saturate(120%);
   -webkit-backdrop-filter: blur(6px) saturate(120%);
-  border: 1px solid rgba(255,255,255,0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
 }
 
 /* Sección de últimos simuladores */
@@ -463,7 +513,7 @@ onBeforeUnmount(() => {
   background: rgba(255, 255, 255, 0.07);
   border-radius: 0.75rem;
   padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,33,71,0.05);
+  box-shadow: 0 2px 8px rgba(0, 33, 71, 0.05);
 }
 
 .ultimo-simulador-card {
@@ -474,8 +524,8 @@ onBeforeUnmount(() => {
   height: 100%;
   display: flex;
   flex-direction: column;
-  box-shadow: 0 2px 8px rgba(0,33,71,0.07);
-  border: 1px solid rgba(255,255,255,0.13);
+  box-shadow: 0 2px 8px rgba(0, 33, 71, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.13);
 }
 
 .ultimo-simulador-card:hover {
@@ -490,7 +540,7 @@ onBeforeUnmount(() => {
   gap: 0.5rem;
   padding: 0.75rem 1rem;
   background: rgba(0, 0, 0, 0.13);
-  border-bottom: 1px solid rgba(255,255,255,0.09);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 .sim-title {
@@ -508,12 +558,12 @@ onBeforeUnmount(() => {
 .ultimo-simulador-card .card-footer {
   padding: 0.65rem 0.85rem;
   background: rgba(0, 0, 0, 0.08);
-  border-top: 1px solid rgba(255,255,255,0.09);
+  border-top: 1px solid rgba(255, 255, 255, 0.09);
 }
 
 /* Badges */
 .bg-warning {
-  background-color: #FFC72C !important;
+  background-color: #ffc72c !important;
 }
 
 .category-badge {
@@ -540,9 +590,9 @@ onBeforeUnmount(() => {
   border-radius: 0.75rem;
   overflow: hidden;
   height: 100%;
-  box-shadow: 0 2px 8px rgba(0,33,71,0.07);
-  border: 1px solid rgba(255,255,255,0.13);
-  background: rgba(255,255,255,0.13);
+  box-shadow: 0 2px 8px rgba(0, 33, 71, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  background: rgba(255, 255, 255, 0.13);
 }
 
 .download-card {
@@ -555,7 +605,7 @@ onBeforeUnmount(() => {
 
 .action-icon {
   background: rgba(255, 199, 44, 0.18);
-  color: #FFC72C;
+  color: #ffc72c;
   font-size: 2.2rem;
   padding: 1.5rem 1.2rem;
   display: flex;
@@ -580,7 +630,7 @@ onBeforeUnmount(() => {
 }
 
 .btn-download {
-  background-color: #C8102E;
+  background-color: #c8102e;
   color: white;
   border: none;
   font-weight: 600;
@@ -600,10 +650,9 @@ onBeforeUnmount(() => {
   letter-spacing: 1px;
 }
 
-
-
 /* Spinner de carga */
-.spinner-border, .spinner-grow {
+.spinner-border,
+.spinner-grow {
   width: 3rem;
   height: 3rem;
 }
@@ -630,7 +679,10 @@ onBeforeUnmount(() => {
   .dashboard-title {
     font-size: 1.4rem;
   }
-  .metric-card, .glass-card, .action-card, .ultimos-simuladores-section {
+  .metric-card,
+  .glass-card,
+  .action-card,
+  .ultimos-simuladores-section {
     padding: 1rem !important;
   }
   .action-icon {

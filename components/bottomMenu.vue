@@ -15,19 +15,19 @@
       </NuxtLink>
       <NuxtLink to="/order_simulators" class="nav-item" active-class="active">
         <i class="bi bi-cpu"></i>
-        <span>Online Sim</span>
+        <span>S-Online</span>
       </NuxtLink>
       <NuxtLink to="/downloads" class="nav-item" active-class="active">
         <i class="ri-download-2-line"></i>
         <span>Descargas</span>
       </NuxtLink>
       <NuxtLink to="/info_simuladores" class="nav-item" active-class="active">
-        <i class="bi bi-info-square"></i>
+        <i class="bi bi-info-lg"></i>
         <span>Info</span>
       </NuxtLink>
       <NuxtLink to="/registro_simuladores" class="nav-item" active-class="active">
-        <i class="ri-edit-box-line"></i>
-        <span>Nuevo Simulador</span>
+        <i class="bi bi-pencil-square"></i>
+        <span>Nuevo</span>
       </NuxtLink>
     </nav>
   </ClientOnly>
@@ -46,9 +46,9 @@
   justify-content: space-between;
   align-items: center;
   border-top: 2px solid #ffc72c;
-  /* Amarillo UNEFA */
   z-index: 1200;
   padding: 0 4px;
+  gap: 0;
 }
 
 .nav-item {
@@ -72,25 +72,23 @@
 }
 
 .nav-item span {
-  font-size: 11px;
+  font-size: 10px;
   margin-top: 0;
   line-height: 1.1;
   max-width: 80px;
   overflow-wrap: break-word;
   display: block;
   white-space: normal;
-  /* Permite saltos de línea */
   word-break: break-word;
-  /* Rompe palabras largas si es necesario */
 }
 
 @media (max-width: 400px) {
   .nav-item {
-    padding: 0 1px;
+    margin: 0 1px;
   }
 
   .nav-item span {
-    font-size: 9.5px;
+    font-size: 9px;
     max-width: 48px;
     white-space: normal;
     word-break: break-word;
