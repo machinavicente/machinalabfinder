@@ -96,6 +96,7 @@
     line-height: 1.15;
     display: -webkit-box;
     -webkit-line-clamp: 2;
+    line-clamp: 2;
     /* Máximo 2 líneas */
     -webkit-box-orient: vertical;
     overflow: hidden;
