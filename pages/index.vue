@@ -12,21 +12,19 @@
                   Potencia tu aprendizaje en la UNEFA - Extensión Zaraza
                 </span>
               </div>
-
               <div class="d-flex flex-column gap-3">
                 <div class="d-flex flex-column gap-2">
                   <h1 class="mb-0 display-2 fw-bolder">
                     MachinaLab Finder
                   </h1>
-                  <p class="mb-0">
+                  <p class="mb-0 presentation-text">
                     <strong>MachinaLab Finder. </strong>Es una plataforma innovadora diseñada para facilitar la búsqueda
-                    y acceso a simuladores virtuales de laboratorios. Inspirada en la necesidad de optimizar la
+                    y acceso a simuladores de laboratorios. Inspirada en la necesidad de optimizar la
                     formación práctica en entornos educativos, esta herramienta permite a estudiantes y docentes
                     encontrar de manera rápida y sencilla recursos digitales que complementan el aprendizaje teórico.
                   </p>
                 </div>
               </div>
-
               <div class="d-grid d-md-flex flex-row gap-2 mb-5">
                 <NuxtLink to="/order_simulators" class="btn btn-unefa btn-lg">
                   Comenzar
@@ -37,8 +35,7 @@
               </div>
             </div>
           </div>
-
-          <!-- Panel lateral con features -->
+          <!-- Panel lateral de features -->
           <div class="col-xxl-6 offset-xxl-1 col-lg-7 col-12">
             <div class="row gx-4 gy-4">
               <div v-for="(feature, index) in features" :key="index" class="col-12 col-md-6">
@@ -54,7 +51,6 @@
           </div>
         </div>
       </div>
-
       <!-- Modal  "¿Cómo usar?" -->
       <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -67,7 +63,10 @@
               <ul class="list-unstyled mb-3">
                 <li class="mb-2"><i class="bi bi-play-circle text-unefa-accent me-2"></i>Haz clic en <b>Comenzar</b> para explorar los simuladores online.</li>
                 <li class="mb-2"><i class="bi bi-search text-unefa-accent me-2"></i>Utiliza el buscador para encontrar simuladores por nombre o materia.</li>
-                <li class="mb-2"><i class="bi bi-download text-unefa-accent me-2"></i>Descarga recursos y guías desde la sección correspondiente.</li>
+                <li class="mb-2">
+                  <i class="bi bi-download text-unefa-accent me-2"></i>
+                  Descarga recursos y guías desde la <a href="/guides">Biblioteca!</a>
+                </li>
               </ul>
             </div>
             <div class="modal-footer border-0">
@@ -76,15 +75,11 @@
           </div>
         </div>
       </div>
-
     </section>
   </ClientOnly>
 </template>
 
 <script setup>
-import { ref } from 'vue'
-
-// Datos para las características
 const features = [
   {
     icon: 'bi bi-laptop',
@@ -110,9 +105,10 @@ const features = [
   background: linear-gradient(120deg, #002147 70%, #003366 100%);
   display: flex;
   align-items: center;
-  /* Centra verticalmente el contenido */
 }
-
+.presentation-text {
+  text-align: justify;
+}
 .text-unefa-accent {
   color: #ffc72c;
 }
@@ -173,9 +169,6 @@ const features = [
   -webkit-backdrop-filter: blur(6px) saturate(120%);
   border: 1px solid rgba(255,255,255,0.18);
 }
-
-
-
 .feature-icon {
   font-size: 2.8rem;
   color: #ffc72c;

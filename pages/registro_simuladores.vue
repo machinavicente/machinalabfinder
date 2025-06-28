@@ -47,10 +47,10 @@
                 <span v-else class="ms-2 text-success fw-bold">¡Listo para guardar!</span>
               </span>
             </div>
-            <div class="progress" style="height: 12px;">
+            <div class="progress mb-3" style="height: 10px;">
               <div
                 v-if="formProgress > 0"
-                class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                class=" progress-bar progress-bar-striped progress-bar-animated bg-info"
                 role="progressbar"
                 :style="{ width: formProgress + '%' }"
                 :aria-valuenow="formProgress"
@@ -118,17 +118,17 @@
                     <option value="Matemáticas I">Matemáticas I</option>
                     <option value="Matemáticas II">Matemáticas II</option>
                     <option value="Matemáticas III">Matemáticas III</option>
-                    <option value="Quimica">Química</option>
+                    <option value="Química">Química</option>
                     <option value="Física I">Física I</option>
                     <option value="Física II">Física II</option>
                     <option value="Programación">Programación</option>
-                    <option value="Lenguajes de Programacion I">
+                    <option value="Lenguajes de Programación I">
                       Lenguajes de Programación I
                     </option>
-                    <option value="Lenguajes de Programacion II">
+                    <option value="Lenguajes de Programación II">
                       Lenguajes de Programación II
                     </option>
-                    <option value="Lenguajes de Programacion III">
+                    <option value="Lenguajes de Programación III">
                       Lenguajes de Programación III
                     </option>
                     <option value="Procesamiento de Datos">
@@ -139,7 +139,7 @@
                     <option value="Sistemas Operativos">
                       Sistemas Operativos
                     </option>
-                    <option value="Simulacion y Modelos">
+                    <option value="Simulación y Modelos">
                       Simulación y Modelos
                     </option>
                     <option value="Otra...">Otra...</option>
@@ -197,7 +197,7 @@
                     id="enlace"
                     v-model="simulador.enlace"
                     required
-                    placeholder="https://www.ejemplo.com"
+                    placeholder="https://www.simulador.com"
                   />
                 </div>
 
@@ -313,7 +313,6 @@
 import { useNuxtApp } from "#app";
 import { forbiddenKeywords } from "@/utils/validate_form.js";
 
-// ✅ Función confiable que usa la zona horaria de Venezuela correctamente
 function getVenezuelaDateTimeString() {
   const now = new Date();
   const venezuelaDate = new Date(
@@ -348,7 +347,7 @@ export default {
 
   computed: {
     formProgress() {
-      // Campos requeridos (sin fecha)
+      // Campos requeridos 
       const campos = [
         this.simulador.nombre_del_simulador,
         this.simulador.descripcion_del_simulador,
@@ -421,7 +420,7 @@ export default {
     },
 
     async validateForm() {
-      // Validar que ningún campo esté vacío (excepto otra_asignatura si no aplica y created_at)
+      // Validar que ningún campo esté vacío (excepto otra_asignatura)
       const campos = [
         {
           valor: this.simulador.nombre_del_simulador,
@@ -443,7 +442,7 @@ export default {
         }
       }
 
-      // Si se selecciona "Otra..." validar el campo otra_asignatura
+      // "Otra..." validar el campo otra_asignatura
       if (this.mostrarOtraAsignatura) {
         if (
           !this.simulador.otra_asignatura ||
@@ -467,7 +466,7 @@ export default {
         this.containsForbiddenKeyword(this.simulador.enlace, forbiddenKeywords)
       ) {
         this.error =
-          "Este enlace no es apto para registrarse como recurso educativo.";
+          "Este enlace no es apto para registrarse como un simulador.";
         return false;
       }
       if (
@@ -503,7 +502,7 @@ export default {
       );
 
       if (urlYaExiste) {
-        this.error = "Este enlace ya ha sido registrado previamente.";
+        this.error = "Este simulador ya ha sido registrado previamente.";
         return false;
       }
 

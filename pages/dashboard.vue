@@ -420,10 +420,7 @@ onBeforeUnmount(() => {
 }
 
 .dashboard-logo {
-  border-radius: 0.5rem;
-  background: #fff;
   padding: 0.25rem;
-  box-shadow: 0 2px 8px rgba(0, 33, 71, 0.08);
 }
 
 .dashboard-title {
@@ -500,14 +497,6 @@ onBeforeUnmount(() => {
   text-shadow: 0 1px 2px #00214733;
 }
 
-/* Glass effect */
-.glass-card {
-  background: rgba(255, 255, 255, 0.13) !important;
-  backdrop-filter: blur(6px) saturate(120%);
-  -webkit-backdrop-filter: blur(6px) saturate(120%);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-}
-
 /* Sección de últimos simuladores */
 .ultimos-simuladores-section {
   background: rgba(255, 255, 255, 0.07);
@@ -518,6 +507,7 @@ onBeforeUnmount(() => {
 
 .ultimo-simulador-card {
   background: rgba(255, 255, 255, 0.13);
+
   border-radius: 0.75rem;
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s;
@@ -597,10 +587,6 @@ onBeforeUnmount(() => {
 
 .download-card {
   background: rgba(255, 255, 255, 0.09);
-}
-
-.stats-card {
-  background: rgba(0, 0, 0, 0.09);
 }
 
 .action-icon {

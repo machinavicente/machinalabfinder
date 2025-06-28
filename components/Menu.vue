@@ -2,7 +2,6 @@
   <div class="layout-wrapper">
     <nav class="navbar navbar-expand-lg fixed-top navbar-dark" aria-label="Main navbar">
       <div class="container-fluid">
-        <!-- Menú horizontal siempre visible en escritorio, oculto en móvil -->
         <ul class="navbar-nav">
           <li class="nav-item">
             <NuxtLink class="nav-link" to="/">

@@ -29,10 +29,9 @@
 
     <!-- Estado de carga -->
     <div v-if="isLoading" class="text-center py-5">
-      <div class="spinner-grow text-primary" role="status">
+      <div class="spinner-grow text-danger" role="status">
         <span class="visually-hidden">Cargando...</span>
       </div>
-      <div class="mt-2 text-muted">Cargando guías, por favor espera...</div>
     </div>
 
     <!-- Error -->

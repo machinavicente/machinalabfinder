@@ -115,8 +115,6 @@
           </div>
         </div>
       </template>
-
-      <!-- Mensaje si no hay resultados en la búsqueda -->
       <div v-else-if="terminoBusqueda || filtroAsignatura" class="text-center text-muted py-5">
         <i class="ri-search-eye-line fs-1 mb-2"></i>
         <div>No se encontraron simuladores bajo ese criterio.</div>
@@ -294,15 +292,19 @@ onMounted(() => {
 }
 
 .card:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  transform: translateY(-5px) scale(1.02);
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 10px 24px rgba(0, 33, 71, 0.13);
+  background: rgba(255, 255, 255, 0.18);
 }
 
 .card-header {
   padding: 0.5rem 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
 }
-
+.card-text {
+  text-align: justify;
+}
 small {
   font-weight: 800;
 }
