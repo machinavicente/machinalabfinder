@@ -59,22 +59,4 @@ MachinaLab Finder es una plataforma web para la gestión, consulta y registro de
    http://localhost:3000
    ```
 
-## Despliegue
-
-Para desplegar en Vercel:
-
-1. Asegúrate de tener la cuenta de Vercel configurada.
-2. Desde el directorio del proyecto, ejecuta:
-   ```bash
-   vercel
-   ```
-3. Sigue las instrucciones en pantalla para completar el despliegue.
-
-## Notas
-
-- Este proyecto utiliza [Nuxt Content](https://content.nuxtjs.org/) para la gestión de contenido.
-- Asegúrate de revisar la documentación de cada tecnología utilizada para un mejor entendimiento y aprovechamiento del proyecto.
-
----
-
 ¡Gracias por interesarte en MachinaLab Finder!

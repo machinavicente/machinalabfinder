@@ -50,7 +50,7 @@
             <div class="progress mb-3" style="height: 10px;">
               <div
                 v-if="formProgress > 0"
-                class=" progress-bar progress-bar-striped progress-bar-animated bg-info"
+                class=" progress-bar progress-bar-striped progress-bar-animated bg-success"
                 role="progressbar"
                 :style="{ width: formProgress + '%' }"
                 :aria-valuenow="formProgress"

@@ -438,6 +438,25 @@ function cerrarModales() {
 }
 </script>
 <style scoped>
+.win-btn:hover {
+  background-color: #0078d7;
+  color: white;
+}
+
+.win-minimize:hover {
+  background-color: #999;
+  color: white;
+}
+
+.win-maximize:hover {
+  background-color: #0078d7;
+  color: white;
+}
+
+.win-close:hover {
+  background-color: #e81123;
+  color: white;
+}
 /* Estilos generales del contenedor */
 .container.containerr {
   margin: 0 auto;
