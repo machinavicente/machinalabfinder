@@ -1,20 +1,17 @@
 <template>
-  <!-- ... (resto del dashboard) ... -->
-
-  <!-- AJUSTES -->
   <div v-if="currentView === 'settings'" class="dashboard-settings">
     <div class="row">
       <div class="col-lg-8">
-        <div class="card">
+        <div class="card  mb-5">
           <div class="card-header">
             <h2 class="mb-0">Configuración de tu cuenta</h2>
           </div>
           <div class="card-body">
             <div class="settings-container">
-              <div class="row">
+              <div class="row ">
                 <div class="col-md-4">
                   <div class="profile-card text-center">
-                    <div class="avatar-container mx-auto mb-3" @click="triggerAvatarUpload">
+                    <div class="avatar-container mx-auto mb-3">
                       <img 
                         :src="userAvatar" 
                         class="rounded-circle border border-unefa-accent" 
@@ -28,7 +25,7 @@
                   </div>
                 </div>
                 
-                <div class="col-md-8">
+                <div class="col-md-8 ">
                   <form @submit.prevent="guardarPerfil" autocomplete="off" novalidate>
                     <div class="mb-3">
                       <label class="form-label fw-semibold" for="nombre">Nombre completo</label>
@@ -81,10 +78,7 @@
                         <span v-if="loading"><i class="bi bi-arrow-repeat spin"></i> Guardando...</span>
                         <span v-else><i class="bi bi-save"></i> Guardar Cambios</span>
                       </button>
-                      
-                      
                     </div>
-                    
                     <transition name="fade">
                       <div v-if="mensaje" :class="['alert', mensajeTipo, 'mt-3', 'mb-0']" role="alert">
                         <i class="bi me-2" :class="{
@@ -131,8 +125,6 @@
             </div>
           </div>
         </div>
-        
-
       </div>
     </div>
   </div>
@@ -262,12 +254,6 @@ async function guardarPerfil() {
   
   loading.value = false
 }
-
-
-
-
-
-
 
 // Formatear fechas
 function formatDate(dateStr: string) {
