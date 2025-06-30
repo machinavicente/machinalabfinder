@@ -29,6 +29,9 @@
                 <NuxtLink to="/order_simulators" class="btn btn-unefa btn-lg">
                   Comenzar
                 </NuxtLink>
+                <NuxtLink to="/userProfile" class="btn btn-unefa btn-lg">
+                  Perfil
+                </NuxtLink>
                 <button class="btn btn-outline-unefa btn-lg" data-bs-toggle="modal" data-bs-target="#helpModal">
                   ¿Cómo usar?
                 </button>

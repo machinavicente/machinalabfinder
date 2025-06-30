@@ -45,6 +45,12 @@
               Expande la colección
             </NuxtLink>
           </li>
+          <li class="nav-item">
+            <NuxtLink class="nav-link" to="/userProfile">
+              <i class="bi bi-person-badge"></i>
+              Perfil de Usuario
+            </NuxtLink>
+          </li>
         </ul>
       </div>
     </nav>
