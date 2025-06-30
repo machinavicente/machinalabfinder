@@ -1,97 +1,221 @@
 <template>
-  <div class="settings-card card p-4 mx-auto animate__animated animate__fadeIn" style="max-width: 420px;">
-    <div class="d-flex flex-column align-items-center mb-4">
-      <div class="avatar-wrapper mb-2" @click="cambiarAvatar" title="Cambiar avatar" tabindex="0">
-        <img :src="avatarUrl" alt="Avatar" class="profile-avatar" />
-        <span class="avatar-edit"><i class="bi bi-camera"></i></span>
-      </div>
-      <h5 class="mb-0 fw-bold">{{ nuevoNombre || 'Usuario' }}</h5>
-      <small class="text-muted">Editar perfil</small>
-    </div>
-    <form @submit.prevent="guardarPerfil" autocomplete="off" novalidate>
-      <div class="mb-3">
-        <label class="form-label fw-semibold" for="nombre">Nombre</label>
-        <input
-          id="nombre"
-          v-model.trim="nuevoNombre"
-          class="form-control"
-          :class="{ 'is-invalid': nombreError }"
-          maxlength="32"
-          required
-          autocomplete="off"
-        />
-        <div v-if="nombreError" class="invalid-feedback">{{ nombreError }}</div>
-      </div>
-      <div class="mb-3">
-        <label class="form-label fw-semibold" for="password">Nueva Contraseña</label>
-        <div class="input-group">
-          <input
-            id="password"
-            v-model="nuevaPassword"
-            :type="showPassword ? 'text' : 'password'"
-            class="form-control"
-            :class="{ 'is-invalid': passwordError }"
-            minlength="6"
-            maxlength="32"
-            autocomplete="new-password"
-          />
-          <button class="btn btn-outline-secondary" type="button" @click="showPassword = !showPassword" tabindex="-1">
-            <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-          </button>
+  <!-- ... (resto del dashboard) ... -->
+
+  <!-- AJUSTES -->
+  <div v-if="currentView === 'settings'" class="dashboard-settings">
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="card">
+          <div class="card-header">
+            <h2 class="mb-0">Configuración de tu cuenta</h2>
+          </div>
+          <div class="card-body">
+            <div class="settings-container">
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="profile-card text-center">
+                    <div class="avatar-container mx-auto mb-3" @click="triggerAvatarUpload">
+                      <img 
+                        :src="userAvatar" 
+                        class="rounded-circle border border-unefa-accent" 
+                        width="150"
+                        alt="Avatar"
+                      >
+
+                    </div>
+                    <h4 class="mb-1">{{ nombre || 'Usuario' }}</h4>
+                    <p class="text-muted mb-3">{{ userEmail }}</p>
+                  </div>
+                </div>
+                
+                <div class="col-md-8">
+                  <form @submit.prevent="guardarPerfil" autocomplete="off" novalidate>
+                    <div class="mb-3">
+                      <label class="form-label fw-semibold" for="nombre">Nombre completo</label>
+                      <input
+                        id="nombre"
+                        v-model.trim="nuevoNombre"
+                        class="form-control"
+                        :class="{ 'is-invalid': nombreError }"
+                        maxlength="32"
+                        required
+                        autocomplete="off"
+                      />
+                      <div v-if="nombreError" class="invalid-feedback">{{ nombreError }}</div>
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label fw-semibold" for="email">Correo electrónico</label>
+                      <input
+                        id="email"
+                        type="email"
+                        v-model="userEmail"
+                        class="form-control"
+                        disabled
+                      />
+                    </div>
+                    
+                    <div class="mb-3">
+                      <label class="form-label fw-semibold" for="password">Nueva Contraseña</label>
+                      <div class="input-group">
+                        <input
+                          id="password"
+                          v-model="nuevaPassword"
+                          :type="showPassword ? 'text' : 'password'"
+                          class="form-control"
+                          :class="{ 'is-invalid': passwordError }"
+                          minlength="6"
+                          maxlength="32"
+                          autocomplete="new-password"
+                        />
+                        <button class="btn btn-outline-secondary" type="button" @click="showPassword = !showPassword" tabindex="-1">
+                          <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                        </button>
+                      </div>
+                      <div v-if="passwordError" class="invalid-feedback d-block">{{ passwordError }}</div>
+                      <small class="text-muted">Mínimo 6 caracteres. Déjalo vacío si no deseas cambiarla.</small>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                      <button class="btn btn-unefa-primary btn-success" type="submit" :disabled="loading">
+                        <span v-if="loading"><i class="bi bi-arrow-repeat spin"></i> Guardando...</span>
+                        <span v-else><i class="bi bi-save"></i> Guardar Cambios</span>
+                      </button>
+                      
+                      
+                    </div>
+                    
+                    <transition name="fade">
+                      <div v-if="mensaje" :class="['alert', mensajeTipo, 'mt-3', 'mb-0']" role="alert">
+                        <i class="bi me-2" :class="{
+                          'bi-check-circle': mensajeTipo === 'alert-success',
+                          'bi-exclamation-triangle': mensajeTipo === 'alert-warning',
+                          'bi-x-circle': mensajeTipo === 'alert-danger',
+                          'bi-info-circle': mensajeTipo === 'alert-info'
+                        }"></i>
+                        {{ mensaje }}
+                      </div>
+                    </transition>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div v-if="passwordError" class="invalid-feedback d-block">{{ passwordError }}</div>
-        <small class="text-muted">Mínimo 6 caracteres. Déjalo vacío si no deseas cambiarla.</small>
       </div>
-      <button class="btn btn-unefa w-100 mt-2" type="submit" :disabled="loading">
-        <span v-if="loading"><i class="bi bi-arrow-repeat spin"></i> Guardando...</span>
-        <span v-else><i class="bi bi-save"></i> Guardar Cambios</span>
-      </button>
-    </form>
-    <transition name="fade">
-      <div v-if="mensaje" :class="['alert', mensajeTipo, 'mt-3', 'text-center']" role="alert">
-        {{ mensaje }}
+      
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-header">
+            <h5 class="mb-0">Seguridad</h5>
+          </div>
+          <div class="card-body">
+            <div class="security-item d-flex align-items-center mb-3">
+              <div class="security-icon bg-success-light text-success">
+                <i class="bi bi-shield-check"></i>
+              </div>
+              <div class="ms-3">
+                <div class="security-label">Último inicio de sesión</div>
+                <div class="security-value">{{ formatDate(lastSignInAt) }}</div>
+              </div>
+            </div>
+            
+            <div class="security-item d-flex align-items-center">
+              <div class="security-icon bg-info-light text-info">
+                <i class="bi bi-clock-history"></i>
+              </div>
+              <div class="ms-3">
+                <div class="security-label">Cuenta creada</div>
+                <div class="security-value">{{ formatDate(createdAt) }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+
       </div>
-    </transition>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, onMounted, watch } from 'vue'
+
+import { useRouter } from 'vue-router'
+
+
+const router = useRouter()
 const props = defineProps<{ nombre: string }>()
 const emit = defineEmits(['updateNombre'])
 
-const { $supabase } = useNuxtApp()
+import type { SupabaseClient } from '@supabase/supabase-js'
+const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient }
+
+// Vista actual del dashboard
+const currentView = ref('settings')
+
+// Datos del usuario
 const nuevoNombre = ref(props.nombre)
+const userEmail = ref('')
+const userAvatar = ref('https://cdn-icons-png.flaticon.com/512/3135/3135715.png')
+const userId = ref<string | null>(null)
+const lastSignInAt = ref('')
+const createdAt = ref('')
+
+// Contraseña y configuración
 const nuevaPassword = ref('')
 const showPassword = ref(false)
+
+
+// Estado y mensajes
 const loading = ref(false)
 const mensaje = ref('')
 const mensajeTipo = ref('alert-info')
 const nombreError = ref('')
 const passwordError = ref('')
-const avatarUrl = ref('https://cdn-icons-png.flaticon.com/512/3135/3135715.png') // Puedes cambiar por el avatar real
 
-watch(() => props.nombre, (val) => {
-  nuevoNombre.value = val
+// Inicialización
+onMounted(async () => {
+  const { data: { user } } = await $supabase.auth.getUser()
+  if (!user) {
+    router.push('/login')
+    return
+  }
+  
+  userId.value = user.id
+  nuevoNombre.value = user.user_metadata?.name || user.user_metadata?.userName || ''
+  userEmail.value = user.email || ''
+  userAvatar.value = user.user_metadata?.avatar_url || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
+  lastSignInAt.value = user.last_sign_in_at || ''
+  createdAt.value = user.created_at || ''
+ 
 })
 
+
+
+// Validación del formulario
 function validar() {
   nombreError.value = ''
   passwordError.value = ''
   let valido = true
+  
   if (!nuevoNombre.value || nuevoNombre.value.length < 3) {
     nombreError.value = 'El nombre debe tener al menos 3 caracteres.'
     valido = false
   }
+  
   if (nuevaPassword.value && nuevaPassword.value.length < 6) {
     passwordError.value = 'La contraseña debe tener al menos 6 caracteres.'
     valido = false
   }
+  
   return valido
 }
 
+// Guardar cambios del perfil
 async function guardarPerfil() {
   if (!validar()) return
+  
   loading.value = true
   mensaje.value = ''
   mensajeTipo.value = 'alert-info'
@@ -102,6 +226,7 @@ async function guardarPerfil() {
     const { error } = await $supabase.auth.updateUser({
       data: { name: nuevoNombre.value }
     })
+    
     if (!error) {
       emit('updateNombre', nuevoNombre.value)
       mensaje.value = 'Nombre actualizado correctamente.'
@@ -112,11 +237,13 @@ async function guardarPerfil() {
       mensajeTipo.value = 'alert-danger'
     }
   }
+
   // Cambiar contraseña si se ingresó una nueva
   if (nuevaPassword.value) {
     const { error } = await $supabase.auth.updateUser({
       password: nuevaPassword.value
     })
+    
     if (!error) {
       mensaje.value += (cambios ? ' ' : '') + 'Contraseña actualizada correctamente.'
       mensajeTipo.value = 'alert-success'
@@ -127,115 +254,181 @@ async function guardarPerfil() {
       mensajeTipo.value = 'alert-danger'
     }
   }
+
   if (!cambios && !mensaje.value) {
     mensaje.value = 'No hay cambios para guardar.'
     mensajeTipo.value = 'alert-warning'
   }
+  
   loading.value = false
 }
 
-function cambiarAvatar() {
-  // Aquí puedes abrir un modal o input file para cambiar el avatar
-  // Por ahora solo muestra un mensaje
-  mensaje.value = 'Función de cambio de avatar próximamente.'
-  mensajeTipo.value = 'alert-info'
+
+
+
+
+
+
+// Formatear fechas
+function formatDate(dateStr: string) {
+  if (!dateStr) return 'N/A'
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('es-ES', { 
+    day: '2-digit', 
+    month: '2-digit', 
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit'
+  })
+}
+
+function formatRelativeTime(dateStr: string) {
+  if (!dateStr) return 'N/A'
+  
+  const date = new Date(dateStr)
+  const now = new Date()
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
+  
+  if (diffInSeconds < 60) return 'hace unos segundos'
+  if (diffInSeconds < 3600) return `hace ${Math.floor(diffInSeconds / 60)} minutos`
+  if (diffInSeconds < 86400) return `hace ${Math.floor(diffInSeconds / 3600)} horas`
+  
+  return `hace ${Math.floor(diffInSeconds / 86400)} días`
 }
 </script>
 
 <style scoped>
-.settings-card {
-  background: rgba(255,255,255,0.98);
-  border-radius: 1.2rem;
-  box-shadow: 0 2px 12px 0 rgba(0, 33, 71, 0.10);
-  border: none;
+.settings-container {
+  padding: 0.5rem;
 }
-.avatar-wrapper {
+
+.profile-card {
+  padding: 1.5rem;
+  background: rgba(0, 33, 71, 0.03);
+  border-radius: 0.75rem;
+}
+
+.avatar-container {
   position: relative;
-  width: 82px;
-  height: 82px;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 2.5px solid #ffc72c;
-  background: #fff;
+  width: fit-content;
   cursor: pointer;
-  transition: box-shadow 0.2s;
+}
+
+.btn-avatar-edit {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--unefa-accent);
+  color: var(--unefa-dark);
+  border: 2px solid white;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 1rem;
 }
-.avatar-wrapper:hover, .avatar-wrapper:focus {
-  box-shadow: 0 0 0 4px rgba(255,199,44,0.13);
+
+.security-item {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(0,0,0,0.02);
 }
-.profile-avatar {
-  width: 78px;
-  height: 78px;
-  object-fit: cover;
+
+.security-icon {
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
 }
-.avatar-edit {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  background: #ffc72c;
-  color: #002147;
-  border-radius: 50%;
-  padding: 4px 6px;
-  font-size: 1.1rem;
-  border: 2px solid #fff;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.09);
-  transition: background 0.18s;
+
+.security-label {
+  font-size: 0.85rem;
+  color: #6c757d;
 }
-.avatar-wrapper:hover .avatar-edit,
-.avatar-wrapper:focus .avatar-edit {
-  background: #002147;
-  color: #ffc72c;
-}
-input.form-control.is-invalid,
-.input-group .form-control.is-invalid {
-  border-color: #ff5252;
-}
-.invalid-feedback {
-  font-size: 0.92em;
-}
-.btn-unefa {
-  background: #ffc72c;
-  color: #002147;
+
+.security-value {
   font-weight: 600;
-  border: none;
-  transition: background 0.18s, color 0.18s;
+  font-size: 0.95rem;
 }
-.btn-unefa:hover, .btn-unefa:focus {
-  background: #002147;
-  color: #ffc72c;
+
+.session-item {
+  padding: 0.75rem 0;
 }
-.btn-outline-secondary {
-  border-color: #ffc72c;
-  color: #002147;
+
+.session-time {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
 }
-.btn-outline-secondary:hover, .btn-outline-secondary:focus {
-  background: #ffc72c;
-  color: #002147;
+
+.bg-success-light {
+  background: rgba(40, 167, 69, 0.1);
 }
+
+.bg-info-light {
+  background: rgba(23, 162, 184, 0.1);
+}
+
+.text-success {
+  color: #28a745;
+}
+
+.text-info {
+  color: #17a2b8;
+}
+
+.alert {
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.5rem;
+}
+
+.alert-info {
+  background-color: rgba(23, 162, 184, 0.1);
+  border-color: rgba(23, 162, 184, 0.2);
+  color: #0c5460;
+}
+
+.alert-success {
+  background-color: rgba(40, 167, 69, 0.1);
+  border-color: rgba(40, 167, 69, 0.2);
+  color: #155724;
+}
+
+.alert-warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  border-color: rgba(255, 193, 7, 0.2);
+  color: #856404;
+}
+
+.alert-danger {
+  background-color: rgba(220, 53, 69, 0.1);
+  border-color: rgba(220, 53, 69, 0.2);
+  color: #721c24;
+}
+
 .spin {
   animation: spin 1s linear infinite;
 }
+
 @keyframes spin {
   100% { transform: rotate(360deg); }
 }
+
 .fade-enter-active, .fade-leave-active {
   transition: opacity 0.3s;
 }
+
 .fade-enter-from, .fade-leave-to {
   opacity: 0;
 }
-@media (max-width: 600px) {
-  .settings-card {
-    padding: 1.2rem !important;
-  }
-  .profile-avatar, .avatar-wrapper {
-    width: 62px;
-    height: 62px;
+
+@media (max-width: 767.98px) {
+  .profile-card {
+    margin-bottom: 1.5rem;
   }
 }
 </style>
