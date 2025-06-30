@@ -17,9 +17,6 @@
 </template>
 
 <style scoped>
-.unefa-footer {
-  border-top: 2px solid #C8102E;
-}
 .footer-link {
   color: #ffffffcc;
   text-decoration: none;

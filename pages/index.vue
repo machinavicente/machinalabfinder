@@ -7,7 +7,7 @@
           <div class="col-lg-5 col-xxl-5 col-12">
             <div class="d-flex flex-column gap-5">
               <div class="d-flex flex-row gap-2 align-items-center">
-                <i class="bi bi-rocket-fill fs-4"></i>
+                <i class="bi bi-rocket-fill fs-4 text-unefa-accent"></i>
                 <span class="text-unefa-accent fw-semibold">
                   Potencia tu aprendizaje en la UNEFA - Extensión Zaraza
                 </span>
@@ -18,26 +18,29 @@
                     MachinaLab Finder
                   </h1>
                   <p class="mb-0 presentation-text">
-                    <strong>MachinaLab Finder. </strong>Es una plataforma innovadora diseñada para facilitar la búsqueda
-                    y acceso a simuladores de laboratorios. Inspirada en la necesidad de optimizar la
-                    formación práctica en entornos educativos, esta herramienta permite a estudiantes y docentes
-                    encontrar de manera rápida y sencilla recursos digitales que complementan el aprendizaje teórico.
+                    <strong class="text-unefa-accent">MachinaLab Finder</strong> es la plataforma innovadora para acceder a simuladores de laboratorios. 
+                    <span class="d-block mt-2">Crea tu cuenta para personalizar tu experiencia o <strong>úsala como invitado</strong> para explorar los recursos disponibles.</span>
                   </p>
                 </div>
               </div>
               <div class="d-grid d-md-flex flex-row gap-2 mb-5">
                 <NuxtLink to="/order_simulators" class="btn btn-unefa btn-lg">
-                  Comenzar
+                  <i class="bi bi-play-fill me-2"></i>Comenzar
                 </NuxtLink>
-                <NuxtLink to="/userProfile" class="btn btn-unefa btn-lg">
-                  Perfil
+                <NuxtLink to="/register" class="btn btn-unefa-outline btn-lg">
+                  <i class="bi bi-person-plus me-2"></i>Crear cuenta
                 </NuxtLink>
                 <button class="btn btn-outline-unefa btn-lg" data-bs-toggle="modal" data-bs-target="#helpModal">
-                  ¿Cómo usar?
+                  <i class="bi bi-question-circle me-2"></i>¿Cómo usar?
                 </button>
+              </div>
+              <div class="alert alert-info border-0 glass-card p-3">
+                <i class="bi bi-info-circle-fill text-unefa-accent me-2"></i>
+                <strong>¿Sabías que?</strong> Con una cuenta puedes guardar tus simuladores favoritos y acceder a contenido exclusivo.
               </div>
             </div>
           </div>
+          
           <!-- Panel lateral de features -->
           <div class="col-xxl-6 offset-xxl-1 col-lg-7 col-12">
             <div class="row gx-4 gy-4">
@@ -54,7 +57,8 @@
           </div>
         </div>
       </div>
-      <!-- Modal  "¿Cómo usar?" -->
+      
+      <!-- Modal "¿Cómo usar?" -->
       <div class="modal fade" id="helpModal" tabindex="-1" aria-labelledby="helpModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
           <div class="modal-content border-0 glass-card">
@@ -64,11 +68,23 @@
             </div>
             <div class="modal-body text-dark">
               <ul class="list-unstyled mb-3">
-                <li class="mb-2"><i class="bi bi-play-circle text-unefa-accent me-2"></i>Haz clic en <b>Comenzar</b> para explorar los simuladores online.</li>
-                <li class="mb-2"><i class="bi bi-search text-unefa-accent me-2"></i>Utiliza el buscador para encontrar simuladores por nombre o materia.</li>
-                <li class="mb-2">
-                  <i class="bi bi-download text-unefa-accent me-2"></i>
-                  Descarga recursos y guías desde la <a href="/guides">Biblioteca!</a>
+                <li class="mb-3 d-flex align-items-start">
+                  <i class="bi bi-play-circle text-unefa-accent me-2 mt-1"></i>
+                  <div>
+                    <strong>Comenzar como invitado</strong> - Explora los simuladores sin necesidad de cuenta
+                  </div>
+                </li>
+                <li class="mb-3 d-flex align-items-start">
+                  <i class="bi bi-person-plus text-unefa-accent me-2 mt-1"></i>
+                  <div>
+                    <strong>Crear cuenta</strong> - Desbloquea funciones avanzadas como favoritos y progreso personalizado
+                  </div>
+                </li>
+                <li class="mb-3 d-flex align-items-start">
+                  <i class="bi bi-search text-unefa-accent me-2 mt-1"></i>
+                  <div>
+                    <strong>Buscar simuladores</strong> - Encuentra recursos por nombre o materia
+                  </div>
                 </li>
               </ul>
             </div>
@@ -87,17 +103,17 @@ const features = [
   {
     icon: 'bi bi-laptop',
     title: 'Acceso multiplataforma',
-    description: 'Utiliza la plataforma desde cualquier dispositivo, sin importar donde estés.',
+    description: 'Disponible en cualquier dispositivo, con o sin cuenta',
   },
   {
-    icon: 'bi bi-book',
-    title: 'Material didáctico',
-    description: 'Guías y recursos diseñados para facilitar tu aprendizaje práctico.',
+    icon: 'bi bi-bookmark-star',
+    title: 'Experiencia personalizada',
+    description: 'Guarda favoritos y sigue tu progreso al crear una cuenta',
   },
   {
     icon: 'bi bi-code-square',
-    title: 'Entornos de programación',
-    description: 'Simuladores con compiladores y editores para practicar código en tiempo real.',
+    title: 'Entornos interactivos',
+    description: 'Practica con simuladores de programación en tiempo real',
   },
 ]
 </script>
@@ -109,9 +125,13 @@ const features = [
   display: flex;
   align-items: center;
 }
+
 .presentation-text {
   text-align: justify;
+  font-size: 1.1rem;
+  line-height: 1.6;
 }
+
 .text-unefa-accent {
   color: #ffc72c;
 }
@@ -121,6 +141,9 @@ const features = [
   color: white;
   border: none;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-unefa:hover {
@@ -129,19 +152,35 @@ const features = [
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
 }
 
-.btn-outline-unefa {
+.btn-unefa-outline {
   border: 2px solid #ffc72c;
   color: #ffc72c;
   background: transparent;
   transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-unefa-outline:hover {
+  background-color: rgba(255, 199, 44, 0.1);
+  color: #ffc72c;
+  transform: translateY(-2px);
+}
+
+.btn-outline-unefa {
+  border: 2px solid white;
+  color: white;
+  background: transparent;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-outline-unefa:hover {
-  background-color: #ffc72c;
-  color: #002147;
-  border-color: #ffc72c;
-  transform: translateY(-2px);
-  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
 .feature-card {
@@ -158,6 +197,7 @@ const features = [
   word-break: break-word;
   box-shadow: 0 2px 8px 0 rgba(0, 33, 71, 0.07);
   position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .feature-card:hover {
@@ -172,8 +212,17 @@ const features = [
   -webkit-backdrop-filter: blur(6px) saturate(120%);
   border: 1px solid rgba(255,255,255,0.18);
 }
+
+.modal-content.glass-card {
+  background: #fff !important;
+  color: #222;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid #eee;
+}
+
 .feature-icon {
-  font-size: 2.8rem;
+  font-size: 2.5rem;
   color: #ffc72c;
   transition: color 0.3s ease;
 }
@@ -186,59 +235,76 @@ const features = [
 }
 
 .feature-desc {
-  color: #fff;
+  color: rgba(255, 255, 255, 0.9);
   font-weight: 400;
   font-size: 0.98rem;
   max-width: 260px;
   margin: 0 auto;
-  word-break: break-word;
-  white-space: normal;
-  overflow-wrap: break-word;
-  text-align: center;
-}
-
-@media (max-width: 575.98px) {
-  .feature-card {
-    padding: 1rem 0.5rem !important;
-    min-width: 0;
-    max-width: 100%;
-  }
-  .feature-desc {
-    font-size: 0.98rem;
-    max-width: 100%;
-    word-break: break-word;
-    white-space: normal;
-    overflow-wrap: break-word;
-    text-align: center;
-  }
-}
-
-.modal-content.glass-card {
-  background: rgba(255,255,255,0.93) !important;
-  color: #002147;
-}
-
-.modal-header, .modal-footer {
-  border: none !important;
-  background: transparent !important;
 }
 
 .alert-info {
-  background: rgba(255, 199, 44, 0.13);
-  color: #002147;
-  border: none;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: white;
+  border-left: 3px solid #ffc72c;
 }
 
-.list-unstyled li i {
-  vertical-align: middle;
+@media (max-width: 991.98px) {
+  /* Ajusta el orden para que los botones queden arriba y no interfieran con las cards */
+  .d-grid.d-md-flex.flex-row.gap-2.mb-5 {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    margin-bottom: 2rem !important;
+  }
+  .btn-unefa, .btn-unefa-outline, .btn-outline-unefa {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+  }
+  .col-xxl-6.offset-xxl-1.col-lg-7.col-12 {
+    margin-top: 2rem;
+  }
+}
+
+@media (max-width: 1200px) and (min-width: 768px) {
+  .d-grid.d-md-flex.flex-row.gap-2.mb-5 {
+    flex-direction: column !important;
+    gap: 0.5rem !important;
+    margin-bottom: 2rem !important;
+  }
+  .btn-unefa, .btn-unefa-outline, .btn-outline-unefa {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    justify-content: center;
+  }
 }
 
 @media (max-width: 767px) {
   .display-2 {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
-  .feature-icon-wrap {
-    padding: 0.7rem;
+  .btn-lg {
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+  }
+  .presentation-text {
+    font-size: 1rem;
+  }
+  .d-grid.d-md-flex.flex-row.gap-2.mb-5 {
+    margin-bottom: 1.5rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .feature-card {
+    padding: 1.5rem 1rem !important;
+  }
+  .btn-unefa, .btn-unefa-outline, .btn-outline-unefa {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  .d-grid.d-md-flex.flex-row.gap-2.mb-5 {
+    gap: 0.5rem !important;
+    margin-bottom: 1rem !important;
   }
 }
 </style>

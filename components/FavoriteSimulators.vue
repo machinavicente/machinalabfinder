@@ -60,7 +60,7 @@
             </div>
 
             <span class="small date text-danger mt-2">
-              Agregado: {{ formatDate(sim.created_at) }}
+              Agregado: {{ formatDate(sim.created_at, true) }}
             </span>
           </div>
 
