@@ -140,23 +140,16 @@ if (process.client) {
 }
 
 @media (max-width: 400px) {
-  .nav-item {
-    margin: 0 1px;
-  }
-
   .nav-item span {
     font-size: 9px;
     max-width: 48px;
-    white-space: normal;
-    word-break: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: normal;
     text-align: center;
     line-height: 1.15;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    line-clamp: 2;
-    /* Máximo 2 líneas */
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    display: block;
   }
 }
 
@@ -164,6 +157,13 @@ if (process.client) {
   .nav-item span {
     font-size: 8.5px;
     max-width: 40px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: normal;
+    text-align: center;
+    line-height: 1.15;
+    display: block;
   }
 }
 

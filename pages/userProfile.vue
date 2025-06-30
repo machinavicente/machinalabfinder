@@ -140,7 +140,7 @@
                       <i :class="['bi', iconoPorAsignatura(sim.asignatura)]"></i>
                     </div>
                     <div class="sim-info">
-                      <div class="d-flex align-items-center mb-1">
+                      <div class="d-flex align-items-center mb-1 sim-title-row">
                         <h5 class="sim-title mb-0 me-2">{{ sim.nombre_del_simulador }}</h5>
                         <span class="badge bg-unefa-dark text-unefa-accent ms-1">{{ sim.asignatura }}</span>
                       </div>
@@ -545,33 +545,33 @@ function formatRelativeTime(dateStr: string) {
   font-size: 1.05rem;
   color: var(--unefa-dark);
   margin-bottom: 0.25rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.sim-subject {
+.sim-title-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 0.5rem;
+}
+
+.badge.bg-unefa-dark {
+  background: var(--unefa-dark) !important;
+  color: var(--unefa-accent) !important;
   font-size: 0.85rem;
-  color: #666;
-}
-
-.empty-favorites {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: #666;
-}
-
-.empty-favorites i {
-  font-size: 3rem;
-  opacity: 0.3;
-}
-
-.btn-unefa-primary {
-  background-color: var(--unefa-primary);
-  color: white;
-  border: none;
-}
-
-.btn-unefa-primary:hover {
-  background-color: #a50d26;
-  color: white;
+  font-weight: 600;
+  padding: 0.35em 0.7em;
+  border-radius: 0.5em;
+  margin-left: 0.5em;
+  max-width: 60vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: inline-block;
+  vertical-align: middle;
 }
 
 /* Mostrar/Ocultar según resolución */
@@ -611,13 +611,48 @@ function formatRelativeTime(dateStr: string) {
   }
 }
 
-.badge.bg-unefa-dark {
-  background: var(--unefa-dark) !important;
-  color: var(--unefa-accent) !important;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 0.35em 0.7em;
-  border-radius: 0.5em;
-  margin-left: 0.5em;
+@media (max-width: 575.98px) {
+  .favorites-list {
+    padding: 0.25rem;
+    gap: 0.5rem;
+  }
+  .favorite-item {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    padding: 0.85rem 0.7rem;
+    margin-bottom: 0.7rem;
+    box-sizing: border-box;
+    gap: 0.5rem;
+  }
+  .sim-icon {
+    margin: 0 auto 0.7rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .sim-info {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
+  .sim-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.3rem;
+    width: 100%;
+  }
+  .sim-title, .badge.bg-unefa-dark {
+    max-width: 100%;
+    white-space: normal;
+    overflow-wrap: break-word;
+    text-overflow: unset;
+  }
+  .btn.btn-outline-danger {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+  }
 }
 </style>
