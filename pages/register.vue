@@ -54,7 +54,7 @@
                     <div class="input-group">
                       <input
                         v-model="password"
-                        type="password"
+                        :type="showPassword ? 'text' : 'password'"
                         class="form-control"
                         id="password"
                         placeholder="Mínimo 6 caracteres"

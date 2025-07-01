@@ -2,13 +2,10 @@
   <div class="dashboard-container">
     <!-- Sidebar (actualiza esta sección) -->
     <nav class="unefa-sidebar d-flex flex-column desktop-only">
-      <div class="sidebar-logo d-flex align-items-center justify-content-center py-4 flex-column">
+      <div
+        class="sidebar-logo d-flex align-items-center justify-content-center py-4 flex-column"
+      >
         <h2 class="fs-4 fw-bold text-unefa-accent mb-2">Mi Laboratorio</h2>
-        <div class="sidebar-user-name text-center w-100">
-          <span class="fw-bold text-white" style="font-size:1.08rem;">
-            {{ nombre }}
-          </span>
-        </div>
       </div>
       <ul class="nav flex-column nav-custom mt-4">
         <li class="nav-item">
@@ -56,8 +53,16 @@
           </a>
         </li>
         <li class="nav-item mt-2">
-          <button class="nav-link text-danger" style="background:none;border:none;text-align:left;width:100%;"
-            @click="logout">
+          <button
+            class="nav-link text-danger"
+            style="
+              background: none;
+              border: none;
+              text-align: left;
+              width: 100%;
+            "
+            @click="logout"
+          >
             <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
           </button>
         </li>
@@ -80,10 +85,10 @@
                   alt="Avatar usuario"
                 />
                 <h3 class="fw-bold mb-1">
-                  ¡Bienvenido{{ nombre ? ', ' + nombre : '' }}!
+                  ¡Bienvenido{{ nombre ? ", " + nombre : "" }}!
                 </h3>
                 <p class="text-muted mb-4">{{ userEmail }}</p>
-                
+
                 <div class="user-stats">
                   <div class="stat-item">
                     <i class="bi bi-calendar-check"></i>
@@ -91,11 +96,17 @@
                   </div>
                   <div class="stat-item">
                     <i class="bi bi-activity"></i>
-                    <span>Último acceso: {{ formatRelativeTime(lastSignInAt) }}</span>
+                    <span
+                      >Último acceso:
+                      {{ formatRelativeTime(lastSignInAt) }}</span
+                    >
                   </div>
                   <div class="stat-item">
                     <i class="bi bi-star-fill"></i>
-                    <span>{{ simuladoresFavoritos.length }} simuladores favoritos</span>
+                    <span
+                      >{{ simuladoresFavoritos.length }} simuladores
+                      favoritos</span
+                    >
                   </div>
                 </div>
               </div>
@@ -106,12 +117,16 @@
               <div class="card-header bg-unefa-dark text-white">
                 <h5 class="mb-0">
                   <i class="bi bi-book me-2"></i>
-                 Asignaturas vistas
+                  Asignaturas vistas
                 </h5>
               </div>
               <div class="card-body">
                 <ul class="list-unstyled mb-0">
-                  <li v-for="asig in asignaturasFavoritas" :key="asig" class="mb-2">
+                  <li
+                    v-for="asig in asignaturasFavoritas"
+                    :key="asig"
+                    class="mb-2"
+                  >
                     <i class="bi bi-dot text-unefa-primary"></i>
                     {{ asig }}
                   </li>
@@ -119,37 +134,43 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Columna derecha - Últimos favoritos -->
           <div class="col-lg-7">
             <div class="card favorites-card shadow-sm">
               <div class="card-header bg-unefa-dark text-white">
                 <h4 class="mb-0">
                   <i class="bi bi-star-fill me-2"></i>
-                  Tus últimos 5 simuladores favoritos
+                  Tus últimos 4 simuladores favoritos
                 </h4>
               </div>
               <div class="card-body">
                 <div v-if="ultimosFavoritos.length > 0" class="favorites-list">
-                  <div 
-                    v-for="sim in ultimosFavoritos" 
-                    :key="sim.id" 
+                  <div
+                    v-for="sim in ultimosFavoritos"
+                    :key="sim.id"
                     class="favorite-item"
                   >
                     <div class="sim-icon">
-                      <i :class="['bi', iconoPorAsignatura(sim.asignatura)]"></i>
+                      <i
+                        :class="['bi', iconoPorAsignatura(sim.asignatura)]"
+                      ></i>
                     </div>
                     <div class="sim-info">
-                      <div class="d-flex align-items-center mb-1 sim-title-row">
-                        <h5 class="sim-title mb-0 me-2">{{ sim.nombre_del_simulador }}</h5>
-                        <span class="badge bg-unefa-dark text-unefa-accent ms-1">{{ sim.asignatura }}</span>
+                      <div class="sim-title-row">
+                        <span class="sim-title">{{
+                          sim.nombre_del_simulador
+                        }}</span>
+                        <span class="badge bg-unefa-dark">{{
+                          sim.asignatura
+                        }}</span>
                       </div>
                       <small class="text-muted">
                         <i class="bi bi-calendar me-1"></i>
                         Creado el {{ formatDate(sim.created_at, true) }}
                       </small>
                     </div>
-                    <button 
+                    <button
                       class="btn btn-sm btn-outline-danger"
                       @click="toggleFavorito(sim.id)"
                     >
@@ -160,8 +181,8 @@
                 <div v-else class="empty-favorites">
                   <i class="bi bi-star text-muted"></i>
                   <p class="mt-3">Aún no tienes simuladores favoritos</p>
-                  <router-link 
-                    to="/simuladores" 
+                  <router-link
+                    to="/simuladores"
                     class="btn btn-unefa-primary btn-sm"
                   >
                     <i class="bi bi-cpu me-1"></i> Explorar simuladores
@@ -204,157 +225,206 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
-import SimulatorList from '~/components/SimulatorList.vue'
-import ProfileSettings from '~/components/ProfileSettings.vue'
-import FavoriteSimulators from '~/components/FavoriteSimulators.vue'
+import { ref, onMounted, computed, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
+import SimulatorList from "~/components/SimulatorList.vue";
+import ProfileSettings from "~/components/ProfileSettings.vue";
+import FavoriteSimulators from "~/components/FavoriteSimulators.vue";
 
-import type { SupabaseClient } from '@supabase/supabase-js'
-const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient }
+import type { SupabaseClient } from "@supabase/supabase-js";
+const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient };
 
-const nombre = ref('')
-const userEmail = ref('')
-const userAvatar = ref('https://cdn-icons-png.flaticon.com/512/3135/3135715.png')
-const lastSignInAt = ref('')
-const createdAt = ref('')
-const simuladores = ref<any[]>([])
-const favoritos = ref<any[]>([])
-const router = useRouter()
-const route = useRoute()
-const currentView = ref('home')
+const nombre = ref("");
+const userEmail = ref("");
+const userAvatar = ref(
+  "https://cdn-icons-png.flaticon.com/512/3135/3135715.png"
+);
+const lastSignInAt = ref("");
+const createdAt = ref("");
+const simuladores = ref<any[]>([]);
+const favoritos = ref<any[]>([]);
+const router = useRouter();
+const route = useRoute();
+const currentView = ref("home");
 
 // Sincroniza currentView con la query 'view'
 watch(
   () => route.query.view,
   (view) => {
-    if (typeof view === 'string' && ['home', 'simuladores', 'favorites', 'settings'].includes(view)) {
-      currentView.value = view
+    if (
+      typeof view === "string" &&
+      ["home", "simuladores", "favorites", "settings"].includes(view)
+    ) {
+      currentView.value = view;
     }
   },
   { immediate: true }
-)
+);
 
-let userId: string | null = null
+let userId: string | null = null;
 
 onMounted(async () => {
-  const { data: { user } } = await $supabase.auth.getUser()
+  const {
+    data: { user },
+  } = await $supabase.auth.getUser();
   if (!user) {
-    router.push('/login')
-    return
+    router.push("/login");
+    return;
   }
-  
-  userId = user.id
-  nombre.value = user.user_metadata?.name || user.user_metadata?.userName || ''
-  userEmail.value = user.email || ''
-  userAvatar.value = user.user_metadata?.avatar_url || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
-  lastSignInAt.value = user.last_sign_in_at || ''
-  createdAt.value = user.created_at || ''
+
+  userId = user.id;
+  nombre.value = user.user_metadata?.name || user.user_metadata?.userName || "";
+  userEmail.value = user.email || "";
+  userAvatar.value =
+    user.user_metadata?.avatar_url ||
+    "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+  lastSignInAt.value = user.last_sign_in_at || "";
+  createdAt.value = user.created_at || "";
 
   // Cargar simuladores
-  const { data: sims } = await $supabase.from('simuladores').select('*')
-  simuladores.value = sims || []
+  const { data: sims } = await $supabase.from("simuladores").select("*");
+  simuladores.value = sims || [];
 
   // Cargar favoritos con información de fecha de creación
   const { data: favs } = await $supabase
-    .from('favoritos')
-    .select('*, simuladores(*)')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-  favoritos.value = favs || []
-})
+    .from("favoritos")
+    .select("*, simuladores(*)")
+    .eq("user_id", userId)
+    .order("created_at", { ascending: false });
+  favoritos.value = favs || [];
+});
 
 // Simuladores favoritos with full info
 const simuladoresFavoritos = computed(() => {
-  return favoritos.value.map(fav => ({
+  return favoritos.value.map((fav) => ({
     ...fav.simuladores,
-    favorito_created_at: fav.created_at
-  }))
-})
+    favorito_created_at: fav.created_at,
+  }));
+});
 
-// Últimos 5 favoritos ordenados por fecha descendente
+// Últimos 4 favoritos ordenados por fecha descendente
 const ultimosFavoritos = computed(() => {
-  return [...simuladoresFavoritos.value].slice(0, 5)
-})
+  return [...simuladoresFavoritos.value].slice(0, 6);
+});
 
 const asignaturasFavoritas = computed(() => {
   const asignaturas = simuladoresFavoritos.value
-    .map(sim => sim.asignatura)
-    .filter(Boolean)
+    .map((sim) => sim.asignatura)
+    .filter(Boolean);
   // Eliminar duplicados
-  return [...new Set(asignaturas)]
-})
+  return [...new Set(asignaturas)];
+});
 
 function esFavorito(simId: number) {
-  return favoritos.value.some(f => f.simulador_id === simId)
+  return favoritos.value.some((f) => f.simulador_id === simId);
 }
 
 async function toggleFavorito(simId: number) {
-  if (!userId) return
-  
+  if (!userId) return;
+
   if (esFavorito(simId)) {
-    await $supabase.from('favoritos').delete().eq('user_id', userId).eq('simulador_id', simId)
-    favoritos.value = favoritos.value.filter(f => f.simulador_id !== simId)
+    await $supabase
+      .from("favoritos")
+      .delete()
+      .eq("user_id", userId)
+      .eq("simulador_id", simId);
+    favoritos.value = favoritos.value.filter((f) => f.simulador_id !== simId);
   } else {
-    const { data } = await $supabase.from('favoritos').insert({ 
-      user_id: userId, 
-      simulador_id: simId 
-    }).select('*, simuladores(*)').single()
-    
+    const { data } = await $supabase
+      .from("favoritos")
+      .insert({
+        user_id: userId,
+        simulador_id: simId,
+      })
+      .select("*, simuladores(*)")
+      .single();
+
     if (data) {
-      favoritos.value.unshift(data) // Agregar al inicio para mantener orden
+      favoritos.value.unshift(data); // Agregar al inicio para mantener orden
     }
   }
 }
 
 async function logout() {
-  await $supabase.auth.signOut()
-  router.push('/login')
+  await $supabase.auth.signOut();
+  router.push("/login");
 }
 
-function iconoPorAsignatura(asignatura: string) {
+function iconoPorAsignatura(asignatura: string): string {
   switch (asignatura?.toLowerCase()) {
-    case 'programación': return 'bi-code-slash'
-    case 'redes': return 'bi-diagram-3'
-    case 'electrónica': return 'bi-cpu'
-    default: return 'bi-window'
+    case "matemáticas":
+    case "matemática general":
+      return "bi-calculator";
+    case "lógica matemática":
+      return "bi-file-binary";
+    case "química":
+      return "bi-flask";
+    case "física i":
+      return "bi-lightning-charge";
+    case "física ii":
+      return "bi-lightning-charge-fill";
+    case "programación":
+      return "bi-code-slash";
+    case "lenguajes de programación i":
+      return "bi-terminal";
+    case "lenguajes de programación ii":
+      return "bi-terminal-dash";
+    case "lenguajes de programación iii":
+      return "bi-terminal-split";
+    case "procesamiento de datos":
+      return "bi-diagram-3";
+    case "bases de datos":
+      return "bi-database";
+    case "redes":
+      return "bi-wifi";
+    case "sistemas operativos":
+      return "bi-window-stack";
+    case "simulación y modelos":
+      return "bi-diagram-3-fill";
+    case "otra...":
+      return "bi-journals";
+    default:
+      return "bi-window";
   }
 }
 
 function formatDate(dateStr: string, short = false) {
-  if (!dateStr) return 'N/A'
-  const date = new Date(dateStr)
-  
+  if (!dateStr) return "...";
+  const date = new Date(dateStr);
+
   if (short) {
-    return date.toLocaleDateString('es-ES', { 
-      day: '2-digit', 
-      month: '2-digit', 
-      year: 'numeric'
-    })
+    return date.toLocaleDateString("es-ES", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
   }
-  
-  return date.toLocaleDateString('es-ES', { 
-    day: '2-digit', 
-    month: '2-digit', 
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+
+  return date.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
 }
 
 function formatRelativeTime(dateStr: string) {
-  if (!dateStr) return 'N/A'
-  
-  const date = new Date(dateStr)
-  const now = new Date()
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-  
-  if (diffInSeconds < 60) return 'hace unos segundos'
-  if (diffInSeconds < 3600) return `hace ${Math.floor(diffInSeconds / 60)} minutos`
-  if (diffInSeconds < 86400) return `hace ${Math.floor(diffInSeconds / 3600)} horas`
-  if (diffInSeconds < 604800) return `hace ${Math.floor(diffInSeconds / 86400)} días`
-  
-  return formatDate(dateStr, true)
+  if (!dateStr) return "...";
+
+  const date = new Date(dateStr);
+  const now = new Date();
+  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+  if (diffInSeconds < 60) return "hace unos segundos";
+  if (diffInSeconds < 3600)
+    return `hace ${Math.floor(diffInSeconds / 60)} minutos`;
+  if (diffInSeconds < 86400)
+    return `hace ${Math.floor(diffInSeconds / 3600)} horas`;
+  if (diffInSeconds < 604800)
+    return `hace ${Math.floor(diffInSeconds / 86400)} días`;
+
+  return formatDate(dateStr, true);
 }
 </script>
 
@@ -368,21 +438,21 @@ function formatRelativeTime(dateStr: string) {
 
 .dashboard-container {
   display: flex;
-  height: 100vh;         /* Cambia min-height por height */
-  overflow: hidden;      /* Evita que algo se salga */
+  height: 100vh; /* Cambia min-height por height */
+  overflow: hidden; /* Evita que algo se salga */
   background: var(--unefa-bg);
 }
 
 .unefa-sidebar {
-  width: 260px;
+  width: 200px;
   min-height: 100vh;
   background: #002147; /* Azul UNEFA sólido */
-  color: #fff;         /* Texto blanco */
+  color: #fff; /* Texto blanco */
   position: sticky;
   top: 0;
   left: 0;
   z-index: 10;
-  box-shadow: 2px 0 12px rgba(0,0,0,0.09);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.09);
   border-right: 2px solid #ffc72c;
   display: flex;
   flex-direction: column;
@@ -390,7 +460,7 @@ function formatRelativeTime(dateStr: string) {
 }
 
 .sidebar-logo {
-  background: rgba(255,255,255,0.03);
+  background: rgba(255, 255, 255, 0.03);
   border-bottom: 1.5px solid var(--unefa-accent);
 }
 
@@ -401,7 +471,7 @@ function formatRelativeTime(dateStr: string) {
 .nav-link {
   color: #fff; /* Texto blanco */
   font-weight: 500;
-  padding: 0.95rem 2rem;
+  padding: 0.95rem 1rem;
   border-radius: 0.7rem 0 0 0.7rem;
   margin-bottom: 0.3rem;
   transition: background 0.2s, color 0.2s, box-shadow 0.2s;
@@ -411,10 +481,12 @@ function formatRelativeTime(dateStr: string) {
   font-size: 1.08rem;
   border-left: 4px solid transparent;
 }
-.nav-link.active, .nav-link:hover {   /* Fondo amarillo UNEFA */
-  color: #ffc72c;  /* Texto azul UNEFA */
-  font-weight: 700;;
-  box-shadow: 0 2px 8px 0 rgba(200,16,46,0.07);
+.nav-link.active,
+.nav-link:hover {
+  /* Fondo amarillo UNEFA */
+  color: #ffc72c; /* Texto azul UNEFA */
+  font-weight: 700;
+  box-shadow: 0 2px 8px 0 rgba(200, 16, 46, 0.07);
 }
 
 .nav-link i {
@@ -424,8 +496,8 @@ function formatRelativeTime(dateStr: string) {
 
 .main-content {
   flex: 1;
-  height: 100vh;         /* Ocupa todo el alto de la pantalla */
-  overflow-y: auto;      /* Scroll solo aquí */
+  height: 100vh; /* Ocupa todo el alto de la pantalla */
+  overflow-y: auto; /* Scroll solo aquí */
   padding: 2rem 2rem 2rem 2.5rem;
   background: var(--unefa-bg);
   min-width: 0;
@@ -464,7 +536,7 @@ function formatRelativeTime(dateStr: string) {
 .stat-item i {
   margin-right: 0.75rem;
   font-size: 1.1rem;
-  color: var(--unefa-dark);
+  color: #002147;
 }
 
 .favorites-card {
@@ -483,17 +555,13 @@ function formatRelativeTime(dateStr: string) {
 .card-header h5 {
   font-size: 1.3rem;
   font-weight: 700;
-  color: #ffc72c !important;      /* Texto amarillo UNEFA */
-  background: #002147;              /* Fondo azul UNEFA */
+  color: #ffc72c !important; /* Texto amarillo UNEFA */
+  background: #002147; /* Fondo azul UNEFA */
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   letter-spacing: 0.5px;
   margin-bottom: 0;
   text-shadow: none;
-}
-
-.bg-unefa-dark {
-  background-color: var(--unefa-dark) !important;
 }
 
 /* Mejora para títulos en mobile */
@@ -504,14 +572,10 @@ function formatRelativeTime(dateStr: string) {
   }
 }
 
-.favorites-list {
-  padding: 0.5rem;
-}
-
 .favorite-item {
   display: flex;
   align-items: center;
-  padding: 1rem;
+  padding: 0.95rem;
   margin-bottom: 0.75rem;
   background: rgba(0, 0, 0, 0.02);
   border-radius: 0.5rem;
@@ -559,8 +623,8 @@ function formatRelativeTime(dateStr: string) {
 }
 
 .badge.bg-unefa-dark {
-  background: var(--unefa-dark) !important;
-  color: var(--unefa-accent) !important;
+  background: #002147;
+  color: #ffc72c;
   font-size: 0.85rem;
   font-weight: 600;
   padding: 0.35em 0.7em;
@@ -613,7 +677,7 @@ function formatRelativeTime(dateStr: string) {
 
 @media (max-width: 575.98px) {
   .favorites-list {
-    padding: 0.25rem;
+    padding: 0.55rem;
     gap: 0.5rem;
   }
   .favorite-item {
@@ -622,7 +686,7 @@ function formatRelativeTime(dateStr: string) {
     width: 100%;
     min-width: 0;
     max-width: 100%;
-    padding: 0.85rem 0.7rem;
+    padding: 0.85rem 0.4rem;
     margin-bottom: 0.7rem;
     box-sizing: border-box;
     gap: 0.5rem;
@@ -641,10 +705,11 @@ function formatRelativeTime(dateStr: string) {
   .sim-title-row {
     flex-direction: column;
     align-items: flex-start;
-    gap: 0.3rem;
+    gap: 0.5rem;
     width: 100%;
   }
-  .sim-title, .badge.bg-unefa-dark {
+  .sim-title,
+  .badge.bg-unefa-dark {
     max-width: 100%;
     white-space: normal;
     overflow-wrap: break-word;
@@ -654,5 +719,77 @@ function formatRelativeTime(dateStr: string) {
     align-self: flex-end;
     margin-top: 0.5rem;
   }
+}
+
+@media (min-width: 1200px) {
+  .favorites-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    justify-items: center;
+    justify-content: center;
+  }
+  .favorite-item {
+    flex: 0 0 calc(33.333% - 1rem);
+    max-width: calc(33.333% - 1rem);
+    min-width: 200px;
+    margin-bottom: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    background: #fff;
+    border-radius: 0.75rem;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    border: 1px solid #f0f0f0;
+    padding: 1rem;
+  }
+  .sim-icon {
+    margin: 0.4rem auto 0.5rem auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+  }
+  .sim-info {
+    width: 100%;
+    text-align: left;
+    margin-bottom: 0.5rem;
+  }
+  .sim-title-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    display: flex;
+  }
+  .sim-title,
+  .badge.bg-unefa-dark {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+  }
+  .btn-fav {
+    align-self: flex-end;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
+    padding: 0.3em 0.7em;
+  }
+}
+
+/* Asegura que en todos los tamaños el texto no se desborde */
+.sim-title,
+.sim-title-row,
+.badge.bg-unefa-dark {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
 }
 </style>
