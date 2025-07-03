@@ -198,7 +198,7 @@
             </div>
           </div>
         </div>
-        <!-- Calendario de actividades SOLO en la vista principal -->
+        <!-- Calendario de actividades-->
         <div class="card shadow-sm mt-4">
           <div class="card-header bg-unefa-dark text-white d-flex align-items-center justify-content-between">
             <h5 class="mb-0">
@@ -234,7 +234,7 @@
                   </div>
                 </div>
                 <div class="d-flex gap-2">
-                  <button class="btn btn-sm btn-outline-primary" @click="abrirModalActividad(act)">
+                  <button class="btn btn-sm btn-outline-warning" @click="abrirModalActividad(act)">
                     <i class="bi bi-pencil"></i>
                   </button>
                   <button class="btn btn-sm btn-outline-danger" @click="eliminarActividad(act.id)">
@@ -303,20 +303,19 @@
                       <label class="form-label">Estado</label>
                       <select v-model="actividadEditando.estado" class="form-select">
                         <option value="pendiente">Pendiente</option>
-                        <option value="completado">Completado</option>
                       </select>
                     </div>
                   </div>
                   <div class="modal-footer">
+                    <button type="submit" class="btn btn-unefa-primary">
+                      {{ actividadEditando.id ? 'Actualizar' : 'Crear' }}
+                    </button>
                     <button
                       type="button"
-                      class="btn btn-secondary"
+                      class="btn btn-danger"
                       data-bs-dismiss="modal"
                     >
                       Cancelar
-                    </button>
-                    <button type="submit" class="btn btn-unefa-primary">
-                      {{ actividadEditando.id ? 'Actualizar' : 'Agregar' }}
                     </button>
                   </div>
                 </form>
