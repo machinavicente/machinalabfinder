@@ -6,47 +6,109 @@
           <div class="card shadow-lg border-0 rounded-4">
             <div class="card-header unefa-primary-bg text-white d-flex align-items-center">
               <i class="bi bi-shield-lock me-2 fs-4 text-warning"></i>
-              <h3 class="mb-0 fs-5">Autenticación</h3>
+              <h3 class="mb-0 fs-5">Actualizar Contraseña</h3>
             </div>
+
             <div class="card-body">
-              <div v-if="status === 'recovery'">
-                <p class="text-center mb-4 text-muted">Ingresa tu nueva contraseña para completar el proceso</p>
-                <form @submit.prevent="onUpdatePassword" autocomplete="on" novalidate>
-                  <div class="mb-3">
-                    <label for="password" class="form-label">Nueva contraseña</label>
-                    <input v-model="password" :type="showPassword ? 'text' : 'password'" class="form-control" id="password" required minlength="6" autocomplete="new-password" />
-                    <button type="button" class="btn btn-outline-secondary mt-2" @click="showPassword = !showPassword">
-                      <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+              <p class="text-center mb-4 text-muted">Ingresa tu nueva contraseña para completar el proceso</p>
+              
+              <form @submit.prevent="onUpdatePassword" autocomplete="on" novalidate>
+                <div class="row g-3">
+                  <!-- Nueva Contraseña -->
+                  <div class="col-12 position-relative">
+                    <label for="password" class="form-label">
+                      <i class="ri-lock-password-line me-1"></i> Nueva contraseña
+                    </label>
+                    <div class="input-group">
+                      <input
+                        v-model="password"
+                        :type="showPassword ? 'text' : 'password'"
+                        class="form-control"
+                        id="password"
+                        placeholder="Mínimo 6 caracteres"
+                        required
+                        minlength="6"
+                        autocomplete="new-password"
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        @click="showPassword = !showPassword"
+                      >
+                        <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Confirmar Contraseña -->
+                  <div class="col-12 position-relative">
+                    <label for="confirm" class="form-label">
+                      <i class="ri-lock-2-line me-1"></i> Confirmar contraseña
+                    </label>
+                    <div class="input-group">
+                      <input
+                        v-model="confirm"
+                        :type="showConfirmPassword ? 'text' : 'password'"
+                        class="form-control"
+                        id="confirm"
+                        placeholder="Repite la nueva contraseña"
+                        required
+                        minlength="6"
+                        autocomplete="new-password"
+                      />
+                      <button
+                        class="btn btn-outline-secondary"
+                        type="button"
+                        @click="showConfirmPassword = !showConfirmPassword"
+                      >
+                        <i :class="showConfirmPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Alertas -->
+                  <div v-if="error" class="col-12">
+                    <div class="alert alert-danger alert-dismissible fade show py-2" role="alert">
+                      <i class="bi bi-exclamation-triangle me-2"></i>{{ error }}
+                      <button
+                        type="button"
+                        class="btn-close"
+                        @click="error = ''"
+                      ></button>
+                    </div>
+                  </div>
+                  <div v-if="success" class="col-12">
+                    <div class="alert alert-success alert-dismissible fade show py-3" role="alert">
+                      <i class="bi bi-person-check me-2"></i>{{ success }}
+                      <button
+                        type="button"
+                        class="btn-close"
+                        @click="success = ''"
+                      ></button>
+                    </div>
+                  </div>
+
+                  <!-- Botón de actualización -->
+                  <div class="col-12 mt-2">
+                    <button :disabled="loading" type="submit" class="btn btn-success w-100">
+                      <template v-if="loading">
+                        <span class="spinner-border spinner-border-sm me-2"></span>
+                        Guardando...
+                      </template>
+                      <template v-else>
+                        <i class="ri-save-line me-2"></i> Guardar nueva contraseña
+                      </template>
                     </button>
                   </div>
-                  <div class="mb-3">
-                    <label for="confirm" class="form-label">Confirmar contraseña</label>
-                    <input v-model="confirm" :type="showConfirmPassword ? 'text' : 'password'" class="form-control" id="confirm" required minlength="6" autocomplete="new-password" />
-                    <button type="button" class="btn btn-outline-secondary mt-2" @click="showConfirmPassword = !showConfirmPassword">
-                      <i :class="showConfirmPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
-                    </button>
+
+                  <!-- Enlace de regreso -->
+                  <div class="col-12 text-center mt-3">
+                    <NuxtLink to="/login" class="text-decoration-none">
+                      <i class="ri-arrow-left-line me-1"></i> Volver al inicio de sesión
+                    </NuxtLink>
                   </div>
-                  <div v-if="error" class="alert alert-danger">{{ error }}</div>
-                  <div v-if="success" class="alert alert-success">{{ success }}</div>
-                  <button :disabled="loading" type="submit" class="btn btn-success w-100">
-                    <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
-                    Guardar nueva contraseña
-                  </button>
-                </form>
-              </div>
-              <div v-else-if="status === 'confirmation'">
-                <div class="alert alert-success text-center">
-                  <i class="bi bi-check-circle me-2"></i>
-                  ¡Correo confirmado correctamente! Ya puedes iniciar sesión.
                 </div>
-                <NuxtLink to="/login" class="btn btn-primary w-100 mt-3">Ir al inicio de sesión</NuxtLink>
-              </div>
-              <div v-else>
-                <div class="text-center py-5">
-                  <span class="spinner-border"></span>
-                  <p class="mt-3">Procesando...</p>
-                </div>
-              </div>
+              </form>
             </div>
           </div>
         </div>
@@ -57,15 +119,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import { useNuxtApp } from '#app';
+import { useRouter } from 'vue-router';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
-const route = useRoute();
-const router = useRouter();
-const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient };
-
-const status = ref<'recovery' | 'confirmation' | 'loading'>('loading');
 const password = ref('');
 const confirm = ref('');
 const loading = ref(false);
@@ -74,15 +130,13 @@ const success = ref('');
 const showPassword = ref(false);
 const showConfirmPassword = ref(false);
 
-onMounted(() => {
-  const type = route.query.type;
-  if (type === 'recovery') {
-    status.value = 'recovery';
-  } else if (type === 'signup' || type === 'email_confirm') {
-    status.value = 'confirmation';
-  } else {
-    status.value = 'loading';
-    // Puedes agregar lógica para otros tipos si lo necesitas
+const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient };
+const router = useRouter();
+
+onMounted(async () => {
+  const { data } = await $supabase.auth.getSession();
+  if (!data.session) {
+    error.value = '¡Sesión de recuperación no encontrada! Usa el enlace enviado a tu correo.';
   }
 });
 
@@ -90,6 +144,7 @@ async function onUpdatePassword() {
   error.value = '';
   success.value = '';
 
+  // Validaciones de campos vacíos
   if (!password.value && !confirm.value) {
     error.value = 'Debes ingresar y confirmar tu nueva contraseña.';
     return;
