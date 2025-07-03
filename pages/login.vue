@@ -158,26 +158,35 @@ async function onLogin() {
 
   loading.value = true;
 
-  const { data, error: loginError } = await $supabase.auth.signInWithPassword({
-    email: email.value,
-    password: password.value,
-  });
+  // Buscar usuario por email
+  const { data, error: queryError } = await $supabase
+    .from('usuarios')
+    .select('id, nombre, apellido, email, password_hash')
+    .eq('email', email.value)
+    .single();
 
-  if (loginError) {
-    // Traducción manual de los mensajes más comunes
-    let mensaje = loginError.message;
-    if (mensaje === 'Invalid login credentials') {
-      mensaje = 'Correo o contraseña incorrectos.';
-    }
-    error.value = mensaje || 'Error al iniciar sesión. Verifica tus datos.';
+  if (queryError || !data) {
+    error.value = 'Correo o contraseña incorrectos.';
     loading.value = false;
     return;
   }
 
-  const user = data?.user;
-  const userName = user?.user_metadata?.name || 'Usuario';
+  // Comparar contraseña (texto plano, solo ejemplo)
+  if (data.password_hash !== password.value) {
+    error.value = 'Correo o contraseña incorrectos.';
+    loading.value = false;
+    return;
+  }
 
-  success.value = `¡Bienvenido, ${userName}!`;
+  // Guardar sesión simple en localStorage (solo ejemplo)
+  localStorage.setItem('usuario', JSON.stringify({
+    id: data.id,
+    nombre: data.nombre,
+    apellido: data.apellido,
+    email: data.email
+  }));
+
+  success.value = `¡Bienvenido, ${data.nombre}!`;
   email.value = '';
   password.value = '';
   loading.value = false;

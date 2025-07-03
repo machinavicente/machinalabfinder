@@ -2,13 +2,13 @@
   <div v-if="currentView === 'settings'" class="dashboard-settings">
     <div class="row">
       <div class="col-lg-8">
-        <div class="card  mb-5">
+        <div class="card mb-5">
           <div class="card-header">
             <h2 class="mb-0">Configuración de tu cuenta</h2>
           </div>
           <div class="card-body">
             <div class="settings-container">
-              <div class="row ">
+              <div class="row">
                 <div class="col-md-4">
                   <div class="profile-card text-center">
                     <div class="avatar-container mx-auto mb-3">
@@ -18,14 +18,12 @@
                         width="150"
                         alt="Avatar"
                       >
-
                     </div>
-                    <h4 class="mb-1">{{ nombre || 'Usuario' }}</h4>
+                    <h4 class="mb-1">{{ nuevoNombre || 'Usuario' }}</h4>
                     <p class="text-muted mb-3">{{ userEmail }}</p>
                   </div>
                 </div>
-                
-                <div class="col-md-8 ">
+                <div class="col-md-8">
                   <form @submit.prevent="guardarPerfil" autocomplete="off" novalidate>
                     <div class="mb-3">
                       <label class="form-label fw-semibold" for="nombre">Nombre completo</label>
@@ -40,7 +38,19 @@
                       />
                       <div v-if="nombreError" class="invalid-feedback">{{ nombreError }}</div>
                     </div>
-                    
+                    <div class="mb-3">
+                      <label class="form-label fw-semibold" for="apellido">Apellido</label>
+                      <input
+                        id="apellido"
+                        v-model.trim="nuevoApellido"
+                        class="form-control"
+                        :class="{ 'is-invalid': apellidoError }"
+                        maxlength="32"
+                        required
+                        autocomplete="off"
+                      />
+                      <div v-if="apellidoError" class="invalid-feedback">{{ apellidoError }}</div>
+                    </div>
                     <div class="mb-3">
                       <label class="form-label fw-semibold" for="email">Correo electrónico</label>
                       <input
@@ -51,32 +61,37 @@
                         disabled
                       />
                     </div>
-                    
+                    <hr>
+                    <!-- Campo Nueva contraseña -->
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="password">Nueva Contraseña</label>
+                      <label class="form-label fw-semibold" for="password">Nueva contraseña</label>
                       <div class="input-group">
                         <input
+                          :type="mostrarPassword ? 'text' : 'password'"
                           id="password"
                           v-model="nuevaPassword"
-                          :type="showPassword ? 'text' : 'password'"
                           class="form-control"
                           :class="{ 'is-invalid': passwordError }"
                           minlength="6"
-                          maxlength="32"
                           autocomplete="new-password"
+                          placeholder="Nueva contraseña"
                         />
-                        <button class="btn btn-outline-secondary" type="button" @click="showPassword = !showPassword" tabindex="-1">
-                          <i :class="showPassword ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
+                        <button type="button"
+                          class="btn btn-outline-secondary"
+                          tabindex="-1"
+                          @click="mostrarPassword = !mostrarPassword">
+                          <i :class="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
                         </button>
+                        <div v-if="passwordError" class="invalid-feedback d-block">{{ passwordError }}</div>
                       </div>
-                      <div v-if="passwordError" class="invalid-feedback d-block">{{ passwordError }}</div>
-                      <small class="text-muted">Mínimo 6 caracteres. Déjalo vacío si no deseas cambiarla.</small>
                     </div>
-                    
                     <div class="d-flex justify-content-between align-items-center mt-4">
                       <button class="btn btn-unefa-primary btn-success" type="submit" :disabled="loading">
                         <span v-if="loading"><i class="bi bi-arrow-repeat spin"></i> Guardando...</span>
                         <span v-else><i class="bi bi-save"></i> Guardar Cambios</span>
+                      </button>
+                      <button type="button" class="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#modalEliminarCuenta">
+                        <i class="bi bi-trash"></i> Eliminar cuenta
                       </button>
                     </div>
                     <transition name="fade">
@@ -97,7 +112,6 @@
           </div>
         </div>
       </div>
-      
       <div class="col-lg-4">
         <div class="card mb-4">
           <div class="card-header">
@@ -109,20 +123,38 @@
                 <i class="bi bi-shield-check"></i>
               </div>
               <div class="ms-3">
-                <div class="security-label">Último inicio de sesión</div>
-                <div class="security-value">{{ formatDate(lastSignInAt) }}</div>
+                <div class="security-label">Última sesión activa</div>
+                <div class="security-value">{{ formatDate(actualizadoEn) }}</div>
               </div>
             </div>
-            
             <div class="security-item d-flex align-items-center">
               <div class="security-icon bg-info-light text-info">
                 <i class="bi bi-clock-history"></i>
               </div>
               <div class="ms-3">
                 <div class="security-label">Cuenta creada</div>
-                <div class="security-value">{{ formatDate(createdAt) }}</div>
+                <div class="security-value">{{ formatDate(creadoEn) }}</div>
               </div>
             </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Eliminar Cuenta -->
+    <div class="modal fade" id="modalEliminarCuenta" tabindex="-1" aria-labelledby="modalEliminarCuentaLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="modalEliminarCuentaLabel"><i class="bi bi-exclamation-triangle me-2"></i>Confirmar eliminación</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            <p>¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+            <button type="button" class="btn btn-danger" @click="eliminarCuenta"><i class="bi bi-trash"></i> Eliminar definitivamente</button>
           </div>
         </div>
       </div>
@@ -131,133 +163,145 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, watch } from 'vue'
-
+import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
-
-
-const router = useRouter()
-const props = defineProps<{ nombre: string }>()
-const emit = defineEmits(['updateNombre'])
-
 import type { SupabaseClient } from '@supabase/supabase-js'
 const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient }
 
-// Vista actual del dashboard
 const currentView = ref('settings')
-
-// Datos del usuario
-const nuevoNombre = ref(props.nombre)
+const nuevoNombre = ref('')
+const nuevoApellido = ref('')
 const userEmail = ref('')
 const userAvatar = ref('https://cdn-icons-png.flaticon.com/512/3135/3135715.png')
-const userId = ref<string | null>(null)
-const lastSignInAt = ref('')
-const createdAt = ref('')
+const userId = ref<number | null>(null)
+const creadoEn = ref('')
+const actualizadoEn = ref('')
 
-// Contraseña y configuración
 const nuevaPassword = ref('')
-const showPassword = ref(false)
+const confirmarPassword = ref('')
+const passwordError = ref('')
 
-
-// Estado y mensajes
 const loading = ref(false)
 const mensaje = ref('')
 const mensajeTipo = ref('alert-info')
 const nombreError = ref('')
-const passwordError = ref('')
+const apellidoError = ref('')
+const mostrarPassword = ref(false)
+const mostrarPassword2 = ref(false)
 
-// Inicialización
+const router = useRouter()
+
 onMounted(async () => {
-  const { data: { user } } = await $supabase.auth.getUser()
-  if (!user) {
+  const usuarioStr = localStorage.getItem("usuario")
+  if (!usuarioStr) {
     router.push('/login')
     return
   }
-  
-  userId.value = user.id
-  nuevoNombre.value = user.user_metadata?.name || user.user_metadata?.userName || ''
-  userEmail.value = user.email || ''
-  userAvatar.value = user.user_metadata?.avatar_url || 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png'
-  lastSignInAt.value = user.last_sign_in_at || ''
-  createdAt.value = user.created_at || ''
- 
+  const usuario = JSON.parse(usuarioStr)
+  userId.value = usuario.id
+  nuevoNombre.value = usuario.nombre
+  nuevoApellido.value = usuario.apellido
+  userEmail.value = usuario.email
+
+  const { data: userData } = await $supabase
+    .from("usuarios")
+    .select("creado_en, actualizado_en")
+    .eq("id", userId.value)
+    .single()
+  creadoEn.value = userData?.creado_en || ""
+  actualizadoEn.value = userData?.actualizado_en || ""
 })
 
-
-
-// Validación del formulario
 function validar() {
   nombreError.value = ''
+  apellidoError.value = ''
   passwordError.value = ''
   let valido = true
-  
+
   if (!nuevoNombre.value || nuevoNombre.value.length < 3) {
     nombreError.value = 'El nombre debe tener al menos 3 caracteres.'
     valido = false
   }
-  
-  if (nuevaPassword.value && nuevaPassword.value.length < 6) {
-    passwordError.value = 'La contraseña debe tener al menos 6 caracteres.'
+  if (!nuevoApellido.value || nuevoApellido.value.length < 3) {
+    apellidoError.value = 'El apellido debe tener al menos 3 caracteres.'
     valido = false
   }
-  
+  if (nuevaPassword.value) {
+    if (nuevaPassword.value.length < 6) {
+      passwordError.value = 'La contraseña debe tener al menos 6 caracteres.'
+      valido = false
+    }
+  }
   return valido
 }
 
-// Guardar cambios del perfil
 async function guardarPerfil() {
-  if (!validar()) return
-  
+  if (!validar() || !userId.value) return
+
   loading.value = true
   mensaje.value = ''
   mensajeTipo.value = 'alert-info'
-  let cambios = false
 
-  // Cambiar nombre en metadatos de auth
-  if (nuevoNombre.value && nuevoNombre.value !== props.nombre) {
-    const { error } = await $supabase.auth.updateUser({
-      data: { name: nuevoNombre.value }
-    })
-    
-    if (!error) {
-      emit('updateNombre', nuevoNombre.value)
-      mensaje.value = 'Nombre actualizado correctamente.'
-      mensajeTipo.value = 'alert-success'
-      cambios = true
-    } else {
-      mensaje.value = 'Error al actualizar el nombre.'
-      mensajeTipo.value = 'alert-danger'
-    }
+  // Campos a actualizar
+  const updateData: any = {
+    nombre: nuevoNombre.value,
+    apellido: nuevoApellido.value,
+    actualizado_en: new Date().toISOString()
   }
-
-  // Cambiar contraseña si se ingresó una nueva
   if (nuevaPassword.value) {
-    const { error } = await $supabase.auth.updateUser({
-      password: nuevaPassword.value
-    })
-    
-    if (!error) {
-      mensaje.value += (cambios ? ' ' : '') + 'Contraseña actualizada correctamente.'
-      mensajeTipo.value = 'alert-success'
-      nuevaPassword.value = ''
-      cambios = true
-    } else {
-      mensaje.value += (cambios ? ' ' : '') + 'Error al actualizar la contraseña.'
-      mensajeTipo.value = 'alert-danger'
-    }
+    updateData.password_hash = nuevaPassword.value // En producción, aplica hash/salt
   }
 
-  if (!cambios && !mensaje.value) {
-    mensaje.value = 'No hay cambios para guardar.'
-    mensajeTipo.value = 'alert-warning'
+  const { error } = await $supabase
+    .from("usuarios")
+    .update(updateData)
+    .eq("id", userId.value)
+
+  if (!error) {
+    mensaje.value = 'Perfil actualizado correctamente.'
+    mensajeTipo.value = 'alert-success'
+    const usuarioStr = localStorage.getItem("usuario")
+    if (usuarioStr) {
+      const usuario = JSON.parse(usuarioStr)
+      usuario.nombre = nuevoNombre.value
+      usuario.apellido = nuevoApellido.value
+      localStorage.setItem("usuario", JSON.stringify(usuario))
+    }
+    nuevaPassword.value = ''
+    confirmarPassword.value = ''
+  } else {
+    mensaje.value = 'Error al actualizar el perfil.'
+    mensajeTipo.value = 'alert-danger'
   }
-  
   loading.value = false
+}
+
+// Eliminar cuenta
+async function eliminarCuenta() {
+  if (!userId.value) return
+  const { error } = await $supabase
+    .from("usuarios")
+    .delete()
+    .eq("id", userId.value)
+  if (!error) {
+    localStorage.removeItem("usuario")
+    // Cierra el modal manualmente
+    const modal = document.getElementById('modalEliminarCuenta')
+    if (modal) {
+      // @ts-ignore
+      const bsModal = bootstrap.Modal.getInstance(modal)
+      bsModal && bsModal.hide()
+    }
+    router.replace('/login')
+  } else {
+    mensaje.value = 'Error al eliminar la cuenta.'
+    mensajeTipo.value = 'alert-danger'
+  }
 }
 
 // Formatear fechas
 function formatDate(dateStr: string) {
-  if (!dateStr) return 'N/A'
+  if (!dateStr) return '...'
   const date = new Date(dateStr)
   return date.toLocaleDateString('es-ES', { 
     day: '2-digit', 
@@ -265,157 +309,7 @@ function formatDate(dateStr: string) {
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    hour12: true // <-- Agrega esta línea
+    hour12: true
   })
 }
-
-function formatRelativeTime(dateStr: string) {
-  if (!dateStr) return 'N/A'
-  
-  const date = new Date(dateStr)
-  const now = new Date()
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000)
-  
-  if (diffInSeconds < 60) return 'hace unos segundos'
-  if (diffInSeconds < 3600) return `hace ${Math.floor(diffInSeconds / 60)} minutos`
-  if (diffInSeconds < 86400) return `hace ${Math.floor(diffInSeconds / 3600)} horas`
-  
-  return `hace ${Math.floor(diffInSeconds / 86400)} días`
-}
 </script>
-
-<style scoped>
-.settings-container {
-  padding: 0.5rem;
-}
-
-.profile-card {
-  padding: 1.5rem;
-  background: rgba(0, 33, 71, 0.03);
-  border-radius: 0.75rem;
-}
-
-.avatar-container {
-  position: relative;
-  width: fit-content;
-  cursor: pointer;
-}
-
-.btn-avatar-edit {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--unefa-accent);
-  color: var(--unefa-dark);
-  border: 2px solid white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-}
-
-.security-item {
-  padding: 0.75rem;
-  border-radius: 0.5rem;
-  background: rgba(0,0,0,0.02);
-}
-
-.security-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.25rem;
-}
-
-.security-label {
-  font-size: 0.85rem;
-  color: #6c757d;
-}
-
-.security-value {
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.session-item {
-  padding: 0.75rem 0;
-}
-
-.session-time {
-  font-size: 0.8rem;
-  margin-top: 0.25rem;
-}
-
-.bg-success-light {
-  background: rgba(40, 167, 69, 0.1);
-}
-
-.bg-info-light {
-  background: rgba(23, 162, 184, 0.1);
-}
-
-.text-success {
-  color: #28a745;
-}
-
-.text-info {
-  color: #17a2b8;
-}
-
-.alert {
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.5rem;
-}
-
-.alert-info {
-  background-color: rgba(23, 162, 184, 0.1);
-  border-color: rgba(23, 162, 184, 0.2);
-  color: #0c5460;
-}
-
-.alert-success {
-  background-color: rgba(40, 167, 69, 0.1);
-  border-color: rgba(40, 167, 69, 0.2);
-  color: #155724;
-}
-
-.alert-warning {
-  background-color: rgba(255, 193, 7, 0.1);
-  border-color: rgba(255, 193, 7, 0.2);
-  color: #856404;
-}
-
-.alert-danger {
-  background-color: rgba(220, 53, 69, 0.1);
-  border-color: rgba(220, 53, 69, 0.2);
-  color: #721c24;
-}
-
-.spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  100% { transform: rotate(360deg); }
-}
-
-.fade-enter-active, .fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter-from, .fade-leave-to {
-  opacity: 0;
-}
-
-@media (max-width: 767.98px) {
-  .profile-card {
-    margin-bottom: 1.5rem;
-  }
-}
-</style>

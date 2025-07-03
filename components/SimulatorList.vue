@@ -6,7 +6,10 @@
       </div>
 
       <div v-if="simuladores.length === 0" class="col-12">
-        <div class="alert alert-info">No hay simuladores disponibles.</div>
+        <div class="alert alert-danger text-center">
+          <i class="bi bi-wifi-off fs-4 px-3"></i>
+          <span >Error de Conexion, Verifique e intente de nuevo</span>
+        </div>
       </div>
 
       <div v-else class="row g-4">

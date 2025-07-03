@@ -15,18 +15,33 @@
               <form @submit.prevent="onRegister">
                 <div class="row g-3">
                   <!-- Nombre -->
-                  <div class="col-12 position-relative">
-                    <label for="name" class="form-label">
-                      <i class="ri-user-3-line me-1"></i> Nombre completo
+                  <div class="col-12 col-md-6 position-relative">
+                    <label for="nombre" class="form-label">
+                      <i class="ri-user-3-line me-1"></i> Nombre
                     </label>
                     <input
-                      v-model="name"
+                      v-model="nombre"
                       type="text"
                       class="form-control"
-                      id="name"
+                      id="nombre"
                       placeholder="Tu nombre"
                       required
-                      autocomplete="name"
+                      autocomplete="given-name"
+                    />
+                  </div>
+                  <!-- Apellido -->
+                  <div class="col-12 col-md-6 position-relative">
+                    <label for="apellido" class="form-label">
+                      <i class="ri-user-3-line me-1"></i> Apellido
+                    </label>
+                    <input
+                      v-model="apellido"
+                      type="text"
+                      class="form-control"
+                      id="apellido"
+                      placeholder="Tu apellido"
+                      required
+                      autocomplete="family-name"
                     />
                   </div>
 
@@ -126,8 +141,10 @@
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const name = ref('');
+const nombre = ref('');
+const apellido = ref('');
 const email = ref('');
 const password = ref('');
 const loading = ref(false);
@@ -138,30 +155,31 @@ const showPassword = ref(false);
 import type { SupabaseClient } from '@supabase/supabase-js';
 
 const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient };
+const router = useRouter();
 
 const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value;
 };
+
+// Solo letras (mayúsculas/minúsculas, tildes y espacios)
+const soloLetras = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/;
 
 async function onRegister() {
   error.value = '';
   success.value = '';
 
   // Validaciones de campos vacíos
-  if (!name.value && !email.value && !password.value) {
-    error.value = 'Debes ingresar tu nombre, correo y contraseña.';
+  if (!nombre.value || !apellido.value || !email.value || !password.value) {
+    error.value = 'Debes ingresar tu nombre, apellido, correo y contraseña.';
     return;
   }
-  if (!name.value) {
-    error.value = 'Debes ingresar tu nombre completo.';
+  // Validación de solo letras y espacios
+  if (!soloLetras.test(nombre.value)) {
+    error.value = 'El nombre solo puede contener letras y espacios, sin números ni símbolos.';
     return;
   }
-  if (!email.value) {
-    error.value = 'Debes ingresar tu correo electrónico.';
-    return;
-  }
-  if (!password.value) {
-    error.value = 'Debes ingresar tu contraseña.';
+  if (!soloLetras.test(apellido.value)) {
+    error.value = 'El apellido solo puede contener letras y espacios, sin números ni símbolos.';
     return;
   }
   if (password.value.length < 6) {
@@ -171,28 +189,43 @@ async function onRegister() {
 
   loading.value = true;
 
-  const { error: signUpError } = await $supabase.auth.signUp({
-    email: email.value,
-    password: password.value,
-    options: {
-      data: { name: name.value }
-    }
-  });
+  // Generar un "salt" simple (no seguro, solo ejemplo)
+  const salt = Math.random().toString(36).substring(2, 10);
 
-  if (signUpError) {
-    // Traducción manual de los mensajes más comunes
-    let mensaje = signUpError.message;
-    if (mensaje === 'User already registered') {
+  // Guardar la contraseña como texto plano (solo ejemplo, NO USAR EN PRODUCCIÓN)
+  const password_hash = password.value;
+
+  const { error: insertError } = await $supabase
+    .from('usuarios')
+    .insert([{
+      nombre: nombre.value,
+      apellido: apellido.value,
+      email: email.value,
+      password_hash,
+      salt
+    }]);
+
+  if (insertError) {
+    let mensaje = insertError.message || '';
+    if (mensaje.toLowerCase().includes('duplicate') || mensaje.toLowerCase().includes('unique')) {
       mensaje = 'Este correo ya está registrado.';
     }
     error.value = mensaje || 'Error al registrar. Intenta de nuevo.';
-  } else {
-    success.value = '¡Registro exitoso! Revisa tu correo para confirmar tu cuenta.';
-    name.value = '';
-    email.value = '';
-    password.value = '';
+    loading.value = false;
+    return;
   }
+
+  success.value = '¡Registro exitoso! Redirigiendo al inicio de sesión...';
+  nombre.value = '';
+  apellido.value = '';
+  email.value = '';
+  password.value = '';
   loading.value = false;
+
+  // Redirige al login después de 1.5 segundos
+  setTimeout(() => {
+    router.push('/login');
+  }, 1500);
 }
 </script>
 

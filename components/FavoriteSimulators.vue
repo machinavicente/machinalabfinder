@@ -27,7 +27,7 @@
               @click="toggleFavorito(sim.id)"
             >
               <i class="bi bi-star-fill"></i>
-              Quitar
+              {{ esFavorito(sim.id) ? 'Quitar' : 'Favorito' }}
             </button>
           </div>
 
@@ -78,6 +78,46 @@ defineProps<{
   iconoPorAsignatura: (asignatura: string) => string,
   formatDate: (dateStr: string) => string
 }>()
+
+// Ejemplo para userProfile.vue o el padre de FavoriteSimulators.vue
+async function toggleFavorito(simId: number) {
+  const usuarioStr = localStorage.getItem("usuario");
+  if (!usuarioStr) {
+    window.location.href = "/login";
+    return;
+  }
+  const usuario = JSON.parse(usuarioStr);
+  const userId = usuario.id; // Este es el id del usuario
+
+  // Verifica si ya es favorito (busca por id de usuario y simulador)
+  const { data: fav } = await $supabase
+    .from("favoritos")
+    .select("id")
+    .eq("id", userId)
+    .eq("simulador_id", simId)
+    .maybeSingle();
+
+  if (fav && fav.id) {
+    // Elimina favorito
+    await $supabase
+      .from("favoritos")
+      .delete()
+      .eq("id", userId)
+      .eq("simulador_id", simId);
+  } else {
+    // Agrega favorito
+    await $supabase
+      .from("favoritos")
+      .insert([
+        {
+          id: userId, // El id del usuario como PK y FK
+          simulador_id: simId,
+        },
+      ]);
+  }
+
+  // Recarga la lista de favoritos aquí si es necesario
+}
 </script>
 
 <style scoped>
