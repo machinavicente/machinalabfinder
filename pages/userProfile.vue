@@ -136,12 +136,12 @@
           </div>
 
           <!-- Columna derecha - Últimos favoritos -->
-          <div class="col-lg-7">
+          <div class="col-lg-7 mt-4">
             <div class="card favorites-card shadow-sm">
               <div class="card-header bg-unefa-dark text-white">
                 <h4 class="mb-0">
                   <i class="bi bi-star-fill me-2"></i>
-                  Tus últimos 4 simuladores favoritos
+                  Tus últimos 6 simuladores favoritos
                 </h4>
               </div>
               <div class="card-body">

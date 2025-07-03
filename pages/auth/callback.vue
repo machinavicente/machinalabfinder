@@ -82,7 +82,6 @@ onMounted(() => {
     status.value = 'confirmation';
   } else {
     status.value = 'loading';
-    // Puedes agregar lógica para otros tipos si lo necesitas
   }
 });
 
