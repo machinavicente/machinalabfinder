@@ -172,7 +172,7 @@ const currentView = ref('settings')
 const nuevoNombre = ref('')
 const nuevoApellido = ref('')
 const userEmail = ref('')
-const userAvatar = ref('https://cdn-icons-png.flaticon.com/512/3135/3135715.png')
+const userAvatar = ref('https://cdn-icons-png.flaticon.com/512/1946/1946429.png')
 const userId = ref<number | null>(null)
 const creadoEn = ref('')
 const actualizadoEn = ref('')
@@ -191,6 +191,9 @@ const mostrarPassword2 = ref(false)
 
 const router = useRouter()
 
+const originalNombre = ref('');
+const originalApellido = ref('');
+
 onMounted(async () => {
   const usuarioStr = localStorage.getItem("usuario")
   if (!usuarioStr) {
@@ -202,6 +205,10 @@ onMounted(async () => {
   nuevoNombre.value = usuario.nombre
   nuevoApellido.value = usuario.apellido
   userEmail.value = usuario.email
+
+  // Guardar valores originales
+  originalNombre.value = usuario.nombre
+  originalApellido.value = usuario.apellido
 
   const { data: userData } = await $supabase
     .from("usuarios")
@@ -236,6 +243,17 @@ function validar() {
 }
 
 async function guardarPerfil() {
+  // Validar si hay cambios
+  if (
+    nuevoNombre.value === originalNombre.value &&
+    nuevoApellido.value === originalApellido.value &&
+    !nuevaPassword.value
+  ) {
+    mensaje.value = 'No has realizado ningún cambio en tu perfil.'
+    mensajeTipo.value = 'alert-warning'
+    return
+  }
+
   if (!validar() || !userId.value) return
 
   loading.value = true
@@ -267,6 +285,9 @@ async function guardarPerfil() {
       usuario.apellido = nuevoApellido.value
       localStorage.setItem("usuario", JSON.stringify(usuario))
     }
+    // Actualizar valores originales tras guardar
+    originalNombre.value = nuevoNombre.value
+    originalApellido.value = nuevoApellido.value
     nuevaPassword.value = ''
     confirmarPassword.value = ''
   } else {

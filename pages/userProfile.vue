@@ -2,32 +2,58 @@
   <div class="dashboard-container row g-0">
     <!-- Sidebar -->
     <nav class="col-lg-3 unefa-sidebar d-flex flex-column min-vh-100 p-0">
-      <div class="sidebar-logo d-flex align-items-center justify-content-center py-4 flex-column">
+      <div
+        class="sidebar-logo d-flex align-items-center justify-content-center py-4 flex-column"
+      >
         <h2 class="fs-4 fw-bold text-unefa-accent mb-2">Mi Laboratorio</h2>
       </div>
       <ul class="nav flex-column nav-custom mt-4 px-3">
         <li class="nav-item mb-2">
-          <a href="#" class="nav-link" :class="{ active: currentView === 'home' }" @click.prevent="currentView = 'home'">
+          <a
+            href="#"
+            class="nav-link"
+            :class="{ active: currentView === 'home' }"
+            @click.prevent="currentView = 'home'"
+          >
             <i class="bi bi-person-badge me-2"></i> Mi Perfil
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a href="#" class="nav-link" :class="{ active: currentView === 'simuladores' }" @click.prevent="currentView = 'simuladores'">
+          <a
+            href="#"
+            class="nav-link"
+            :class="{ active: currentView === 'simuladores' }"
+            @click.prevent="currentView = 'simuladores'"
+          >
             <i class="bi bi-cpu me-2"></i> Simuladores
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a href="#" class="nav-link" :class="{ active: currentView === 'favorites' }" @click.prevent="currentView = 'favorites'">
+          <a
+            href="#"
+            class="nav-link"
+            :class="{ active: currentView === 'favorites' }"
+            @click.prevent="currentView = 'favorites'"
+          >
             <i class="bi bi-star me-2"></i> Favoritos
           </a>
         </li>
         <li class="nav-item mb-2">
-          <a href="#" class="nav-link" :class="{ active: currentView === 'settings' }" @click.prevent="currentView = 'settings'">
+          <a
+            href="#"
+            class="nav-link"
+            :class="{ active: currentView === 'settings' }"
+            @click.prevent="currentView = 'settings'"
+          >
             <i class="bi bi-gear me-2"></i> Ajustes
           </a>
         </li>
         <li class="nav-item mt-4">
-          <button class="nav-link text-danger w-100 text-start logout-btn" style="background: none; border: none;" @click="logout">
+          <button
+            class="nav-link text-danger w-100 text-start logout-btn"
+            style="background: none; border: none"
+            @click="logout"
+          >
             <i class="bi bi-box-arrow-right me-2"></i> Cerrar sesión
           </button>
         </li>
@@ -43,7 +69,12 @@
           <div class="col-md-5">
             <div class="card profile-card shadow-sm mb-4">
               <div class="card-body text-center">
-                <img :src="userAvatar" width="110" class="rounded-circle border border-3 border-unefa-accent mb-3" alt="Avatar usuario" />
+                <img
+                  :src="userAvatar"
+                  width="110"
+                  class="rounded-circle border border-3 border-unefa-accent mb-3"
+                  alt="Avatar usuario"
+                />
                 <h3 class="fw-bold mb-1">¡{{ nombre }} {{ apellido }}!</h3>
                 <p class="text-muted mb-3">{{ userEmail }}</p>
                 <div class="user-stats text-start mt-4">
@@ -53,11 +84,17 @@
                   </div>
                   <div class="stat-item mb-2">
                     <i class="bi bi-activity me-2"></i>
-                    <span>Último acceso: {{ formatRelativeTime(lastSignInAt) }}</span>
+                    <span
+                      >Último acceso:
+                      {{ formatRelativeTime(lastSignInAt) }}</span
+                    >
                   </div>
                   <div class="stat-item">
                     <i class="bi bi-star-fill me-2"></i>
-                    <span>{{ simuladoresFavoritos.length }} simuladores favoritos</span>
+                    <span
+                      >{{ simuladoresFavoritos.length }} simuladores
+                      favoritos</span
+                    >
                   </div>
                 </div>
               </div>
@@ -65,11 +102,17 @@
             <!-- Asignaturas favoritas -->
             <div class="card shadow-sm" v-if="asignaturasFavoritas.length">
               <div class="card-header bg-unefa-dark text-white">
-                <h5 class="mb-0"><i class="bi bi-book me-2"></i>Asignaturas vistas</h5>
+                <h5 class="mb-0">
+                  <i class="bi bi-book me-2"></i>Asignaturas vistas
+                </h5>
               </div>
               <div class="card-body">
                 <ul class="list-unstyled mb-0">
-                  <li v-for="asig in asignaturasFavoritas" :key="asig" class="mb-2">
+                  <li
+                    v-for="asig in asignaturasFavoritas"
+                    :key="asig"
+                    class="mb-2"
+                  >
                     <i class="bi bi-dot text-unefa-primary"></i> {{ asig }}
                   </li>
                 </ul>
@@ -80,22 +123,41 @@
           <div class="col-md-7">
             <div class="card favorites-card shadow-sm h-100">
               <div class="card-header bg-unefa-dark text-white">
-                <h4 class="mb-0"><i class="bi bi-star-fill me-2"></i>Tus últimos 6 simuladores favoritos</h4>
+                <h4 class="mb-0">
+                  <i class="bi bi-star-fill me-2"></i>Tus últimos 6 simuladores
+                  favoritos
+                </h4>
               </div>
               <div class="card-body p-0">
-                <div v-if="ultimosFavoritos.length > 0" class="favorites-list p-3">
+                <div
+                  v-if="ultimosFavoritos.length > 0"
+                  class="favorites-list p-3"
+                >
                   <div
                     v-for="sim in ultimosFavoritos"
                     :key="sim.id"
                     class="favorite-item d-flex align-items-center mb-3 p-2 rounded bg-light flex-column flex-md-row"
                   >
                     <div class="sim-icon me-md-3 mb-2 mb-md-0">
-                      <i :class="['bi', iconoPorAsignatura(sim.asignatura), 'fs-3', 'text-unefa-primary']"></i>
+                      <i
+                        :class="[
+                          'bi',
+                          iconoPorAsignatura(sim.asignatura),
+                          'fs-3',
+                          'text-unefa-primary',
+                        ]"
+                      ></i>
                     </div>
                     <div class="sim-info flex-grow-1 w-100 mb-2 mb-md-0">
-                      <div class="sim-title-row d-flex align-items-center flex-wrap">
-                        <span class="sim-title fw-semibold me-2">{{ sim.nombre_del_simulador }}</span>
-                        <span class="badge bg-unefa-dark">{{ sim.asignatura }}</span>
+                      <div
+                        class="sim-title-row d-flex align-items-center flex-wrap"
+                      >
+                        <span class="sim-title fw-semibold me-2">{{
+                          sim.nombre_del_simulador
+                        }}</span>
+                        <span class="badge bg-unefa-dark">{{
+                          sim.asignatura
+                        }}</span>
                       </div>
                       <small class="text-muted">
                         <i class="bi bi-calendar me-1"></i>
@@ -111,7 +173,10 @@
                       >
                         Usar <i class="bi bi-box-arrow-up-right"></i>
                       </a>
-                      <button class="btn btn-sm btn-outline-danger" @click="toggleFavorito(sim.id)">
+                      <button
+                        class="btn btn-sm btn-outline-danger"
+                        @click="toggleFavorito(sim.id)"
+                      >
                         <i class="bi bi-star-fill"></i>
                       </button>
                     </div>
@@ -122,15 +187,144 @@
                   <p class="mt-3">Aún no tienes simuladores favoritos</p>
                   <router-link to="" class="btn btn-unefa-primary btn-sm">
                     <i class="bi bi-cpu me-1"></i>
-                    <span :class="{ active: currentView === 'simuladores' }" @click.prevent="currentView = 'simuladores'">Explorar Simuladores</span>
+                    <span
+                      :class="{ active: currentView === 'simuladores' }"
+                      @click.prevent="currentView = 'simuladores'"
+                      >Explorar Simuladores</span
+                    >
                   </router-link>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        <!-- Calendario de actividades SOLO en la vista principal -->
+        <div class="card shadow-sm mt-4">
+          <div class="card-header bg-unefa-dark text-white d-flex align-items-center justify-content-between">
+            <h5 class="mb-0">
+              <i class="bi bi-calendar-event me-2"></i>Calendario de actividades
+            </h5>
+            <button class="btn btn-sm btn-unefa-primary" @click="abrirModalActividad()">
+              <i class="bi bi-plus-lg"></i> Nueva actividad
+            </button>
+          </div>
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush">
+              <li
+                v-for="act in actividadesOrdenadas"
+                :key="act.id"
+                class="list-group-item d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-2"
+              >
+                <div class="flex-grow-1">
+                  <div class="d-flex align-items-center gap-2 mb-1">
+                    <input type="checkbox" v-model="act.estado" true-value="completado" false-value="pendiente" @change="actualizarEstado(act)" />
+                    <span :class="['fw-semibold', act.estado === 'completado' ? 'text-success text-decoration-line-through' : '']">
+                      {{ act.titulo }}
+                    </span>
+                    <span class="badge bg-unefa-dark ms-2">{{ formatDate(act.fecha) }}</span>
+                  </div>
+                  <div class="mb-1 text-muted" v-if="act.descripcion">
+                    <i class="bi bi-info-circle me-1"></i>{{ act.descripcion }}
+                  </div>
+                  <div v-if="act.recursos" class="mb-1">
+                    <i class="bi bi-link-45deg me-1"></i>
+                    <span v-for="(recurso, i) in act.recursos.split(',')" :key="i">
+                      <a :href="recurso.trim()" target="_blank" rel="noopener" class="me-2">{{ recurso.trim() }}</a>
+                    </span>
+                  </div>
+                </div>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-sm btn-outline-primary" @click="abrirModalActividad(act)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button class="btn btn-sm btn-outline-danger" @click="eliminarActividad(act.id)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </div>
+              </li>
+              <li v-if="actividades.length === 0" class="list-group-item text-center text-muted">
+                No hay actividades programadas
+              </li>
+            </ul>
+          </div>
+          <!-- Modal para agregar/editar actividad -->
+          <div
+            class="modal fade"
+            id="modalActividad"
+            tabindex="-1"
+            aria-labelledby="modalActividadLabel"
+            aria-hidden="true"
+            ref="modalActividadRef"
+          >
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable custom-modal-actividad">
+              <div class="modal-content">
+                <form @submit.prevent="guardarActividad">
+                  <div class="modal-header bg-unefa-dark text-white">
+                    <h5 class="modal-title" id="modalActividadLabel">
+                      {{ actividadEditando.id ? 'Editar' : 'Nueva' }} actividad
+                    </h5>
+                    <button
+                      type="button"
+                      class="btn-close btn-close-white"
+                      data-bs-dismiss="modal"
+                      aria-label="Cerrar"
+                    ></button>
+                  </div>
+                  <div class="modal-body">
+                    <div class="mb-3">
+                      <label class="form-label">Título</label>
+                      <input
+                        v-model="actividadEditando.titulo"
+                        type="text"
+                        class="form-control"
+                        maxlength="50"
+                        required
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Descripción</label>
+                      <textarea
+                        v-model="actividadEditando.descripcion"
+                        class="form-control"
+                        maxlength="200"
+                        rows="2"
+                      ></textarea>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Fecha</label>
+                      <input
+                        v-model="actividadEditando.fecha"
+                        type="date"
+                        class="form-control"
+                        required
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Estado</label>
+                      <select v-model="actividadEditando.estado" class="form-select">
+                        <option value="pendiente">Pendiente</option>
+                        <option value="completado">Completado</option>
+                      </select>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-bs-dismiss="modal"
+                    >
+                      Cancelar
+                    </button>
+                    <button type="submit" class="btn btn-unefa-primary">
+                      {{ actividadEditando.id ? 'Actualizar' : 'Agregar' }}
+                    </button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-
       <!-- SIMULADORES -->
       <div v-else-if="currentView === 'simuladores'">
         <SimulatorList
@@ -141,7 +335,6 @@
           :formatDate="formatDate"
         />
       </div>
-
       <!-- FAVORITOS -->
       <div v-else-if="currentView === 'favorites'">
         <FavoriteSimulators
@@ -152,7 +345,6 @@
           :formatDate="formatDate"
         />
       </div>
-
       <!-- SETTINGS -->
       <div v-else-if="currentView === 'settings'">
         <ProfileSettings :nombre="nombre" @updateNombre="nombre = $event" />
@@ -162,51 +354,66 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from "vue";
+import { ref, computed, onMounted } from "vue";
+import { useNuxtApp } from "#app";
 import { useRouter, useRoute } from "vue-router";
 import SimulatorList from "~/components/SimulatorList.vue";
 import ProfileSettings from "~/components/ProfileSettings.vue";
 import FavoriteSimulators from "~/components/FavoriteSimulators.vue";
 
 function iconoPorAsignatura(asignatura: string) {
-  switch (asignatura?.toLowerCase()) {
-    case "física":
-      return "bi-lightning-charge";
-    case "química":
-      return "bi-beaker";
-    case "biología":
-      return "bi-flower2";
-    case "matemáticas":
-      return "bi-calculator";
-    case "informática":
-      return "bi-cpu";
-    case "electrónica":
-      return "bi-plug";
-    default:
-      return "bi-book";
-  }
+  const mapaIconos: Record<string, string> = {
+    'Matemáticas': 'bi-calculator',
+    'Matemática General': 'bi-calculator',
+    'Lógica Matemática': 'bi-file-binary',
+    'Química': 'bi-flask',
+    'Física I': 'bi-lightning-charge',
+    'Física II': 'bi-lightning-charge-fill',
+    'Programación': 'bi-code-slash',
+    'Lenguajes de Programación I': 'bi-terminal',
+    'Lenguajes de Programación II': 'bi-terminal-dash',
+    'Lenguajes de Programación III': 'bi-terminal-split',
+    'Procesamiento de Datos': 'bi-diagram-3',
+    'Bases de Datos': 'bi-database',
+    'Redes': 'bi-wifi',
+    'Sistemas Operativos': 'bi-window-stack',
+    'Simulación y Modelos': 'bi-diagram-3-fill',
+    'Otra...': 'bi-journals'
+  };
+  return mapaIconos[asignatura] || mapaIconos['Otra...'];
 }
 
-import type { SupabaseClient } from "@supabase/supabase-js";
-const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient };
+const { $supabase } = useNuxtApp() as any;
+const router = useRouter();
 
 const nombre = ref("");
 const apellido = ref("");
 const userEmail = ref("");
-const userAvatar = ref("https://cdn-icons-png.flaticon.com/512/3135/3135715.png");
+const userAvatar = ref(
+  "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
+);
 const createdAt = ref("");
 const lastSignInAt = ref("");
 const simuladores = ref<any[]>([]);
 const favoritos = ref<any[]>([]);
-const router = useRouter();
+const actividades = ref<any[]>([]);
+const actividadEditando = ref({
+  id: null,
+  titulo: "",
+  descripcion: "",
+  recursos: "",
+  fecha: "",
+  estado: "pendiente",
+});
+const modalActividadRef = ref<any>(null);
 const route = useRoute();
 
 const simuladoresFavoritos = computed(() => favoritos.value);
-const currentView = ref("home");
+const currentView = ref<"home" | "simuladores" | "favorites" | "settings">("home");
 
 const asignaturasFavoritas = computed(() => {
   const asignaturasSet = new Set<string>();
-  favoritos.value.forEach(fav => {
+  favoritos.value.forEach((fav) => {
     if (fav && fav.asignatura) {
       asignaturasSet.add(fav.asignatura);
     }
@@ -216,7 +423,11 @@ const asignaturasFavoritas = computed(() => {
 
 const ultimosFavoritos = computed(() => {
   return [...favoritos.value]
-    .sort((a, b) => new Date(b.favorito_created_at || b.created_at).getTime() - new Date(a.favorito_created_at || a.created_at).getTime())
+    .sort(
+      (a, b) =>
+        new Date(b.favorito_created_at || b.created_at).getTime() -
+        new Date(a.favorito_created_at || a.created_at).getTime()
+    )
     .slice(0, 6);
 });
 
@@ -229,7 +440,7 @@ watch(
       typeof view === "string" &&
       ["home", "simuladores", "favorites", "settings"].includes(view)
     ) {
-      currentView.value = view;
+      currentView.value = view as typeof currentView.value;
     }
   },
   { immediate: true }
@@ -263,21 +474,31 @@ onMounted(async () => {
     .select("simulador_id, created_at")
     .eq("user_id", userId);
 
-  favoritos.value = (favs || []).map(fav => {
-    const sim = simuladores.value.find(s => s.id === fav.simulador_id);
-    if (sim) {
-      return {
-        ...fav,
-        ...sim,
-        favorito_created_at: fav.created_at
-      };
-    }
-    return null;
-  }).filter(Boolean);
+  favoritos.value = (favs || [])
+    .map((fav) => {
+      const sim = simuladores.value.find((s) => s.id === fav.simulador_id);
+      if (sim) {
+        return {
+          ...fav,
+          ...sim,
+          favorito_created_at: fav.created_at,
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
+
+  const { data: acts } = await $supabase
+    .from("actividades")
+    .select("*")
+    .eq("user_id", userId)
+    .order("fecha", { ascending: true });
+
+  actividades.value = acts || [];
 });
 
 function esFavorito(simId: number) {
-  return favoritos.value.some(f => f.id === simId);
+  return favoritos.value.some((f) => f.id === simId);
 }
 
 function formatDate(dateStr: string, corto = false) {
@@ -304,12 +525,10 @@ async function toggleFavorito(simId: number) {
       .eq("user_id", userId)
       .eq("simulador_id", simId);
   } else {
-    await $supabase
-      .from("favoritos")
-      .insert({
-        user_id: userId,
-        simulador_id: simId,
-      });
+    await $supabase.from("favoritos").insert({
+      user_id: userId,
+      simulador_id: simId,
+    });
   }
 
   const { data: favs } = await $supabase
@@ -317,17 +536,19 @@ async function toggleFavorito(simId: number) {
     .select("simulador_id, created_at")
     .eq("user_id", userId);
 
-  favoritos.value = (favs || []).map(fav => {
-      const sim = simuladores.value.find(s => s.id === fav.simulador_id);
+  favoritos.value = (favs || [])
+    .map((fav) => {
+      const sim = simuladores.value.find((s) => s.id === fav.simulador_id);
       if (sim) {
         return {
           ...fav,
           ...sim,
-          favorito_created_at: fav.created_at
+          favorito_created_at: fav.created_at,
         };
       }
       return null;
-    }).filter(Boolean);
+    })
+    .filter(Boolean);
 }
 
 function formatRelativeTime(dateStr: string) {
@@ -352,6 +573,115 @@ function logout() {
   router.replace("/login");
   setTimeout(() => window.location.reload(), 100);
 }
+
+const nuevaActividad = ref({
+  titulo: "",
+  fecha: "",
+});
+
+function agregarActividad() {
+  if (!nuevaActividad.value.titulo.trim() || !nuevaActividad.value.fecha) return;
+  actividades.value.push({
+    titulo: nuevaActividad.value.titulo.trim(),
+    fecha: nuevaActividad.value.fecha,
+  });
+  nuevaActividad.value.titulo = "";
+  nuevaActividad.value.fecha = "";
+}
+
+// function eliminarActividad(idx: number) {
+//   actividades.value.splice(idx, 1);
+// }
+
+const actividadesOrdenadas = computed(() =>
+  [...actividades.value].sort((a, b) => new Date(a.fecha).getTime() - new Date(b.fecha).getTime())
+);
+
+function abrirModalActividad(act = null) {
+  if (act && typeof act === "object") {
+    actividadEditando.value = { ...act };
+  } else {
+    actividadEditando.value = {
+      id: null,
+      titulo: "",
+      descripcion: "",
+      fecha: "",
+      estado: "pendiente",
+    };
+  }
+  setTimeout(() => {
+    const modal = window.bootstrap.Modal.getOrCreateInstance(modalActividadRef.value);
+    modal.show();
+  }, 50);
+}
+
+async function guardarActividad() {
+  const userStr = localStorage.getItem("usuario");
+  if (!userStr) return router.replace("/login");
+  const usuario = JSON.parse(userStr);
+
+  if (actividadEditando.value.id) {
+    // Editar
+    await $supabase
+      .from("actividades")
+      .update({
+        titulo: actividadEditando.value.titulo,
+        descripcion: actividadEditando.value.descripcion,
+        fecha: actividadEditando.value.fecha,
+        estado: actividadEditando.value.estado,
+        actualizado_en: new Date().toISOString(),
+      })
+      .eq("id", actividadEditando.value.id)
+      .eq("user_id", usuario.id);
+  } else {
+    // Nueva
+    await $supabase.from("actividades").insert({
+      user_id: usuario.id,
+      titulo: actividadEditando.value.titulo,
+      descripcion: actividadEditando.value.descripcion,
+      fecha: actividadEditando.value.fecha,
+      estado: actividadEditando.value.estado,
+    });
+  }
+  await cargarActividades();
+
+  // Quitar el foco del botón antes de cerrar el modal
+  if (document.activeElement instanceof HTMLElement) {
+    document.activeElement.blur();
+  }
+
+  const modal = window.bootstrap.Modal.getOrCreateInstance(modalActividadRef.value);
+  modal.hide();
+}
+
+async function eliminarActividad(id: number) {
+  await $supabase.from("actividades").delete().eq("id", id);
+  await cargarActividades();
+}
+
+async function actualizarEstado(act) {
+  await $supabase
+    .from("actividades")
+    .update({ estado: act.estado, actualizado_en: new Date().toISOString() })
+    .eq("id", act.id);
+  await cargarActividades();
+}
+
+async function cargarActividades() {
+  const userStr = localStorage.getItem("usuario");
+  if (!userStr) return;
+  const usuario = JSON.parse(userStr);
+  const { data: acts } = await $supabase
+    .from("actividades")
+    .select("*")
+    .eq("user_id", usuario.id)
+    .order("fecha", { ascending: true });
+  actividades.value = acts || [];
+}
+
+onMounted(() => {
+  cargarActividades();
+});
 </script>
 
 <style scoped>
@@ -360,19 +690,36 @@ function logout() {
     display: none !important;
   }
   .favorites-card {
-    max-height: 350px;
+    max-height: 620px;
     min-height: 220px;
   }
 }
 .dashboard-container {
   background: #f8f9fa;
   min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow-x: hidden;
+}
+.main-content {
+  flex: 1 1 0%;
+  width: 100%;
+  max-width: 100vw;      /* <-- Limita el ancho máximo al viewport */
+  overflow-x: auto;      /* <-- Permite scroll horizontal si es necesario */
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  box-sizing: border-box;
+  min-width: 0;
 }
 .unefa-sidebar {
   background: #003366;
   color: #fff;
   min-width: 220px;
   max-width: 260px;
+  width: 100%;
 }
 .unefa-sidebar .nav-link {
   color: #fff;
@@ -414,8 +761,7 @@ function logout() {
   background: #fff;
   border: 1px solid #e5e7eb;
   box-shadow: 0 2px 8px rgba(0, 33, 71, 0.07);
-  max-height: 420px;
-  min-height: 220px;
+
   overflow-y: auto;
   display: flex;
   flex-direction: column;
@@ -474,5 +820,25 @@ function logout() {
 .btn-unefa-primary:hover {
   background: #002147;
   color: #ffc72c;
+}
+.custom-modal-actividad {
+  max-width: 480px;
+  width: 95vw;
+}
+.custom-modal-actividad .modal-content {
+  max-height: 90vh;
+  overflow: auto;
+}
+@media (max-width: 576px) {
+  .custom-modal-actividad {
+    max-width: 98vw;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+  }
+  .custom-modal-actividad .modal-content {
+    max-height: 95vh;
+  }
 }
 </style>
