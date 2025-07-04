@@ -58,7 +58,7 @@
           </button>
         </li>
       </ul>
-    </nav>>
+    </nav>
     <main class="col-lg-9 main-content py-4 px-3">
       <!-- HOME - Vista de perfil -->
       <div v-if="currentView === 'home'" class="profile-view">

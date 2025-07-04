@@ -285,7 +285,6 @@ async function guardarPerfil() {
       usuario.apellido = nuevoApellido.value
       localStorage.setItem("usuario", JSON.stringify(usuario))
     }
-    // Actualizar valores originales tras guardar
     originalNombre.value = nuevoNombre.value
     originalApellido.value = nuevoApellido.value
     nuevaPassword.value = ''
