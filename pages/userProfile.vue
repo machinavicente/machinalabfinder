@@ -221,7 +221,9 @@
                     <span :class="['fw-semibold', act.estado === 'completado' ? 'text-success text-decoration-line-through' : '']">
                       {{ act.titulo }}
                     </span>
-                    <span class="badge bg-unefa-dark ms-2">{{ formatDate(act.fecha) }}</span>
+                    <span class="badge bg-unefa-dark ms-2">
+                      {{ formatDate(act.fecha) }}<span v-if="act.hora"> - {{ formatHour12(act.hora) }}</span>
+                    </span>
                   </div>
                   <div class="mb-1 text-muted" v-if="act.descripcion">
                     <i class="bi bi-info-circle me-1"></i>{{ act.descripcion }}
@@ -298,6 +300,27 @@
                         class="form-control"
                         required
                       />
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Hora</label>
+                      <div class="input-group">
+                        <span class="input-group-text">
+                          <i class="bi bi-clock"></i>
+                        </span>
+                        <input
+                          v-model="actividadEditando.hora"
+                          type="time"
+                          class="form-control"
+                          required
+                          step="60"
+                        />
+                      </div>
+                      <small class="form-text text-muted ms-1">
+                        Selecciona la hora en formato 12 horas (AM/PM)
+                      </small>
+                      <div v-if="actividadEditando.hora" class="mt-1 text-primary fw-semibold">
+                        {{ formatHour12(actividadEditando.hora) }}
+                      </div>
                     </div>
                     <div class="mb-3">
                       <label class="form-label">Estado</label>
@@ -402,6 +425,7 @@ const actividadEditando = ref({
   descripcion: "",
   recursos: "",
   fecha: "",
+  hora: "",
   estado: "pendiente",
 });
 const modalActividadRef = ref<any>(null);
@@ -502,6 +526,14 @@ function esFavorito(simId: number) {
 
 function formatDate(dateStr: string, corto = false) {
   if (!dateStr) return "";
+  // Si el string es tipo 'YYYY-MM-DD', muéstralo tal cual para evitar desfase por zona horaria
+  if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
+    const [y, m, d] = dateStr.split("-");
+    return corto
+      ? `${d}/${m}/${y}`
+      : `${d.padStart(2, "0")}-${m.padStart(2, "0")}-${y}`;
+  }
+  // Si es un string con hora, usa Date normal
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return "";
   if (corto) {
@@ -605,6 +637,7 @@ function abrirModalActividad(act = null) {
       titulo: "",
       descripcion: "",
       fecha: "",
+      hora: "",
       estado: "pendiente",
     };
   }
@@ -627,6 +660,7 @@ async function guardarActividad() {
         titulo: actividadEditando.value.titulo,
         descripcion: actividadEditando.value.descripcion,
         fecha: actividadEditando.value.fecha,
+        hora: actividadEditando.value.hora,
         estado: actividadEditando.value.estado,
         actualizado_en: new Date().toISOString(),
       })
@@ -637,8 +671,9 @@ async function guardarActividad() {
     await $supabase.from("actividades").insert({
       user_id: usuario.id,
       titulo: actividadEditando.value.titulo,
-      descripcion: actividadEditando.value.descripcion,
+      descripcion: actividadEditando.value.descripcion || "",
       fecha: actividadEditando.value.fecha,
+      hora: actividadEditando.value.hora || "",
       estado: actividadEditando.value.estado,
     });
   }
@@ -681,6 +716,16 @@ async function cargarActividades() {
 onMounted(() => {
   cargarActividades();
 });
+
+function formatHour12(hora24: string) {
+  if (!hora24) return "";
+  const [h, m] = hora24.split(":");
+  let hour = parseInt(h, 10);
+  const minute = m || "00";
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+  return `${hour}:${minute} ${ampm}`;
+}
 </script>
 
 <style scoped>
@@ -887,6 +932,16 @@ onMounted(() => {
 .custom-modal-actividad .btn-unefa-primary:hover {
   background: #002147;
   color: #ffc72c;
+}
+
+.input-group-text {
+  background: #f6f8fa;
+  border-radius: 0.5rem 0 0 0.5rem;
+  border: 1px solid #cfd8dc;
+  color: #003366;
+}
+.form-text {
+  font-size: 0.95em;
 }
 
 @media (max-width: 576px) {
