@@ -36,7 +36,7 @@
               </div>
               <div class="alert alert-info border-0 glass-card p-3">
                 <i class="bi bi-info-circle-fill text-unefa-accent me-2"></i>
-                <strong>¿Sabías que?</strong> Con una cuenta puedes guardar tus simuladores favoritos y acceder a contenido exclusivo.
+                <strong>¿Sabías que?</strong> Con una cuenta puedes guardar tus simuladores favoritos y crear tu <strong>Laboratorio Personal.</strong>
               </div>
             </div>
           </div>
