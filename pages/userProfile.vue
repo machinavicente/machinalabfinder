@@ -58,9 +58,7 @@
           </button>
         </li>
       </ul>
-    </nav>
-
-    <!-- Main content -->
+    </nav>>
     <main class="col-lg-9 main-content py-4 px-3">
       <!-- HOME - Vista de perfil -->
       <div v-if="currentView === 'home'" class="profile-view">
@@ -249,7 +247,7 @@
               </li>
             </ul>
           </div>
-          <!-- Modal para agregar/editar actividad -->
+          <!-- Modal para agregar / editar actividad -->
           <div
             class="modal fade"
             id="modalActividad"
@@ -314,12 +312,6 @@
                           required
                           step="60"
                         />
-                      </div>
-                      <small class="form-text text-muted ms-1">
-                        Selecciona la hora en formato 12 horas (AM/PM)
-                      </small>
-                      <div v-if="actividadEditando.hora" class="mt-1 text-primary fw-semibold">
-                        {{ formatHour12(actividadEditando.hora) }}
                       </div>
                     </div>
                     <div class="mb-3">
@@ -526,14 +518,13 @@ function esFavorito(simId: number) {
 
 function formatDate(dateStr: string, corto = false) {
   if (!dateStr) return "";
-  // Si el string es tipo 'YYYY-MM-DD', muéstralo tal cual para evitar desfase por zona horaria
   if (/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) {
     const [y, m, d] = dateStr.split("-");
     return corto
       ? `${d}/${m}/${y}`
       : `${d.padStart(2, "0")}-${m.padStart(2, "0")}-${y}`;
   }
-  // Si es un string con hora, usa Date normal
+  
   const date = new Date(dateStr);
   if (isNaN(date.getTime())) return "";
   if (corto) {
@@ -679,7 +670,6 @@ async function guardarActividad() {
   }
   await cargarActividades();
 
-  // Quitar el foco del botón antes de cerrar el modal
   if (document.activeElement instanceof HTMLElement) {
     document.activeElement.blur();
   }
@@ -749,8 +739,8 @@ function formatHour12(hora24: string) {
 .main-content {
   flex: 1 1 0%;
   width: 100%;
-  max-width: 100vw;      /* <-- Limita el ancho máximo al viewport */
-  overflow-x: auto;      /* <-- Permite scroll horizontal si es necesario */
+  max-width: 100vw;      
+  overflow-x: auto;      
   margin-left: 0;
   margin-right: 0;
   padding-left: 16px;
@@ -777,7 +767,7 @@ function formatHour12(hora24: string) {
   background: #ffc72c;
   color: #003366 !important;
 }
-/* Quitar hover solo a cerrar sesión */
+
 .unefa-sidebar .logout-btn,
 .unefa-sidebar .logout-btn:hover,
 .unefa-sidebar .logout-btn:focus {
@@ -872,7 +862,6 @@ function formatHour12(hora24: string) {
   margin-right: auto;
   top: 0;
   bottom: 0;
-  /* Centrado vertical y margen superior para evitar solapamiento */
   display: flex;
   align-items: center;
   min-height: 0;
@@ -883,7 +872,7 @@ function formatHour12(hora24: string) {
   box-shadow: 0 4px 24px rgba(0,33,71,0.13);
   border: 1px solid #e5e7eb;
   background: #fdfdfd;
-  max-height: 75vh; /* Reduce el alto máximo */
+  max-height: 75vh; 
   overflow-y: auto;
   padding: 0.5rem 0.5rem 0.5rem 0.5rem;
 }

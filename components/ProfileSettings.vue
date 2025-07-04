@@ -267,7 +267,7 @@ async function guardarPerfil() {
     actualizado_en: new Date().toISOString()
   }
   if (nuevaPassword.value) {
-    updateData.password_hash = nuevaPassword.value // En producción, aplica hash/salt
+    updateData.password_hash = nuevaPassword.value 
   }
 
   const { error } = await $supabase
