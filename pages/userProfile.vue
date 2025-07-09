@@ -98,13 +98,13 @@
               </div>
             </div>
             <!-- Asignaturas favoritas -->
-            <div class="card shadow-sm" v-if="asignaturasFavoritas.length">
+            <div class="card shadow-sm favorite_asig" v-if="asignaturasFavoritas.length">
               <div class="card-header bg-unefa-dark text-white">
                 <h5 class="mb-0">
                   <i class="bi bi-book me-2"></i>Asignaturas vistas
                 </h5>
               </div>
-              <div class="card-body">
+              <div class="card-body asig_body">
                 <ul class="list-unstyled mb-0">
                   <li
                     v-for="asig in asignaturasFavoritas"
@@ -790,12 +790,18 @@ function formatHour12(hora24: string) {
   border: 1px solid #e5e7eb;
   box-shadow: 0 2px 8px rgba(0, 33, 71, 0.07);
 }
+.favorite_asig{
+  min-height: 300px;
+  max-height: 300px;
+}
+.asig_body{
+  overflow-y: scroll;
+}
 .favorites-card {
   border-radius: 1rem;
   background: #fff;
   border: 1px solid #e5e7eb;
   box-shadow: 0 2px 8px rgba(0, 33, 71, 0.07);
-
   overflow-y: auto;
   display: flex;
   flex-direction: column;

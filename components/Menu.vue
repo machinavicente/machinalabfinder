@@ -76,7 +76,7 @@
   align-items: center;
   width: 100%;
   gap: 0.5rem;
-  white-space: nowrap;
+
 }
 
 a,
@@ -117,7 +117,8 @@ a:hover,
     align-items: center;
     width: 100%;
     gap: 0.5rem;
-    white-space: nowrap;
+    white-space:nowrap;
+    flex-wrap:wrap;
   }
 
   .nav-link {

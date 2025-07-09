@@ -601,4 +601,48 @@ function cerrarModales() {
 .date {
   font-weight: 800;
 }
+
+@media (max-width: 994px) {
+  .ultimo-simulador-card .card-header {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 0.2rem;
+    padding: 0.3rem 0.4rem;
+  }
+  .category-badge {
+    margin-bottom: 0.2rem;
+    width: 100%;
+    max-width: 100%;
+    text-align: left;
+  }
+  .win-window-controls {
+    margin-left: 0;
+    margin-top: 0.1rem;
+    align-self: flex-end;
+    flex-wrap: nowrap;
+    width: auto;
+    max-width: 100%;
+  }
+  .win-btn {
+    width: 20px;
+    height: 18px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ultimo-simulador-card .card-header {
+    padding: 0.2rem 0.2rem;
+    gap: 0.1rem;
+  }
+  .category-badge {
+    font-size: 0.92rem;
+    margin-bottom: 0.15rem;
+  }
+  .win-btn {
+    width: 18px;
+    height: 16px;
+    font-size: 11px;
+  }
+}
 </style>

@@ -2,13 +2,13 @@
   <div class="w-100">
     <h4 class="mb-3 text-unefa-dark">Mis Simuladores Favoritos</h4>
 
-    <div v-if="simuladoresFavoritos.length === 0" class="alert alert-warning text-center">
+    <div v-if="favoritos.length === 0" class="alert alert-warning text-center">
       No tienes simuladores favoritos aún.
     </div>
 
     <div v-else class="row g-4 justify-content-center mt-5">
       <div
-        v-for="(sim, idx) in simuladoresFavoritos"
+        v-for="(sim, idx) in favoritos"
         :key="sim.id"
         class="col-md-4 d-flex"
       >
@@ -71,13 +71,28 @@
 </template>
 
 <script setup lang="ts">
-defineProps<{
+import type { SupabaseClient } from '@supabase/supabase-js'
+import { useNuxtApp } from '#app'
+import { ref, watch } from 'vue';
+
+const { $supabase } = useNuxtApp();
+
+const props = defineProps<{
   simuladoresFavoritos: any[],
   esFavorito: (id: number) => boolean,
   toggleFavorito: (id: number) => void,
   iconoPorAsignatura: (asignatura: string) => string,
   formatDate: (dateStr: string) => string
-}>()
+}>();
+
+const favoritos = ref([...props.simuladoresFavoritos]);
+
+watch(
+  () => props.simuladoresFavoritos,
+  (nuevos) => {
+    favoritos.value = [...nuevos];
+  }
+);
 
 // Ejemplo para userProfile.vue o el padre de FavoriteSimulators.vue
 async function toggleFavorito(simId: number) {
@@ -87,13 +102,13 @@ async function toggleFavorito(simId: number) {
     return;
   }
   const usuario = JSON.parse(usuarioStr);
-  const userId = usuario.id; // Este es el id del usuario
+  const userId = Number(usuario.id);
 
-  // Verifica si ya es favorito (busca por id de usuario y simulador)
+  // Busca si ya es favorito
   const { data: fav } = await $supabase
     .from("favoritos")
     .select("id")
-    .eq("id", userId)
+    .eq("user_id", userId)
     .eq("simulador_id", simId)
     .maybeSingle();
 
@@ -102,21 +117,23 @@ async function toggleFavorito(simId: number) {
     await $supabase
       .from("favoritos")
       .delete()
-      .eq("id", userId)
+      .eq("user_id", userId)
       .eq("simulador_id", simId);
+
+    // Quita de la lista local
+    favoritos.value = favoritos.value.filter(sim => sim.id !== simId);
   } else {
     // Agrega favorito
     await $supabase
       .from("favoritos")
       .insert([
         {
-          id: userId, // El id del usuario como PK y FK
+          user_id: userId,
           simulador_id: simId,
         },
       ]);
+    // Opcional: recargar desde la API o agregar manualmente si tienes los datos del simulador
   }
-
-  // Recarga la lista de favoritos aquí si es necesario
 }
 </script>
 
