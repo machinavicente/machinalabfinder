@@ -117,7 +117,7 @@
                         Registrando...
                       </template>
                       <template v-else>
-                        <i class="ri-user-add-line me-2"></i> Registrarse
+                        <i class="ri-user-add-line me-2 text-success"></i> Registrarse
                       </template>
                     </button>
                   </div>
@@ -189,10 +189,8 @@ async function onRegister() {
 
   loading.value = true;
 
-  // Generar un "salt" simple (no seguro, solo ejemplo)
   const salt = Math.random().toString(36).substring(2, 10);
 
-  // Guardar la contraseña como texto plano (solo ejemplo, NO USAR EN PRODUCCIÓN)
   const password_hash = password.value;
 
   const { error: insertError } = await $supabase
@@ -225,7 +223,7 @@ async function onRegister() {
   // Redirige al login después de 1.5 segundos
   setTimeout(() => {
     router.push('/login');
-  }, 1500);
+  }, 3500);
 }
 </script>
 
@@ -252,19 +250,6 @@ async function onRegister() {
   border-color: #003366;
   box-shadow: 0 0 0 0.25rem rgba(0, 51, 102, 0.25);
 }
-
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.btn-success:hover {
-  background-color: #218838;
-  border-color: #1e7e34;
-}
-
 .alert {
   border-radius: 8px;
   font-size: 0.9rem;

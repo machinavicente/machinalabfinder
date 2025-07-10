@@ -46,7 +46,9 @@ const email = ref('')
 const loading = ref(false)
 const error = ref('')
 const router = useRouter()
-const { $supabase } = useNuxtApp()
+import type { SupabaseClient } from '@supabase/supabase-js'
+
+const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient }
 
 async function onVerify() {
   error.value = ''
@@ -56,14 +58,13 @@ async function onVerify() {
   }
   loading.value = true
   try {
-    // Consulta directa a la tabla usuarios SIN API
     const { data, error: supaError } = await $supabase
       .from('usuarios')
       .select('id')
       .eq('email', email.value)
       .single()
     if (supaError || !data) throw new Error('Correo no encontrado')
-    // Si existe, redirige a forgotPassword con el correo en query
+    // Si existe, redirige a forgotPassword con el correo en precargado
     router.push({ path: '/forgotPassword', query: { email: email.value } })
   } catch (e: any) {
     error.value = e.message || 'Correo no encontrado.'

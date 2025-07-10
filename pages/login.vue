@@ -6,7 +6,7 @@
           <div class="card shadow-lg border-0 rounded-4">
             <div class="card-header unefa-primary-bg text-white d-flex align-items-center">
               <i class="bi bi-box-arrow-in-right me-2 fs-4 text-warning"></i>
-              <h3 class="mb-0 fs-5">Acceso al Sistema</h3>
+              <h3 class="mb-0 fs-5">Acceso</h3>
             </div>
 
             <div class="card-body">
@@ -86,7 +86,7 @@
                         Iniciando...
                       </template>
                       <template v-else>
-                        <i class="ri-login-box-line me-2"></i> Iniciar sesión
+                        <i class="ri-login-box-line me-2 text-success"></i> Iniciar sesión
                       </template>
                     </button>
                   </div>
@@ -215,17 +215,6 @@ async function onLogin() {
   padding: 10px 15px;
 }
 
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-  padding: 10px;
-  border-radius: 8px;
-}
-
-.btn-success:hover {
-  background-color: #218838;
-  border-color: #1e7e34;
-}
 
 .alert {
   border-radius: 8px;
