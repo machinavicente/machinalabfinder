@@ -220,10 +220,10 @@ async function onRegister() {
   password.value = '';
   loading.value = false;
 
-  // Redirige al login después de 1.5 segundos
+  // Redirige al login
   setTimeout(() => {
     router.push('/login');
-  }, 3500);
+  }, 2500);
 }
 </script>
 

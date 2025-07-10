@@ -164,7 +164,6 @@
   </div>
 </template>
 <script setup lang="ts">
-// Importaciones de Vue y Supabase
 import { ref, computed, onMounted } from 'vue'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import { forbiddenKeywords } from '@/utils/validate_form.js'
@@ -313,7 +312,7 @@ const simuladoresPorAsignatura = computed(() => {
   return resultado
 })
 
-// Formatea la fecha a formato legible en español
+// Formatea la fecha a formato es
 function formatDate(fechaISO: string) {
   const date = new Date(fechaISO)
   return date.toLocaleDateString('es-ES', { year: 'numeric', month: 'short', day: 'numeric' })
@@ -377,7 +376,7 @@ function abrirModificar(sim: simuladores) {
 async function guardarCambios() {
   if (!simuladorSeleccionado.value) return
   if (contieneContenidoInapropiado(formEnlace.value)) {
-    alert('Este enlace contiene contenido no apto para un entorno educativo. Por favor, ingrese un enlace válido.')
+    alert('Este enlace contiene contenido no apto para un entorno educativo. Por favor, Intente de nuevo.')
     return
   }
   const { error: updateError } = await supabase

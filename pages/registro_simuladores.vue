@@ -466,7 +466,7 @@ export default {
         this.containsForbiddenKeyword(this.simulador.enlace, forbiddenKeywords)
       ) {
         this.error =
-          "Este enlace no es apto para registrarse como un simulador.";
+          "Este enlace contiene contenido no apto para un entorno educativo. Por favor, Intente de nuevo.";
         return false;
       }
       if (
