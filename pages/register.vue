@@ -17,7 +17,7 @@
                   <!-- Nombre -->
                   <div class="col-12 col-md-6 position-relative">
                     <label for="nombre" class="form-label">
-                      <i class="ri-user-3-line me-1"></i> Nombre
+                      <i class="ri-user-3-line me-1"></i> Nombre <span class="text-danger">*</span>
                     </label>
                     <input
                       v-model="nombre"
@@ -32,7 +32,7 @@
                   <!-- Apellido -->
                   <div class="col-12 col-md-6 position-relative">
                     <label for="apellido" class="form-label">
-                      <i class="ri-user-3-line me-1"></i> Apellido
+                      <i class="ri-user-3-line me-1"></i> Apellido <span class="text-danger">*</span>
                     </label>
                     <input
                       v-model="apellido"
@@ -48,7 +48,7 @@
                   <!-- Email -->
                   <div class="col-12 position-relative">
                     <label for="email" class="form-label">
-                      <i class="ri-mail-line me-1"></i> Correo electrónico
+                      <i class="ri-mail-line me-1"></i> Correo electrónico <span class="text-danger">*</span>
                     </label>
                     <input
                       v-model="email"
@@ -61,10 +61,26 @@
                     />
                   </div>
 
+                  <!-- Email Alternativo -->
+                  <div class="col-12 position-relative">
+                    <label for="emailAlternativo" class="form-label">
+                      <i class="ri-mail-line me-1"></i> Correo electrónico alternativo <span class="text-danger">*</span>
+                    </label>
+                    <input
+                      v-model="emailAlternativo"
+                      type="email"
+                      class="form-control"
+                      id="emailAlternativo"
+                      required
+                      placeholder="ejemplo@correo.com"
+                      autocomplete="email"
+                    />
+                  </div>
+
                   <!-- Password -->
                   <div class="col-12 position-relative">
                     <label for="password" class="form-label">
-                      <i class="ri-lock-2-line me-1"></i> Contraseña
+                      <i class="ri-lock-2-line me-1"></i> Contraseña <span class="text-danger">*</span>
                     </label>
                     <div class="input-group">
                       <input
@@ -147,6 +163,7 @@ const nombre = ref('');
 const apellido = ref('');
 const email = ref('');
 const password = ref('');
+const emailAlternativo = ref('');
 const loading = ref(false);
 const error = ref('');
 const success = ref('');
@@ -169,8 +186,8 @@ async function onRegister() {
   success.value = '';
 
   // Validaciones de campos vacíos
-  if (!nombre.value || !apellido.value || !email.value || !password.value) {
-    error.value = 'Debes ingresar tu nombre, apellido, correo y contraseña.';
+  if (!nombre.value || !apellido.value || !email.value || !password.value || !emailAlternativo.value) {
+    error.value = 'Todos los campos son obligatorios.';
     return;
   }
   // Validación de solo letras y espacios
@@ -186,6 +203,14 @@ async function onRegister() {
     error.value = 'La contraseña debe tener al menos 6 caracteres.';
     return;
   }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAlternativo.value)) {
+    error.value = 'El correo electrónico alternativo no es válido.';
+    return;
+  }
+  if (email.value === emailAlternativo.value) {
+    error.value = 'El correo electrónico alternativo no puede ser el mismo que el principal.';
+    return;
+  }
 
   loading.value = true;
 
@@ -199,6 +224,7 @@ async function onRegister() {
       nombre: nombre.value,
       apellido: apellido.value,
       email: email.value,
+      emailAlternativo: emailAlternativo.value,
       password_hash,
       salt
     }]);
@@ -218,6 +244,7 @@ async function onRegister() {
   apellido.value = '';
   email.value = '';
   password.value = '';
+  emailAlternativo.value = '';
   loading.value = false;
 
   // Redirige al login

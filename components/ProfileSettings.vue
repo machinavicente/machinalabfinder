@@ -62,7 +62,6 @@
                       />
                     </div>
                     <hr>
-                    <!-- Campo Nueva contraseña -->
                     <div class="mb-3">
                       <label class="form-label fw-semibold" for="password">Nueva contraseña</label>
                       <div class="input-group">
@@ -94,17 +93,6 @@
                         <i class="bi bi-trash"></i> Eliminar cuenta
                       </button>
                     </div>
-                    <transition name="fade">
-                      <div v-if="mensaje" :class="['alert', mensajeTipo, 'mt-3', 'mb-0']" role="alert">
-                        <i class="bi me-2" :class="{
-                          'bi-check-circle': mensajeTipo === 'alert-success',
-                          'bi-exclamation-triangle': mensajeTipo === 'alert-warning',
-                          'bi-x-circle': mensajeTipo === 'alert-danger',
-                          'bi-info-circle': mensajeTipo === 'alert-info'
-                        }"></i>
-                        {{ mensaje }}
-                      </div>
-                    </transition>
                   </form>
                 </div>
               </div>
@@ -154,7 +142,43 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-danger" @click="eliminarCuenta"><i class="bi bi-trash"></i> Eliminar definitivamente</button>
+            <button type="button" class="btn btn-danger" @click="confirmarEliminarCuenta">
+              <i class="bi bi-trash"></i> Eliminar definitivamente
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Mensaje -->
+    <div class="modal fade" id="modalMensaje" tabindex="-1" aria-labelledby="modalMensajeLabel" aria-hidden="true" ref="modalMensajeRef">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div 
+            class="modal-header" 
+            :class="{
+              'bg-success text-white': mensajeTipo === 'alert-success',
+              'bg-warning text-dark': mensajeTipo === 'alert-warning',
+              'bg-danger text-white': mensajeTipo === 'alert-danger',
+              'bg-info text-white': mensajeTipo === 'alert-info',
+            }"
+          >
+            <h5 class="modal-title" id="modalMensajeLabel">
+              <i :class="{
+                'bi-check-circle': mensajeTipo === 'alert-success',
+                'bi-exclamation-triangle': mensajeTipo === 'alert-warning',
+                'bi-x-circle': mensajeTipo === 'alert-danger',
+                'bi-info-circle': mensajeTipo === 'alert-info',
+              }" class="me-2"></i>
+              Mensaje
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+          </div>
+          <div class="modal-body">
+            {{ mensaje }}
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" @click="cerrarModalMensaje">Aceptar</button>
           </div>
         </div>
       </div>
@@ -163,7 +187,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import type { SupabaseClient } from '@supabase/supabase-js'
 const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient }
@@ -187,15 +211,17 @@ const mensajeTipo = ref('alert-info')
 const nombreError = ref('')
 const apellidoError = ref('')
 const mostrarPassword = ref(false)
-const mostrarPassword2 = ref(false)
 
 const router = useRouter()
 
-const originalNombre = ref('');
-const originalApellido = ref('');
+const originalNombre = ref('')
+const originalApellido = ref('')
+
+let modalMensajeInstance: bootstrap.Modal | null = null
+const modalMensajeRef = ref<HTMLElement | null>(null)
 
 onMounted(async () => {
-  const usuarioStr = localStorage.getItem("usuario")
+  const usuarioStr = localStorage.getItem('usuario')
   if (!usuarioStr) {
     router.push('/login')
     return
@@ -206,17 +232,21 @@ onMounted(async () => {
   nuevoApellido.value = usuario.apellido
   userEmail.value = usuario.email
 
-  // Guardar valores originales
   originalNombre.value = usuario.nombre
   originalApellido.value = usuario.apellido
 
   const { data: userData } = await $supabase
-    .from("usuarios")
-    .select("creado_en, actualizado_en")
-    .eq("id", userId.value)
+    .from('usuarios')
+    .select('creado_en, actualizado_en')
+    .eq('id', userId.value)
     .single()
-  creadoEn.value = userData?.creado_en || ""
-  actualizadoEn.value = userData?.actualizado_en || ""
+  creadoEn.value = userData?.creado_en || ''
+  actualizadoEn.value = userData?.actualizado_en || ''
+
+  await nextTick()
+  if (modalMensajeRef.value) {
+    modalMensajeInstance = new bootstrap.Modal(modalMensajeRef.value)
+  }
 })
 
 function validar() {
@@ -233,24 +263,20 @@ function validar() {
     apellidoError.value = 'El apellido debe tener al menos 3 caracteres.'
     valido = false
   }
-  if (nuevaPassword.value) {
-    if (nuevaPassword.value.length < 6) {
-      passwordError.value = 'La contraseña debe tener al menos 6 caracteres.'
-      valido = false
-    }
+  if (nuevaPassword.value && nuevaPassword.value.length < 6) {
+    passwordError.value = 'La contraseña debe tener al menos 6 caracteres.'
+    valido = false
   }
   return valido
 }
 
 async function guardarPerfil() {
-  // Validar si hay cambios
   if (
     nuevoNombre.value === originalNombre.value &&
     nuevoApellido.value === originalApellido.value &&
     !nuevaPassword.value
   ) {
-    mensaje.value = 'No has realizado ningún cambio en tu perfil.'
-    mensajeTipo.value = 'alert-warning'
+    mostrarMensaje('No has realizado ningún cambio en tu perfil.', 'alert-warning')
     return
   }
 
@@ -260,76 +286,86 @@ async function guardarPerfil() {
   mensaje.value = ''
   mensajeTipo.value = 'alert-info'
 
-  // Campos a actualizar
   const updateData: any = {
     nombre: nuevoNombre.value,
     apellido: nuevoApellido.value,
-    actualizado_en: new Date().toISOString()
+    actualizado_en: new Date().toISOString(),
   }
   if (nuevaPassword.value) {
-    updateData.password_hash = nuevaPassword.value 
+    updateData.password_hash = nuevaPassword.value
   }
 
   const { error } = await $supabase
-    .from("usuarios")
+    .from('usuarios')
     .update(updateData)
-    .eq("id", userId.value)
+    .eq('id', userId.value)
+
+  loading.value = false
 
   if (!error) {
-    mensaje.value = 'Perfil actualizado correctamente.'
-    mensajeTipo.value = 'alert-success'
-    const usuarioStr = localStorage.getItem("usuario")
+    mostrarMensaje('Perfil actualizado correctamente.', 'alert-success')
+    const usuarioStr = localStorage.getItem('usuario')
     if (usuarioStr) {
       const usuario = JSON.parse(usuarioStr)
       usuario.nombre = nuevoNombre.value
       usuario.apellido = nuevoApellido.value
-      localStorage.setItem("usuario", JSON.stringify(usuario))
+      localStorage.setItem('usuario', JSON.stringify(usuario))
     }
     originalNombre.value = nuevoNombre.value
     originalApellido.value = nuevoApellido.value
     nuevaPassword.value = ''
     confirmarPassword.value = ''
   } else {
-    mensaje.value = 'Error al actualizar el perfil.'
-    mensajeTipo.value = 'alert-danger'
+    mostrarMensaje('Error al actualizar el perfil.', 'alert-danger')
   }
-  loading.value = false
 }
 
-// Eliminar cuenta
-async function eliminarCuenta() {
+async function confirmarEliminarCuenta() {
   if (!userId.value) return
   const { error } = await $supabase
-    .from("usuarios")
+    .from('usuarios')
     .delete()
-    .eq("id", userId.value)
+    .eq('id', userId.value)
+
+  const modal = document.getElementById('modalEliminarCuenta')
+  if (modal) {
+    const bsModal = bootstrap.Modal.getInstance(modal)
+    bsModal && bsModal.hide()
+  }
+
   if (!error) {
-    localStorage.removeItem("usuario")
-    // Cierra el modal manualmente
-    const modal = document.getElementById('modalEliminarCuenta')
-    if (modal) {
-      // @ts-ignore
-      const bsModal = bootstrap.Modal.getInstance(modal)
-      bsModal && bsModal.hide()
-    }
-    router.replace('/login')
+    localStorage.removeItem('usuario')
+    mostrarMensaje('Cuenta eliminada correctamente.', 'alert-success')
+    setTimeout(() => {
+      router.replace('/login')
+    }, 2000)
   } else {
-    mensaje.value = 'Error al eliminar la cuenta.'
-    mensajeTipo.value = 'alert-danger'
+    mostrarMensaje('Error al eliminar la cuenta.', 'alert-danger')
   }
 }
 
-// Formatear fechas
+function mostrarMensaje(texto: string, tipo: string) {
+  mensaje.value = texto
+  mensajeTipo.value = tipo
+  nextTick(() => {
+    modalMensajeInstance?.show()
+  })
+}
+
+function cerrarModalMensaje() {
+  modalMensajeInstance?.hide()
+}
+
 function formatDate(dateStr: string) {
   if (!dateStr) return '...'
   const date = new Date(dateStr)
-  return date.toLocaleDateString('es-ES', { 
-    day: '2-digit', 
-    month: '2-digit', 
+  return date.toLocaleDateString('es-ES', {
+    day: '2-digit',
+    month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-    hour12: true
+    hour12: true,
   })
 }
 </script>
