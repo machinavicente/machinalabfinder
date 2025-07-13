@@ -151,11 +151,20 @@
     </div>
 
     <!-- Modal Mensaje -->
-    <div class="modal fade" id="modalMensaje" tabindex="-1" aria-labelledby="modalMensajeLabel" aria-hidden="true" ref="modalMensajeRef">
+    <div
+      class="modal fade"
+      id="modalMensaje"
+      tabindex="-1"
+      aria-labelledby="modalMensajeLabel"
+      aria-hidden="true"
+      ref="modalMensajeRef"
+      data-bs-backdrop="static"
+      data-bs-keyboard="false"
+    >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div 
-            class="modal-header" 
+          <div
+            class="modal-header"
             :class="{
               'bg-success text-white': mensajeTipo === 'alert-success',
               'bg-warning text-dark': mensajeTipo === 'alert-warning',
@@ -164,21 +173,39 @@
             }"
           >
             <h5 class="modal-title" id="modalMensajeLabel">
-              <i :class="{
-                'bi-check-circle': mensajeTipo === 'alert-success',
-                'bi-exclamation-triangle': mensajeTipo === 'alert-warning',
-                'bi-x-circle': mensajeTipo === 'alert-danger',
-                'bi-info-circle': mensajeTipo === 'alert-info',
-              }" class="me-2"></i>
-              Mensaje
+              <i
+                :class="{
+                  'bi-check-circle': mensajeTipo === 'alert-success',
+                  'bi-exclamation-triangle': mensajeTipo === 'alert-warning',
+                  'bi-x-circle': mensajeTipo === 'alert-danger',
+                  'bi-info-circle': mensajeTipo === 'alert-info',
+                }"
+                class="me-2"
+              ></i>
+              <span>
+                {{ mensajeTipo === 'alert-danger' && mensaje.includes('eliminada') ? 'Cuenta eliminada' : 'Aviso!' }}
+              </span>
             </h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              aria-label="Cerrar"
+              v-if="!(mensajeTipo === 'alert-danger' && mensaje.includes('eliminada'))"
+              @click="cerrarModalMensaje"
+            ></button>
           </div>
           <div class="modal-body">
             {{ mensaje }}
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="router.push('/login')">Aceptar</button>
+            <button
+              type="button"
+              class="btn"
+              :class="mensajeTipo === 'alert-danger' && mensaje.includes('eliminada') ? 'btn-danger' : 'btn-primary'"
+              @click="mensajeTipo === 'alert-danger' && mensaje.includes('eliminada') ? irLogin() : cerrarModalMensaje()"
+            >
+              {{ mensajeTipo === 'alert-danger' && mensaje.includes('eliminada') ? 'Ir al inicio de sesión' : 'Aceptar' }}
+            </button>
           </div>
         </div>
       </div>
@@ -190,6 +217,7 @@
 import { ref, onMounted, nextTick } from 'vue'
 import { useRouter } from 'vue-router'
 import type { SupabaseClient } from '@supabase/supabase-js'
+
 const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient }
 
 const currentView = ref('settings')
@@ -245,7 +273,10 @@ onMounted(async () => {
 
   await nextTick()
   if (modalMensajeRef.value) {
-    modalMensajeInstance = new bootstrap.Modal(modalMensajeRef.value)
+    modalMensajeInstance = new bootstrap.Modal(modalMensajeRef.value, {
+      backdrop: 'static',
+      keyboard: false
+    })
   }
 })
 
@@ -335,7 +366,7 @@ async function confirmarEliminarCuenta() {
 
   if (!error) {
     localStorage.removeItem('usuario')
-    mostrarMensaje('Cuenta eliminada correctamente.', 'alert-success')
+    mostrarMensaje('Cuenta eliminada correctamente.', 'alert-danger')
   } else {
     mostrarMensaje('Error al eliminar la cuenta.', 'alert-danger')
   }
@@ -351,6 +382,13 @@ function mostrarMensaje(texto: string, tipo: string) {
 
 function cerrarModalMensaje() {
   modalMensajeInstance?.hide()
+}
+
+function irLogin() {
+  modalMensajeInstance?.hide()
+  setTimeout(() => {
+    router.push('/login')
+  }, 300)
 }
 
 function formatDate(dateStr: string) {

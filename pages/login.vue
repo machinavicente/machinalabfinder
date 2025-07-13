@@ -70,11 +70,6 @@
                   <div v-if="success" class="col-12">
                     <div class="alert alert-success alert-dismissible fade show py-2" role="alert">
                       <i class="bi bi-person-check me-2"></i>{{ success }}
-                      <button
-                        type="button"
-                        class="btn-close"
-                        @click="success = ''"
-                      ></button>
                     </div>
                   </div>
 
