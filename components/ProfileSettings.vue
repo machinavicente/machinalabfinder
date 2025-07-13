@@ -178,7 +178,7 @@
             {{ mensaje }}
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" @click="cerrarModalMensaje">Aceptar</button>
+            <button type="button" class="btn btn-primary" @click="router.push('/login')">Aceptar</button>
           </div>
         </div>
       </div>
@@ -336,9 +336,6 @@ async function confirmarEliminarCuenta() {
   if (!error) {
     localStorage.removeItem('usuario')
     mostrarMensaje('Cuenta eliminada correctamente.', 'alert-success')
-    setTimeout(() => {
-      router.replace('/login')
-    }, 2000)
   } else {
     mostrarMensaje('Error al eliminar la cuenta.', 'alert-danger')
   }

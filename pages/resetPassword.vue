@@ -63,11 +63,11 @@ async function onVerify() {
       .select('id')
       .eq('email', email.value)
       .single()
-    if (supaError || !data) throw new Error('Correo no encontrado')
+    if (supaError || !data) throw new Error('El correo ingresado no corresponde a ningún usuario.')
     // Si existe, redirige a forgotPassword con el correo en precargado
     router.push({ path: '/forgotPassword', query: { email: email.value } })
   } catch (e: any) {
-    error.value = e.message || 'Correo no encontrado.'
+    error.value = e.message || 'El correo ingresado no corresponde a ningún usuario.'
   }
   loading.value = false
 }
