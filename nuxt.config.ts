@@ -18,7 +18,7 @@ export default defineNuxtConfig({
         {
           src: '/assets/bootstrap/bootstrap.bundle.min.js',
           defer: true,
-          tagPosition: 'bodyClose' // Equivalente a body: true en Nuxt 2
+          tagPosition: 'bodyClose'
         }
       ]
     }

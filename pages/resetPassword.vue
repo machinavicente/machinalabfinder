@@ -9,7 +9,9 @@
         <div class="card-body">
           <form @submit.prevent="onVerify" autocomplete="on" novalidate>
             <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico</label>
+               <label for="email" class="form-label">
+                  <i class="ri-mail-line me-1"></i> Correo electrónico principal  <span class="text-danger">*</span>
+                </label>
               <input
                 v-model="email"
                 type="email"
@@ -27,7 +29,7 @@
             </button>
           </form>
           <div class="text-center mt-3">
-            <NuxtLink to="/login" class="text-decoration-none">
+            <NuxtLink to="/login" class="text-decoration-none ms-2 text-decoration-none small" style="color: #003366;">
               <i class="bi bi-arrow-left me-1"></i> Volver al inicio de sesión
             </NuxtLink>
           </div>

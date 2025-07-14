@@ -26,7 +26,7 @@
                 <div class="col-md-8">
                   <form @submit.prevent="guardarPerfil" autocomplete="off" novalidate>
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="nombre">Nombre completo</label>
+                      <label class="form-label fw-semibold" for="nombre">Nombre completo   <span class="text-danger">*</span></label>
                       <input
                         id="nombre"
                         v-model.trim="nuevoNombre"
@@ -39,7 +39,7 @@
                       <div v-if="nombreError" class="invalid-feedback">{{ nombreError }}</div>
                     </div>
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="apellido">Apellido</label>
+                      <label class="form-label fw-semibold" for="apellido">Apellido  <span class="text-danger">*</span></label>
                       <input
                         id="apellido"
                         v-model.trim="nuevoApellido"
@@ -61,9 +61,21 @@
                         disabled
                       />
                     </div>
+                    <div class="mb-3">
+                      <label class="form-label fw-semibold" for="emailAlternativo">Correo alternativo  <span class="text-danger">*</span></label>
+                      <input
+                        id="emailAlternativo"
+                        type="email"
+                        v-model="emailAlternativo"
+                        class="form-control"
+                        :class="{ 'is-invalid': emailAlternativoError }"
+                        placeholder="Ingresa un correo alternativo"
+                      />
+                      <div v-if="emailAlternativoError" class="invalid-feedback">{{ emailAlternativoError }}</div>
+                    </div>
                     <hr>
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="password">Nueva contraseña</label>
+                      <label class="form-label fw-semibold" for="password">Nueva contraseña  <span class="text-danger">*</span></label>
                       <div class="input-group">
                         <input
                           :type="mostrarPassword ? 'text' : 'password'"
@@ -224,6 +236,8 @@ const currentView = ref('settings')
 const nuevoNombre = ref('')
 const nuevoApellido = ref('')
 const userEmail = ref('')
+const emailAlternativo = ref('')
+const emailAlternativoError = ref('')
 const userAvatar = ref('https://cdn-icons-png.flaticon.com/512/1946/1946429.png')
 const userId = ref<number | null>(null)
 const creadoEn = ref('')
@@ -244,6 +258,7 @@ const router = useRouter()
 
 const originalNombre = ref('')
 const originalApellido = ref('')
+const originalEmailAlternativo = ref('')
 
 let modalMensajeInstance: bootstrap.Modal | null = null
 const modalMensajeRef = ref<HTMLElement | null>(null)
@@ -260,16 +275,19 @@ onMounted(async () => {
   nuevoApellido.value = usuario.apellido
   userEmail.value = usuario.email
 
-  originalNombre.value = usuario.nombre
-  originalApellido.value = usuario.apellido
-
   const { data: userData } = await $supabase
     .from('usuarios')
-    .select('creado_en, actualizado_en')
+    .select('creado_en, actualizado_en, emailAlternativo')
     .eq('id', userId.value)
     .single()
+  
   creadoEn.value = userData?.creado_en || ''
   actualizadoEn.value = userData?.actualizado_en || ''
+  emailAlternativo.value = userData?.emailAlternativo || ''
+  originalEmailAlternativo.value = userData?.emailAlternativo || ''
+
+  originalNombre.value = usuario.nombre
+  originalApellido.value = usuario.apellido
 
   await nextTick()
   if (modalMensajeRef.value) {
@@ -284,6 +302,7 @@ function validar() {
   nombreError.value = ''
   apellidoError.value = ''
   passwordError.value = ''
+  emailAlternativoError.value = ''
   let valido = true
 
   if (!nuevoNombre.value || nuevoNombre.value.length < 3) {
@@ -298,6 +317,10 @@ function validar() {
     passwordError.value = 'La contraseña debe tener al menos 6 caracteres.'
     valido = false
   }
+  if (emailAlternativo.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAlternativo.value)) {
+    emailAlternativoError.value = 'Por favor ingresa un correo electrónico válido.'
+    valido = false
+  }
   return valido
 }
 
@@ -305,7 +328,8 @@ async function guardarPerfil() {
   if (
     nuevoNombre.value === originalNombre.value &&
     nuevoApellido.value === originalApellido.value &&
-    !nuevaPassword.value
+    !nuevaPassword.value &&
+    emailAlternativo.value === originalEmailAlternativo.value
   ) {
     mostrarMensaje('No has realizado ningún cambio en tu perfil.', 'alert-warning')
     return
@@ -321,6 +345,7 @@ async function guardarPerfil() {
     nombre: nuevoNombre.value,
     apellido: nuevoApellido.value,
     actualizado_en: new Date().toISOString(),
+    emailAlternativo: emailAlternativo.value || null
   }
   if (nuevaPassword.value) {
     updateData.password_hash = nuevaPassword.value
@@ -344,6 +369,7 @@ async function guardarPerfil() {
     }
     originalNombre.value = nuevoNombre.value
     originalApellido.value = nuevoApellido.value
+    originalEmailAlternativo.value = emailAlternativo.value
     nuevaPassword.value = ''
     confirmarPassword.value = ''
   } else {

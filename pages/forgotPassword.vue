@@ -9,7 +9,7 @@
         <div class="card-body">
           <form @submit.prevent="onUpdate" autocomplete="off" novalidate>
             <div class="mb-3">
-              <label class="form-label">Correo electrónico</label>
+              <label class="form-label">Correo electrónico principal</label>
               <input
                 type="email"
                 class="form-control"
@@ -19,7 +19,9 @@
             </div>
 
             <div class="mb-3">
-              <label for="emailAlternativo" class="form-label">Correo electrónico alternativo</label>
+              <label for="emailAlternativo" class="form-label">
+                <i class="ri-mail-line me-1"></i> Correo electrónico alternativo  <span class="text-danger">*</span>
+              </label>
               <input
                 type="email"
                 id="emailAlternativo"
@@ -31,7 +33,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="password" class="form-label">Nueva contraseña</label>
+              <label for="password" class="form-label">Nueva contraseña  <span class="text-danger">*</span></label>
               <div class="input-group">
                 <input
                   :type="showPassword ? 'text' : 'password'"
@@ -67,7 +69,7 @@
             </button>
           </form>
           <div class="text-center mt-3">
-            <NuxtLink to="/login" class="text-decoration-none">
+            <NuxtLink to="/login" class="text-decoration-none ms-2 text-decoration-none small" style="color: #003366;">
               <i class="bi bi-arrow-left me-1"></i> Volver al inicio de sesión
             </NuxtLink>
           </div>

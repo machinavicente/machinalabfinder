@@ -48,7 +48,7 @@
                   <!-- Email -->
                   <div class="col-12 position-relative">
                     <label for="email" class="form-label">
-                      <i class="ri-mail-line me-1"></i> Correo electrónico <span class="text-danger">*</span>
+                      <i class="ri-mail-line me-1"></i> Correo electrónico principal  <span class="text-danger">*</span>
                     </label>
                     <input
                       v-model="email"
