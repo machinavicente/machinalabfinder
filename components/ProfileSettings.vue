@@ -11,22 +11,67 @@
               <div class="row">
                 <div class="col-md-4">
                   <div class="profile-card text-center">
-                    <div class="avatar-container mx-auto mb-3">
-                      <img 
-                        :src="userAvatar" 
-                        class="rounded-circle border border-unefa-accent" 
+                    <div class="avatar-container mx-auto mb-4">
+                      <img
+                        :src="userAvatar"
+                        class="rounded-circle border border-unefa-accent shadow-sm"
                         width="150"
                         alt="Avatar"
-                      >
+                      />
                     </div>
-                    <h4 class="mb-1">{{ nuevoNombre || 'Usuario' }}</h4>
-                    <p class="text-muted mb-3">{{ userEmail }}</p>
+
+                    <!-- Nombre del usuario -->
+                    <div class="user-name mb-5">
+                      <h3 class="fw-semibold text-dark font-monospace">
+                        {{ nuevoNombre}} {{ nuevoApellido }}
+                      </h3>
+                    </div>
+
+                    <!-- Información de contacto -->
+                    <div class="contact-info bg-light p-2 rounded-3 shadow-sm">
+                      <!-- Email principal -->
+                      <div class="email-item mb-3">
+                        <div class="d-flex align-items-center">
+                          <i
+                            class="bi bi-envelope-fill text-unefa-accent me-2"
+                          ></i>
+                          <div class="text-start">
+                            <p class="mb-0 small text-muted fw-semibold">
+                              Email principal
+                            </p>
+                            <p class="mb-0 text-dark small">{{ userEmail }}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <hr class="my-3" />
+                      <!-- Email de recuperación -->
+                      <div class="email-item">
+                        <div class="d-flex align-items-center">
+                          <i
+                            class="bi bi-envelope-exclamation-fill text-unefa-accent me-2"
+                          ></i>
+                          <div class="text-start">
+                            <p class="mb-0 small text-muted fw-semibold">
+                              Email de recuperación
+                            </p>
+                            <p class="mb-0 text-dark small">{{ emailAlternativo }}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <div class="col-md-8">
-                  <form @submit.prevent="guardarPerfil" autocomplete="off" novalidate>
+                  <form
+                    @submit.prevent="guardarPerfil"
+                    autocomplete="off"
+                    novalidate
+                  >
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="nombre">Nombre completo   <span class="text-danger">*</span></label>
+                      <label class="form-label fw-semibold" for="nombre"
+                        >Nombre completo
+                        <span class="text-danger">*</span></label
+                      >
                       <input
                         id="nombre"
                         v-model.trim="nuevoNombre"
@@ -36,10 +81,14 @@
                         required
                         autocomplete="off"
                       />
-                      <div v-if="nombreError" class="invalid-feedback">{{ nombreError }}</div>
+                      <div v-if="nombreError" class="invalid-feedback">
+                        {{ nombreError }}
+                      </div>
                     </div>
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="apellido">Apellido  <span class="text-danger">*</span></label>
+                      <label class="form-label fw-semibold" for="apellido"
+                        >Apellido <span class="text-danger">*</span></label
+                      >
                       <input
                         id="apellido"
                         v-model.trim="nuevoApellido"
@@ -49,10 +98,14 @@
                         required
                         autocomplete="off"
                       />
-                      <div v-if="apellidoError" class="invalid-feedback">{{ apellidoError }}</div>
+                      <div v-if="apellidoError" class="invalid-feedback">
+                        {{ apellidoError }}
+                      </div>
                     </div>
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="email">Correo electrónico</label>
+                      <label class="form-label fw-semibold" for="email"
+                        >Correo electrónico</label
+                      >
                       <input
                         id="email"
                         type="email"
@@ -62,7 +115,12 @@
                       />
                     </div>
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="emailAlternativo">Correo alternativo  <span class="text-danger">*</span></label>
+                      <label
+                        class="form-label fw-semibold"
+                        for="emailAlternativo"
+                        >Correo alternativo
+                        <span class="text-danger">*</span></label
+                      >
                       <input
                         id="emailAlternativo"
                         type="email"
@@ -71,11 +129,19 @@
                         :class="{ 'is-invalid': emailAlternativoError }"
                         placeholder="Ingresa un correo alternativo"
                       />
-                      <div v-if="emailAlternativoError" class="invalid-feedback">{{ emailAlternativoError }}</div>
+                      <div
+                        v-if="emailAlternativoError"
+                        class="invalid-feedback"
+                      >
+                        {{ emailAlternativoError }}
+                      </div>
                     </div>
-                    <hr>
+                    <hr />
                     <div class="mb-3">
-                      <label class="form-label fw-semibold" for="password">Nueva contraseña  <span class="text-danger">*</span></label>
+                      <label class="form-label fw-semibold" for="password"
+                        >Nueva contraseña
+                        <span class="text-danger">*</span></label
+                      >
                       <div class="input-group">
                         <input
                           :type="mostrarPassword ? 'text' : 'password'"
@@ -87,21 +153,46 @@
                           autocomplete="new-password"
                           placeholder="Nueva contraseña"
                         />
-                        <button type="button"
+                        <button
+                          type="button"
                           class="btn btn-outline-secondary"
                           tabindex="-1"
-                          @click="mostrarPassword = !mostrarPassword">
-                          <i :class="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'"></i>
+                          @click="mostrarPassword = !mostrarPassword"
+                        >
+                          <i
+                            :class="mostrarPassword ? 'bi-eye-slash' : 'bi-eye'"
+                          ></i>
                         </button>
-                        <div v-if="passwordError" class="invalid-feedback d-block">{{ passwordError }}</div>
+                        <div
+                          v-if="passwordError"
+                          class="invalid-feedback d-block"
+                        >
+                          {{ passwordError }}
+                        </div>
                       </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center mt-4">
-                      <button class="btn btn-unefa-primary btn-success" type="submit" :disabled="loading">
-                        <span v-if="loading"><i class="bi bi-arrow-repeat spin"></i> Guardando...</span>
-                        <span v-else><i class="bi bi-save"></i> Guardar Cambios</span>
+                    <div
+                      class="d-flex justify-content-between align-items-center mt-4"
+                    >
+                      <button
+                        class="btn btn-unefa-primary btn-success"
+                        type="submit"
+                        :disabled="loading"
+                      >
+                        <span v-if="loading"
+                          ><i class="bi bi-arrow-repeat spin"></i>
+                          Guardando...</span
+                        >
+                        <span v-else
+                          ><i class="bi bi-save"></i> Guardar Cambios</span
+                        >
                       </button>
-                      <button type="button" class="btn btn-outline-danger ms-2" data-bs-toggle="modal" data-bs-target="#modalEliminarCuenta">
+                      <button
+                        type="button"
+                        class="btn btn-outline-danger ms-2"
+                        data-bs-toggle="modal"
+                        data-bs-target="#modalEliminarCuenta"
+                      >
                         <i class="bi bi-trash"></i> Eliminar cuenta
                       </button>
                     </div>
@@ -124,7 +215,9 @@
               </div>
               <div class="ms-3">
                 <div class="security-label">Última sesión activa</div>
-                <div class="security-value">{{ formatDate(actualizadoEn) }}</div>
+                <div class="security-value">
+                  {{ formatDate(actualizadoEn) }}
+                </div>
               </div>
             </div>
             <div class="security-item d-flex align-items-center">
@@ -142,19 +235,46 @@
     </div>
 
     <!-- Modal Eliminar Cuenta -->
-    <div class="modal fade" id="modalEliminarCuenta" tabindex="-1" aria-labelledby="modalEliminarCuentaLabel" aria-hidden="true">
+    <div
+      class="modal fade"
+      id="modalEliminarCuenta"
+      tabindex="-1"
+      aria-labelledby="modalEliminarCuentaLabel"
+      aria-hidden="true"
+    >
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-header bg-danger text-white">
-            <h5 class="modal-title" id="modalEliminarCuentaLabel"><i class="bi bi-exclamation-triangle me-2"></i>Confirmar eliminación</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+            <h5 class="modal-title" id="modalEliminarCuentaLabel">
+              <i class="bi bi-exclamation-triangle me-2"></i>Confirmar
+              eliminación
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Cerrar"
+            ></button>
           </div>
           <div class="modal-body">
-            <p>¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.</p>
+            <p>
+              ¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se
+              puede deshacer.
+            </p>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="button" class="btn btn-danger" @click="confirmarEliminarCuenta">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Cancelar
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              @click="confirmarEliminarCuenta"
+            >
               <i class="bi bi-trash"></i> Eliminar definitivamente
             </button>
           </div>
@@ -195,14 +315,24 @@
                 class="me-2"
               ></i>
               <span>
-                {{ mensajeTipo === 'alert-danger' && mensaje.includes('eliminada') ? 'Cuenta eliminada' : 'Aviso!' }}
+                {{
+                  mensajeTipo === "alert-danger" &&
+                  mensaje.includes("eliminada")
+                    ? "Cuenta eliminada"
+                    : "Aviso!"
+                }}
               </span>
             </h5>
             <button
               type="button"
               class="btn-close btn-close-white"
               aria-label="Cerrar"
-              v-if="!(mensajeTipo === 'alert-danger' && mensaje.includes('eliminada'))"
+              v-if="
+                !(
+                  mensajeTipo === 'alert-danger' &&
+                  mensaje.includes('eliminada')
+                )
+              "
               @click="cerrarModalMensaje"
             ></button>
           </div>
@@ -213,10 +343,22 @@
             <button
               type="button"
               class="btn"
-              :class="mensajeTipo === 'alert-danger' && mensaje.includes('eliminada') ? 'btn-danger' : 'btn-primary'"
-              @click="mensajeTipo === 'alert-danger' && mensaje.includes('eliminada') ? irLogin() : cerrarModalMensaje()"
+              :class="
+                mensajeTipo === 'alert-danger' && mensaje.includes('eliminada')
+                  ? 'btn-danger'
+                  : 'btn-primary'
+              "
+              @click="
+                mensajeTipo === 'alert-danger' && mensaje.includes('eliminada')
+                  ? irLogin()
+                  : cerrarModalMensaje()
+              "
             >
-              {{ mensajeTipo === 'alert-danger' && mensaje.includes('eliminada') ? 'Ir al inicio de sesión' : 'Aceptar' }}
+              {{
+                mensajeTipo === "alert-danger" && mensaje.includes("eliminada")
+                  ? "Ir al inicio de sesión"
+                  : "Aceptar"
+              }}
             </button>
           </div>
         </div>
@@ -226,102 +368,108 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
-import { useRouter } from 'vue-router'
-import type { SupabaseClient } from '@supabase/supabase-js'
+import { ref, onMounted, nextTick } from "vue";
+import { useRouter } from "vue-router";
+import type { SupabaseClient } from "@supabase/supabase-js";
 
-const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient }
+const { $supabase } = useNuxtApp() as unknown as { $supabase: SupabaseClient };
 
-const currentView = ref('settings')
-const nuevoNombre = ref('')
-const nuevoApellido = ref('')
-const userEmail = ref('')
-const emailAlternativo = ref('')
-const emailAlternativoError = ref('')
-const userAvatar = ref('https://cdn-icons-png.flaticon.com/512/1946/1946429.png')
-const userId = ref<number | null>(null)
-const creadoEn = ref('')
-const actualizadoEn = ref('')
+const currentView = ref("settings");
+const nuevoNombre = ref("");
+const nuevoApellido = ref("");
+const userEmail = ref("");
+const emailAlternativo = ref("");
+const emailAlternativoError = ref("");
+const userAvatar = ref(
+  "https://cdn-icons-png.flaticon.com/512/1946/1946429.png"
+);
+const userId = ref<number | null>(null);
+const creadoEn = ref("");
+const actualizadoEn = ref("");
 
-const nuevaPassword = ref('')
-const confirmarPassword = ref('')
-const passwordError = ref('')
+const nuevaPassword = ref("");
+const confirmarPassword = ref("");
+const passwordError = ref("");
 
-const loading = ref(false)
-const mensaje = ref('')
-const mensajeTipo = ref('alert-info')
-const nombreError = ref('')
-const apellidoError = ref('')
-const mostrarPassword = ref(false)
+const loading = ref(false);
+const mensaje = ref("");
+const mensajeTipo = ref("alert-info");
+const nombreError = ref("");
+const apellidoError = ref("");
+const mostrarPassword = ref(false);
 
-const router = useRouter()
+const router = useRouter();
 
-const originalNombre = ref('')
-const originalApellido = ref('')
-const originalEmailAlternativo = ref('')
+const originalNombre = ref("");
+const originalApellido = ref("");
+const originalEmailAlternativo = ref("");
 
-let modalMensajeInstance: bootstrap.Modal | null = null
-const modalMensajeRef = ref<HTMLElement | null>(null)
+let modalMensajeInstance: bootstrap.Modal | null = null;
+const modalMensajeRef = ref<HTMLElement | null>(null);
 
 onMounted(async () => {
-  const usuarioStr = localStorage.getItem('usuario')
+  const usuarioStr = localStorage.getItem("usuario");
   if (!usuarioStr) {
-    router.push('/login')
-    return
+    router.push("/login");
+    return;
   }
-  const usuario = JSON.parse(usuarioStr)
-  userId.value = usuario.id
-  nuevoNombre.value = usuario.nombre
-  nuevoApellido.value = usuario.apellido
-  userEmail.value = usuario.email
+  const usuario = JSON.parse(usuarioStr);
+  userId.value = usuario.id;
+  nuevoNombre.value = usuario.nombre;
+  nuevoApellido.value = usuario.apellido;
+  userEmail.value = usuario.email;
 
   const { data: userData } = await $supabase
-    .from('usuarios')
-    .select('creado_en, actualizado_en, emailAlternativo')
-    .eq('id', userId.value)
-    .single()
-  
-  creadoEn.value = userData?.creado_en || ''
-  actualizadoEn.value = userData?.actualizado_en || ''
-  emailAlternativo.value = userData?.emailAlternativo || ''
-  originalEmailAlternativo.value = userData?.emailAlternativo || ''
+    .from("usuarios")
+    .select("creado_en, actualizado_en, emailAlternativo")
+    .eq("id", userId.value)
+    .single();
 
-  originalNombre.value = usuario.nombre
-  originalApellido.value = usuario.apellido
+  creadoEn.value = userData?.creado_en || "";
+  actualizadoEn.value = userData?.actualizado_en || "";
+  emailAlternativo.value = userData?.emailAlternativo || "";
+  originalEmailAlternativo.value = userData?.emailAlternativo || "";
 
-  await nextTick()
+  originalNombre.value = usuario.nombre;
+  originalApellido.value = usuario.apellido;
+
+  await nextTick();
   if (modalMensajeRef.value) {
     modalMensajeInstance = new bootstrap.Modal(modalMensajeRef.value, {
-      backdrop: 'static',
-      keyboard: false
-    })
+      backdrop: "static",
+      keyboard: false,
+    });
   }
-})
+});
 
 function validar() {
-  nombreError.value = ''
-  apellidoError.value = ''
-  passwordError.value = ''
-  emailAlternativoError.value = ''
-  let valido = true
+  nombreError.value = "";
+  apellidoError.value = "";
+  passwordError.value = "";
+  emailAlternativoError.value = "";
+  let valido = true;
 
   if (!nuevoNombre.value || nuevoNombre.value.length < 3) {
-    nombreError.value = 'El nombre debe tener al menos 3 caracteres.'
-    valido = false
+    nombreError.value = "El nombre debe tener al menos 3 caracteres.";
+    valido = false;
   }
   if (!nuevoApellido.value || nuevoApellido.value.length < 3) {
-    apellidoError.value = 'El apellido debe tener al menos 3 caracteres.'
-    valido = false
+    apellidoError.value = "El apellido debe tener al menos 3 caracteres.";
+    valido = false;
   }
   if (nuevaPassword.value && nuevaPassword.value.length < 6) {
-    passwordError.value = 'La contraseña debe tener al menos 6 caracteres.'
-    valido = false
+    passwordError.value = "La contraseña debe tener al menos 6 caracteres.";
+    valido = false;
   }
-  if (emailAlternativo.value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAlternativo.value)) {
-    emailAlternativoError.value = 'Por favor ingresa un correo electrónico válido.'
-    valido = false
+  if (
+    emailAlternativo.value &&
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailAlternativo.value)
+  ) {
+    emailAlternativoError.value =
+      "Por favor ingresa un correo electrónico válido.";
+    valido = false;
   }
-  return valido
+  return valido;
 }
 
 async function guardarPerfil() {
@@ -331,102 +479,105 @@ async function guardarPerfil() {
     !nuevaPassword.value &&
     emailAlternativo.value === originalEmailAlternativo.value
   ) {
-    mostrarMensaje('No has realizado ningún cambio en tu perfil.', 'alert-warning')
-    return
+    mostrarMensaje(
+      "No has realizado ningún cambio en tu perfil.",
+      "alert-warning"
+    );
+    return;
   }
 
-  if (!validar() || !userId.value) return
+  if (!validar() || !userId.value) return;
 
-  loading.value = true
-  mensaje.value = ''
-  mensajeTipo.value = 'alert-info'
+  loading.value = true;
+  mensaje.value = "";
+  mensajeTipo.value = "alert-info";
 
   const updateData: any = {
     nombre: nuevoNombre.value,
     apellido: nuevoApellido.value,
     actualizado_en: new Date().toISOString(),
-    emailAlternativo: emailAlternativo.value || null
-  }
+    emailAlternativo: emailAlternativo.value || null,
+  };
   if (nuevaPassword.value) {
-    updateData.password_hash = nuevaPassword.value
+    updateData.password_hash = nuevaPassword.value;
   }
 
   const { error } = await $supabase
-    .from('usuarios')
+    .from("usuarios")
     .update(updateData)
-    .eq('id', userId.value)
+    .eq("id", userId.value);
 
-  loading.value = false
+  loading.value = false;
 
   if (!error) {
-    mostrarMensaje('Perfil actualizado correctamente.', 'alert-success')
-    const usuarioStr = localStorage.getItem('usuario')
+    mostrarMensaje("Perfil actualizado correctamente.", "alert-success");
+    const usuarioStr = localStorage.getItem("usuario");
     if (usuarioStr) {
-      const usuario = JSON.parse(usuarioStr)
-      usuario.nombre = nuevoNombre.value
-      usuario.apellido = nuevoApellido.value
-      localStorage.setItem('usuario', JSON.stringify(usuario))
+      const usuario = JSON.parse(usuarioStr);
+      usuario.nombre = nuevoNombre.value;
+      usuario.apellido = nuevoApellido.value;
+      localStorage.setItem("usuario", JSON.stringify(usuario));
     }
-    originalNombre.value = nuevoNombre.value
-    originalApellido.value = nuevoApellido.value
-    originalEmailAlternativo.value = emailAlternativo.value
-    nuevaPassword.value = ''
-    confirmarPassword.value = ''
+    originalNombre.value = nuevoNombre.value;
+    originalApellido.value = nuevoApellido.value;
+    originalEmailAlternativo.value = emailAlternativo.value;
+    nuevaPassword.value = "";
+    confirmarPassword.value = "";
   } else {
-    mostrarMensaje('Error al actualizar el perfil.', 'alert-danger')
+    mostrarMensaje("Error al actualizar el perfil.", "alert-danger");
   }
 }
 
 async function confirmarEliminarCuenta() {
-  if (!userId.value) return
+  if (!userId.value) return;
   const { error } = await $supabase
-    .from('usuarios')
+    .from("usuarios")
     .delete()
-    .eq('id', userId.value)
+    .eq("id", userId.value);
 
-  const modal = document.getElementById('modalEliminarCuenta')
+  const modal = document.getElementById("modalEliminarCuenta");
   if (modal) {
-    const bsModal = bootstrap.Modal.getInstance(modal)
-    bsModal && bsModal.hide()
+    const bsModal = bootstrap.Modal.getInstance(modal);
+    bsModal && bsModal.hide();
   }
 
   if (!error) {
-    localStorage.removeItem('usuario')
-    mostrarMensaje('Cuenta eliminada correctamente.', 'alert-danger')
+    localStorage.removeItem("usuario");
+    mostrarMensaje("Cuenta eliminada correctamente.", "alert-danger");
   } else {
-    mostrarMensaje('Error al eliminar la cuenta.', 'alert-danger')
+    mostrarMensaje("Error al eliminar la cuenta.", "alert-danger");
   }
 }
 
 function mostrarMensaje(texto: string, tipo: string) {
-  mensaje.value = texto
-  mensajeTipo.value = tipo
+  mensaje.value = texto;
+  mensajeTipo.value = tipo;
   nextTick(() => {
-    modalMensajeInstance?.show()
-  })
+    modalMensajeInstance?.show();
+  });
 }
 
 function cerrarModalMensaje() {
-  modalMensajeInstance?.hide()
+  modalMensajeInstance?.hide();
 }
 
 function irLogin() {
-  modalMensajeInstance?.hide()
+  modalMensajeInstance?.hide();
   setTimeout(() => {
-    router.push('/login')
-  }, 300)
+    router.push("/login");
+  }, 300);
 }
 
 function formatDate(dateStr: string) {
-  if (!dateStr) return '...'
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('es-ES', {
-    day: '2-digit',
-    month: '2-digit',
-    year: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+  if (!dateStr) return "...";
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("es-ES", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
     hour12: true,
-  })
+  });
 }
 </script>

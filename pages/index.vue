@@ -23,7 +23,7 @@
                   </p>
                 </div>
               </div>
-              <div class="d-grid d-md-flex flex-row gap-2 mb-5">
+              <div class="d-grid d-md-flex flex-row gap-2 mb-3">
                 <NuxtLink to="/order_simulators" class="btn btn-unefa btn-lg">
                   <i class="bi bi-play-fill me-2"></i>Comenzar
                 </NuxtLink>

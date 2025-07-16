@@ -129,7 +129,7 @@ onMounted(() => {
 
 // Valida que el email alternativo tenga formato básico correcto
 const isEmailAlternativoValid = computed(() => {
-  // simple regex para validar email
+  
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return re.test(emailAlternativo.value.trim())
 })
@@ -156,13 +156,13 @@ watch(emailAlternativo, (newEmail) => {
         .single()
 
       if (fetchError) {
-        // This can happen if RLS fails, or if multiple users have the same email.
+        
         console.error('Error de Supabase al verificar el correo:', fetchError)
         throw new Error('Ocurrió un error al verificar la cuenta.')
       }
 
       if (!data) {
-        // This happens when .single() returns 0 rows.
+       
         error.value = 'La cuenta de correo principal no fue encontrada.'
         isAlternativeEmailCorrect.value = false
       } else if (data.emailAlternativo === newEmail.trim()) { // User found, check alternative email
@@ -178,7 +178,7 @@ watch(emailAlternativo, (newEmail) => {
     } finally {
       loading.value = false
     }
-  }, 500) // medio segundo de debounce
+  }, 500)
 })
 
 function redirectToLogin() {
@@ -198,7 +198,7 @@ async function onUpdate() {
   }
   loading.value = true
   try {
-    // Actualiza la contraseña para el email original (considera hashear la contraseña antes)
+    // Actualiza la contraseña para el email original
     const { error: supaError } = await $supabase
       .from('usuarios')
       .update({ password_hash: password.value }) 

@@ -791,8 +791,8 @@ function formatHour12(hora24: string) {
   box-shadow: 0 2px 8px rgba(0, 33, 71, 0.07);
 }
 .favorite_asig{
-  min-height: 300px;
-  max-height: 300px;
+  min-height: 250px;
+  max-height: 250px;
 }
 .asig_body{
   overflow-y: scroll;
@@ -805,6 +805,7 @@ function formatHour12(hora24: string) {
   overflow-y: auto;
   display: flex;
   flex-direction: column;
+  max-height: 610px;
 }
 .favorites-list {
   width: 100%;

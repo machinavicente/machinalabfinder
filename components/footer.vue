@@ -1,17 +1,20 @@
 <template>
-  <footer class="unefa-footer unefa-primary-bg text-white py-5 ">
+  <footer class="unefa-footer unefa-primary-bg text-white py-5">
     <div class="container text-center">
-      <h5 class="mb-4 fw-bold text-uppercase unefa-accent-text">UNEFA - Extensión Zaraza</h5>
+      <h5 class="mb-4 fw-bold text-uppercase unefa-accent-text">
+        UNEFA - Extensión Zaraza
+      </h5>
       <div class="d-flex justify-content-center gap-4 flex-wrap mb-4">
-        <NuxtLink to="/registro_simuladores" class="footer-link">
-          <i class="bi bi-plus-circle me-1"></i> Agrega un Simulador Nuevo
-        </NuxtLink>
         <NuxtLink to="/order_simulators" class="footer-link">
           <i class="bi bi-cpu me-1"></i> Simuladores Online
         </NuxtLink>
+        <NuxtLink class="footer-link" to="/userProfile">
+          <i class="bi bi-person-badge"></i>Perfil de Usuario
+        </NuxtLink>
       </div>
-      <p class="small mb-0 text-white-50">© 2025 - Vicente Machina. Todos los derechos
-        reservados.</p>
+      <p class="small mb-0 text-white-50">
+        © 2025 - Vicente Machina. Todos los derechos reservados.
+      </p>
     </div>
   </footer>
 </template>
@@ -27,10 +30,10 @@
   align-items: center;
 }
 .footer-link:hover {
-  color: #FFC72C;
+  color: #ffc72c;
   transform: translateY(-2px);
 }
 .unefa-accent-text {
-  color: #FFC72C;
+  color: #ffc72c;
 }
 </style>
