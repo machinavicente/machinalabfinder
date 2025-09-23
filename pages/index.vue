@@ -121,7 +121,7 @@ const features = [
 <style scoped>
 .unefa-primary-bg {
   min-height: 100vh;
-  background: linear-gradient(120deg, #002147 70%, #003366 100%);
+  background: #002147;
   display: flex;
   align-items: center;
 }
@@ -249,7 +249,7 @@ const features = [
 }
 
 @media (max-width: 991.98px) {
-  /* Ajusta el orden para que los botones queden arriba y no interfieran con las cards */
+  /*orden para que los botones queden arriba y no interfieran con las cards */
   .d-grid.d-md-flex.flex-row.gap-2.mb-5 {
     flex-direction: column !important;
     gap: 0.5rem !important;

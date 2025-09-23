@@ -410,7 +410,7 @@ onBeforeUnmount(() => {
 }
 .dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(120deg, #002147 70%, #003366 100%);
+  background: #002147;
 }
 
 .dashboard-header {

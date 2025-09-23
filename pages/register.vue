@@ -128,7 +128,7 @@
                         Registrando...
                       </template>
                       <template v-else>
-                        <i class="ri-user-add-line me-2 text-success"></i> Registrarse
+                        <i class="ri-user-add-line me-2 "></i> Registrarse
                       </template>
                     </button>
                   </div>
