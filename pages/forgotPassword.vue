@@ -9,7 +9,7 @@
         <div class="card-body">
           <form @submit.prevent="onUpdate" autocomplete="off" novalidate>
             <div class="mb-3">
-              <label class="form-label">Correo electrónico</label>
+              <label class="form-label">Correo electrónico <span class="requerided text-danger">*</span></label>
               <input
                 type="email"
                 class="form-control"
@@ -19,7 +19,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="emailAlternativo" class="form-label">Correo electrónico alternativo</label>
+              <label for="emailAlternativo" class="form-label">Correo electrónico alternativo <span class="requerided text-danger">*</span></label>
               <input
                 type="email"
                 id="emailAlternativo"
@@ -31,7 +31,7 @@
             </div>
 
             <div class="mb-3">
-              <label for="password" class="form-label">Nueva contraseña</label>
+              <label for="password" class="form-label">Nueva contraseña <span class="requerided text-danger">*</span></label>
               <div class="input-group">
                 <input
                   :type="showPassword ? 'text' : 'password'"

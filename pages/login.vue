@@ -17,7 +17,7 @@
                   <!-- Email -->
                   <div class="col-12 position-relative">
                     <label for="email" class="form-label">
-                      <i class="ri-mail-line me-1"></i> Correo electrónico
+                      <i class="ri-mail-line me-1"></i> Correo electrónico <span class="requerided text-danger">*</span>
                     </label>
                     <input
                       v-model="email"
@@ -33,7 +33,7 @@
                   <!-- Password -->
                   <div class="col-12 position-relative">
                     <label for="password" class="form-label">
-                      <i class="ri-lock-2-line me-1"></i> Contraseña
+                      <i class="ri-lock-2-line me-1"></i> Contraseña <span class="requerided text-danger">*</span>
                     </label>
                     <div class="input-group">
                       <input

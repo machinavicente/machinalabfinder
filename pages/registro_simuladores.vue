@@ -64,7 +64,7 @@
                 <!-- Nombre -->
                 <div class="col-12 position-relative">
                   <label for="nombre" class="form-label">
-                    <i class="ri-file-text-line me-1"></i> Nombre del Simulador
+                    <i class="ri-file-text-line me-1"></i> Nombre del Simulador <span class="requerided text-danger">*</span>
                   </label>
                   <input
                     type="text"
@@ -85,7 +85,7 @@
                 <!-- Descripción -->
                 <div class="col-12 position-relative">
                   <label for="descripcion" class="form-label">
-                    <i class="ri-file-description-line me-1"></i> Descripción
+                    <i class="ri-file-description-line me-1"></i> Descripción <span class="requerided text-danger">*</span>
                   </label>
                   <textarea
                     class="form-control"
@@ -106,7 +106,7 @@
                 <!-- Asignatura -->
                 <div class="col-md-6">
                   <label for="asignatura" class="form-label">
-                    <i class="ri-book-2-line me-1"></i> Asignatura
+                    <i class="ri-book-2-line me-1"></i> Asignatura <span class="requerided text-danger">*</span>
                   </label>
                   <select
                     class="form-select"
@@ -149,7 +149,7 @@
                 <!-- Otra Asignatura -->
                 <div v-if="mostrarOtraAsignatura" class="col-md-6">
                   <label for="otra-asignatura" class="form-label">
-                    <i class="ri-book-open-line me-1"></i> Otra Asignatura
+                    <i class="ri-book-open-line me-1"></i> Otra Asignatura <span class="requerided text-danger">*</span>
                   </label>
                   <select
                     id="otra-asignatura"
@@ -189,7 +189,7 @@
                 <!-- Enlace -->
                 <div class="col-md-6">
                   <label for="enlace" class="form-label">
-                    <i class="ri-link-m"></i> Enlace del Simulador
+                    <i class="ri-link-m"></i> Enlace del Simulador <span class="requerided text-danger">*</span>
                   </label>
                   <input
                     type="url"
@@ -204,7 +204,7 @@
                 <!-- Categoría -->
                 <div class="col-md-6 position-relative">
                   <label for="categoria" class="form-label">
-                    <i class="ri-folder-4-line me-1"></i> Categoría
+                    <i class="ri-folder-4-line me-1"></i> Categoría <span class="requerided text-danger">*</span>
                   </label>
                   <input
                     type="text"

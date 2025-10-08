@@ -9,7 +9,7 @@
         <div class="card-body">
           <form @submit.prevent="onVerify" autocomplete="on" novalidate>
             <div class="mb-3">
-              <label for="email" class="form-label">Correo electrónico</label>
+              <label for="email" class="form-label">Correo electrónico <span class="requerided text-danger">*</span></label>
               <input
                 v-model="email"
                 type="email"
