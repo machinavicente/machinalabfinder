@@ -1,43 +1,39 @@
-import { createClient } from '@supabase/supabase-js'
-
 export default defineEventHandler(async (event) => {
-  // Validación de seguridad
+  const config = useRuntimeConfig()
   const authHeader = getHeader(event, 'authorization')
+
+  // 1. Verificación de seguridad simple
   if (authHeader !== `Bearer ${process.env.CRON_SECRET}`) {
-    return { error: 'No autorizado' }
+    return { status: 'error', message: 'No autorizado' }
   }
 
-  // Intentar obtener la URL y KEY de cualquier variable disponible
-  const url = process.env.SUPABASE_URL || process.env.NUXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_KEY || process.env.NUXT_PUBLIC_SUPABASE_KEY
+  // 2. Usamos fetch directo (más ligero que el cliente de Supabase para esta tarea)
+  const supabaseUrl = process.env.SUPABASE_URL || process.env.NUXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = process.env.SUPABASE_KEY || process.env.NUXT_PUBLIC_SUPABASE_KEY
 
-  if (!url || !key) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: `Faltan credenciales. URL: ${!!url}, KEY: ${!!key}`,
-    })
+  if (!supabaseUrl || !supabaseKey) {
+    return { 
+      status: 'error', 
+      message: 'Faltan variables',
+      check: { url: !!supabaseUrl, key: !!supabaseKey }
+    }
   }
 
   try {
-    const supabase = createClient(url, key)
-    
-    // Hacemos la consulta a simuladores
-    const { data, error } = await supabase
-      .from('simuladores')
-      .select('nombre')
-      .limit(1)
-
-    if (error) throw error
-
-    return { 
-      success: true, 
-      message: 'Sistema despertado con éxito',
-      data 
-    }
-  } catch (err) {
-    throw createError({
-      statusCode: 500,
-      statusMessage: err.message,
+    // Solo pedimos 1 fila de la tabla simuladores
+    const response = await fetch(`${supabaseUrl}/rest/v1/simuladores?select=nombre&limit=1`, {
+      headers: {
+        'apikey': supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`
+      }
     })
+
+    if (!response.ok) {
+      throw new Error(`Supabase respondió con status: ${response.status}`)
+    }
+
+    return { success: true, message: 'Keep-alive exitoso' }
+  } catch (error: any) {
+    return { status: 'error', message: error.message }
   }
 })

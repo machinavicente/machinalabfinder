@@ -1,4 +1,3 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   // Desactivar SSR si prefieres que todo se maneje del lado del cliente (opcional)
   ssr: false,
@@ -12,10 +11,8 @@ export default defineNuxtConfig({
         { name: 'description', content: 'Plataforma de simuladores de laboratorio para estudiantes de la UNEFA' }
       ],
       link: [
-        // Recursos locales (asegúrate de que existan en la carpeta /public/assets/...)
         { rel: 'stylesheet', href: '/assets/bootstrap/bootstrap.min.css' },
         { rel: 'stylesheet', href: '/assets/css/index.css' },
-        // Iconos externos
         { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css' },
         { rel: 'stylesheet', href: 'https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css' }
       ],
@@ -29,22 +26,25 @@ export default defineNuxtConfig({
     }
   },
 
-  // Configuración de variables de entorno accesibles desde el cliente
+  // Configuración de variables de entorno (Clave para que Vercel las vea)
   runtimeConfig: {
+    // Variables de servidor (solo visibles en server/api)
+    supabaseUrl: process.env.SUPABASE_URL || process.env.NUXT_PUBLIC_SUPABASE_URL,
+    supabaseKey: process.env.SUPABASE_KEY || process.env.NUXT_PUBLIC_SUPABASE_KEY,
+    cronSecret: process.env.CRON_SECRET,
+
+    // Variables públicas (visibles en el navegador)
     public: {
-      supabaseUrl: process.env.NUX_SUPABASE_URL || process.env.NUXT_SUPABASE_URL,
-      supabaseKey: process.env.NUX_SUPABASE_KEY || process.env.NUXT_SUPABASE_KEY
+      supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL,
+      supabaseKey: process.env.NUXT_PUBLIC_SUPABASE_KEY
     }
   },
 
-  // Plugins del proyecto
   plugins: [
     '~/plugins/supabase'
   ],
 
-  // Módulos (si instalas @nuxtjs/supabase en el futuro, iría aquí)
   modules: [],
 
-  // Compatibilidad de herramientas
   devtools: { enabled: true }
 })
