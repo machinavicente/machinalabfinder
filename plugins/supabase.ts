@@ -1,18 +1,25 @@
 import { createClient } from '@supabase/supabase-js'
 
-export default defineNuxtPlugin(nuxtApp => {
+export default defineNuxtPlugin((nuxtApp) => {
   const config = useRuntimeConfig()
 
-  const url = config.public.supabaseUrl
-  const key = config.public.supabaseKey
+  // Buscamos en el objeto public que definimos en el config
+  // Si no están ahí, intentamos obtenerlas directamente de process.env (fallback)
+  const supabaseUrl = config.public.supabaseUrl || process.env.NUXT_PUBLIC_SUPABASE_URL
+  const supabaseKey = config.public.supabaseKey || process.env.NUXT_PUBLIC_SUPABASE_KEY
 
-  // Validación de seguridad
-  if (!url || !key) {
-    throw new Error("Error: Supabase URL o Key no encontradas en runtimeConfig.")
+  if (!supabaseUrl || !supabaseKey) {
+    console.error("DEBUG - URL:", supabaseUrl)
+    console.error("DEBUG - KEY:", supabaseKey)
+    throw new Error("Supabase URL o Key no encontradas. Revisa las variables en Vercel.")
   }
 
-  const supabase = createClient(url, key)
+  const supabase = createClient(supabaseUrl, supabaseKey)
 
-  // El nombre '$supabase' es el que usas en tus componentes (login.vue, etc.)
-  nuxtApp.provide('supabase', supabase)
+  // Esto hace que puedas usar $supabase en todo tu proyecto
+  return {
+    provide: {
+      supabase
+    }
+  }
 })
