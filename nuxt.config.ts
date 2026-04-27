@@ -1,5 +1,5 @@
 export default defineNuxtConfig({
-  // Desactivar SSR si prefieres que todo se maneje del lado del cliente (opcional)
+  // Desactivar SSR para manejo del lado del cliente
   ssr: false,
 
   app: {
@@ -26,25 +26,28 @@ export default defineNuxtConfig({
     }
   },
 
-  // Configuración de variables de entorno (Clave para que Vercel las vea)
+  // Configuración de variables de entorno
   runtimeConfig: {
-    // Variables de servidor (solo visibles en server/api)
+    // 1. Nivel Privado: Solo para el servidor (Cron Job)
     supabaseUrl: process.env.SUPABASE_URL || process.env.NUXT_PUBLIC_SUPABASE_URL,
     supabaseKey: process.env.SUPABASE_KEY || process.env.NUXT_PUBLIC_SUPABASE_KEY,
     cronSecret: process.env.CRON_SECRET,
 
-    // Variables públicas (visibles en el navegador)
+    // 2. Nivel Público: Para el Plugin de Supabase y el Frontend
     public: {
+      // Mantenemos los nombres estándar que Nuxt/Vercel inyectan
       supabaseUrl: process.env.NUXT_PUBLIC_SUPABASE_URL,
       supabaseKey: process.env.NUXT_PUBLIC_SUPABASE_KEY
     }
   },
 
+  // Plugins del proyecto
   plugins: [
     '~/plugins/supabase'
   ],
 
   modules: [],
 
+  // Herramientas de desarrollo
   devtools: { enabled: true }
 })
