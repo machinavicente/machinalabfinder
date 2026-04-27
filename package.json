@@ -11,7 +11,11 @@
   },
   "dependencies": {
     "@nuxtjs/bootstrap": "^0.0.1",
+<<<<<<< HEAD
     "@supabase/supabase-js": "^2.104.1",
+=======
+    "@supabase/supabase-js": "^2.49.4",
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
     "axios": "^1.9.0",
     "bootstrap": "^5.3.6",
     "jspdf": "^3.0.1",

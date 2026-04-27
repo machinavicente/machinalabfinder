@@ -153,6 +153,7 @@ async function cargarDescargas() {
     isLoading.value = true;
     error.value = null;
 
+<<<<<<< HEAD
     let result = await supabase.from("descargas").select("*");
 
     if (result.error) {
@@ -166,6 +167,14 @@ async function cargarDescargas() {
     }
 
     const data = result.data;
+=======
+    const { data, error: supabaseError } = await supabase
+      .from("descargas")
+      .select("*")
+      .order("nombre_del_programa", { ascending: true });
+
+    if (supabaseError) throw supabaseError;
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
 
     // Conversión explícita de tipos
     descargas.value = (data || []).map((item) => ({
@@ -176,12 +185,15 @@ async function cargarDescargas() {
       descripcion_del_programa: String(item.descripcion_del_programa),
       asignatura: String(item.asignatura),
     }));
+<<<<<<< HEAD
 
     descargas.value.sort((a, b) =>
       a.nombre_del_programa.localeCompare(b.nombre_del_programa, "es", {
         sensitivity: "base",
       })
     );
+=======
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
   } catch (err) {
     console.error("Error al cargar descargas:", err);
     error.value =

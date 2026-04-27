@@ -44,12 +44,16 @@
     <div v-else>
       <div v-if="imagenesFiltradas.length === 0" class="text-center text-muted py-5">
         <i class="ri-search-eye-line fs-1 mb-2"></i>
+<<<<<<< HEAD
         <div v-if="terminoBusqueda">
           No se encontraron guías bajo ese criterio.
         </div>
         <div v-else>
           Biblioteca vacía.
         </div>
+=======
+        <div>No se encontraron guías bajo ese criterio.</div>
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
       </div>
 
       <!-- Galería de guías -->
@@ -62,6 +66,7 @@
           <div
             class="card h-100 shadow-sm border-0 guide-card position-relative"
           >
+<<<<<<< HEAD
             <template v-if="obtenerURL(nombre)">
               <img
                 :src="obtenerURL(nombre)"
@@ -75,6 +80,16 @@
             <div v-else class="card-img-top guide-img d-flex align-items-center justify-content-center text-muted bg-light">
               <small>Imagen no disponible</small>
             </div>
+=======
+            <img
+              :src="obtenerURL(nombre)"
+              class="card-img-top guide-img"
+              :alt="nombre"
+              @click="imagenSeleccionada = obtenerURL(nombre)"
+              data-bs-toggle="modal"
+              data-bs-target="#modalImagen"
+            />
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
             <span
               class="badge bg-primary position-absolute top-0 end-0 m-2 shadow-sm"
               >Guía</span
@@ -174,7 +189,10 @@ import type { SupabaseClient } from "@supabase/supabase-js";
 
 const { $supabase } = useNuxtApp();
 const supabase = $supabase as SupabaseClient;
+<<<<<<< HEAD
 const STORAGE_BUCKET = "recursos_didacticos"; // Ajusta este nombre al bucket real en Supabase
+=======
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
 
 const imagenes = ref<string[]>([]);
 const imagenSeleccionada = ref<string | null>(null);
@@ -217,14 +235,21 @@ const imagenesFiltradas = computed(() => {
   );
 });
 
+<<<<<<< HEAD
 const imagenExtensionsRegex = /\.(png|jpe?g|gif|webp|jfif)$/i;
 
+=======
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
 async function cargarImagenes() {
   isLoading.value = true;
   error.value = null;
   try {
     const { data, error: bucketError } = await supabase.storage
+<<<<<<< HEAD
       .from(STORAGE_BUCKET)
+=======
+      .from("biblioteca")
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
       .list("", {
         limit: 100,
         offset: 0,
@@ -235,11 +260,16 @@ async function cargarImagenes() {
 
     if (!data || data.length === 0) {
       imagenes.value = [];
+<<<<<<< HEAD
       error.value = "Biblioteca vacía.";
+=======
+      error.value = "Error de Conexion, Verifique e intente de nuevo";
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
       return;
     }
 
     imagenes.value = data
+<<<<<<< HEAD
       .filter((file) => imagenExtensionsRegex.test(file.name))
       .map((file) => file.name);
 
@@ -253,12 +283,25 @@ async function cargarImagenes() {
       err instanceof Error
         ? `No se pudo conectar con la biblioteca. Verifica tu conexión e intenta de nuevo. (${err.message})`
         : "No se pudo conectar con la biblioteca. Verifica tu conexión e intenta de nuevo.";
+=======
+      .filter((file) => /\.(png|jpe?g|gif|webp|jfif)$/i.test(file.name))
+      .map((file) => file.name);
+
+    if (imagenes.value.length === 0) {
+      error.value = "No hay imágenes con extensiones soportadas.";
+    }
+  } catch (err) {
+    console.error("Error al cargar imágenes:", err);
+    error.value = "No se pudieron cargar las imágenes.";
+    imagenes.value = [];
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
   } finally {
     isLoading.value = false;
   }
 }
 
 function obtenerURL(nombre: string): string {
+<<<<<<< HEAD
   const { data, error } = supabase.storage.from(STORAGE_BUCKET).getPublicUrl(nombre);
 
   if (error) {
@@ -272,6 +315,10 @@ function obtenerURL(nombre: string): string {
   }
 
   return data.publicUrl;
+=======
+  return supabase.storage.from("biblioteca").getPublicUrl(nombre).data
+    .publicUrl;
+>>>>>>> 65f12d4795b9284c5cf986ae2453462f7b064921
 }
 
 function descargarArchivo(url: string) {
